@@ -59,7 +59,6 @@
             padding: 5px;
             margin-bottom: 30px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            overflow-x: auto;
         }
 
         .tab-btn {
@@ -72,8 +71,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             color: #666;
-            white-space: nowrap;
-            min-width: 120px;
         }
 
         .tab-btn.active {
@@ -186,7 +183,6 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 100%;
         }
 
         .btn-primary:hover {
@@ -214,27 +210,23 @@
         .affiliate-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             margin-bottom: 15px;
-            gap: 15px;
         }
 
         .affiliate-info {
             flex: 1;
-            min-width: 0;
         }
 
         .affiliate-name {
             font-weight: 600;
             font-size: 1.1rem;
             margin-bottom: 5px;
-            word-break: break-word;
         }
 
         .affiliate-email {
             color: #666;
             font-size: 0.9rem;
-            word-break: break-all;
         }
 
         .affiliate-status {
@@ -243,8 +235,6 @@
             font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
-            white-space: nowrap;
-            flex-shrink: 0;
         }
 
         .status-active {
@@ -259,7 +249,7 @@
 
         .affiliate-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 15px;
             margin-bottom: 15px;
         }
@@ -295,13 +285,11 @@
             font-weight: 600;
             color: #28a745;
             text-align: center;
-            word-break: break-word;
         }
 
         .affiliate-actions {
             display: flex;
             gap: 10px;
-            flex-wrap: wrap;
         }
 
         .btn-secondary {
@@ -314,8 +302,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 0.9rem;
-            flex: 1;
-            min-width: 100px;
         }
 
         .btn-secondary:hover {
@@ -333,8 +319,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 0.9rem;
-            flex: 1;
-            min-width: 100px;
         }
 
         .btn-danger:hover {
@@ -344,7 +328,7 @@
 
         .my-sales-summary {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -366,7 +350,6 @@
             font-size: 2rem;
             font-weight: bold;
             margin-bottom: 5px;
-            word-break: break-word;
         }
 
         .summary-label {
@@ -389,12 +372,11 @@
             font-weight: 600;
             font-size: 1.1rem;
             margin-bottom: 10px;
-            word-break: break-word;
         }
 
         .campaign-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 10px;
         }
 
@@ -413,33 +395,27 @@
         .request-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             margin-bottom: 15px;
-            gap: 15px;
         }
 
         .request-info {
             flex: 1;
-            min-width: 0;
         }
 
         .request-title {
             font-weight: 600;
             margin-bottom: 5px;
-            word-break: break-word;
         }
 
         .request-details {
             color: #666;
             font-size: 0.9rem;
-            word-break: break-word;
         }
 
         .request-actions {
             display: flex;
             gap: 10px;
-            flex-direction: column;
-            flex-shrink: 0;
         }
 
         .btn-success {
@@ -452,7 +428,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 0.9rem;
-            white-space: nowrap;
         }
 
         .btn-success:hover {
@@ -479,6 +454,30 @@
 
         .empty-submessage {
             opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .affiliates-tabs {
+                flex-direction: column;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .commission-type-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .affiliate-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .affiliate-actions {
+                flex-direction: column;
+            }
         }
 
         /* Estilos para o botão de suporte */
@@ -541,263 +540,6 @@
         .support-text {
             font-weight: 600;
             color: #333;
-        }
-
-        /* Media Queries para Mobile */
-        @media (max-width: 768px) {
-            .page-title {
-                font-size: 2rem;
-            }
-
-            .page-subtitle {
-                font-size: 1rem;
-            }
-
-            .affiliates-container {
-                padding: 0 15px 120px;
-            }
-
-            .section-card {
-                padding: 20px;
-                margin-bottom: 20px;
-            }
-
-            .add-affiliate-form {
-                padding: 20px;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .commission-type-selector {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-
-            .commission-option {
-                padding: 12px;
-            }
-
-            .commission-option-title {
-                font-size: 0.9rem;
-            }
-
-            .commission-option-desc {
-                font-size: 0.8rem;
-            }
-
-            .affiliate-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .affiliate-status {
-                align-self: flex-start;
-            }
-
-            .affiliate-stats {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 10px;
-            }
-
-            .stat-item {
-                padding: 8px;
-            }
-
-            .stat-value {
-                font-size: 1rem;
-            }
-
-            .stat-label {
-                font-size: 0.7rem;
-            }
-
-            .affiliate-actions {
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .my-sales-summary {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .summary-card {
-                padding: 20px;
-            }
-
-            .summary-icon {
-                font-size: 2rem;
-            }
-
-            .summary-value {
-                font-size: 1.5rem;
-            }
-
-            .request-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .request-actions {
-                flex-direction: row;
-                width: 100%;
-            }
-
-            .request-actions button {
-                flex: 1;
-            }
-
-            .commission-text {
-                font-size: 0.9rem;
-            }
-
-            .btn-secondary,
-            .btn-danger,
-            .btn-success {
-                font-size: 0.8rem;
-                padding: 10px 12px;
-            }
-
-            .campaign-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .bottom-nav {
-                padding: 10px 5px;
-            }
-
-            .nav-btn {
-                padding: 8px 4px;
-                min-width: auto;
-            }
-
-            .nav-icon {
-                font-size: 1.2rem;
-            }
-
-            .nav-text {
-                font-size: 0.7rem;
-                margin-top: 2px;
-            }
-
-            .support-button {
-                width: 45px;
-                height: 45px;
-                font-size: 1.3rem;
-                bottom: 90px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .page-header {
-                padding: 70px 15px 30px;
-            }
-
-            .page-title {
-                font-size: 1.8rem;
-            }
-
-            .affiliates-tabs {
-                padding: 3px;
-                margin-bottom: 20px;
-            }
-
-            .tab-btn {
-                padding: 12px 8px;
-                font-size: 0.9rem;
-                min-width: 100px;
-            }
-
-            .section-card {
-                padding: 15px;
-            }
-
-            .section-title {
-                font-size: 1.1rem;
-            }
-
-            .affiliate-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .my-sales-summary {
-                gap: 10px;
-            }
-
-            .summary-card {
-                padding: 15px;
-            }
-
-            .summary-icon {
-                font-size: 1.8rem;
-                margin-bottom: 10px;
-            }
-
-            .summary-value {
-                font-size: 1.3rem;
-            }
-
-            .summary-label {
-                font-size: 0.8rem;
-            }
-
-            .empty-state {
-                padding: 40px 15px;
-            }
-
-            .empty-icon {
-                font-size: 3rem;
-            }
-
-            .empty-message {
-                font-size: 1.1rem;
-            }
-
-            .btn-primary {
-                padding: 14px 20px;
-                font-size: 1rem;
-            }
-
-            .back-button {
-                top: 15px;
-                left: 15px;
-                padding: 10px;
-                font-size: 1.1rem;
-            }
-
-            .support-button {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
-                right: 15px;
-                bottom: 95px;
-            }
-        }
-
-        /* Ajustes específicos para navegação em telas pequenas */
-        @media (max-width: 768px) {
-            .bottom-nav {
-                overflow-x: auto;
-                justify-content: flex-start;
-                padding: 8px;
-                gap: 5px;
-            }
-
-            .nav-btn {
-                flex-shrink: 0;
-                min-width: 60px;
-                padding: 8px 6px;
-            }
-
-            .nav-text {
-                display: block;
-                font-size: 0.65rem;
-            }
         }
     </style>
 </head>
@@ -993,4 +735,457 @@
             </div>
             <div class="modal-body">
                 <div class="support-options">
+                    <button class="support-option" onclick="openWhatsAppSupport()">
+                        <span class="support-icon">💬</span>
+                        <span class="support-text">Suporte por WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script>
+        class AfiliadosPage {
+            constructor() {
+                this.currentUser = null;
+                this.affiliates = [];
+                this.requests = [];
+                this.init();
+            }
+
+            init() {
+                this.checkAuth();
+                this.loadCampaigns();
+                this.loadAffiliates();
+                this.bindEvents();
+            }
+
+            checkAuth() {
+                this.currentUser = dataManager.getCurrentUser();
+                if (!this.currentUser) {
+                    alert('Você precisa estar logado para acessar os afiliados!');
+                    window.location.href = 'index.html';
+                    return;
+                }
+                console.log('Usuário logado:', this.currentUser.email);
+            }
+
+            loadCampaigns() {
+                const rifas = dataManager.getRifas();
+                const select = document.getElementById('affiliateCampaign');
                 
+                rifas.forEach(rifa => {
+                    const option = document.createElement('option');
+                    option.value = rifa.id;
+                    option.textContent = rifa.title;
+                    select.appendChild(option);
+                });
+            }
+
+            loadAffiliates() {
+                // Simula dados de afiliados
+                this.affiliates = [
+                    {
+                        id: 1,
+                        email: 'joao@afiliado.com',
+                        name: 'João Afiliado',
+                        campaignId: 1,
+                        campaignName: 'PlayStation 5',
+                        commissionType: 'percentage',
+                        commissionValue: 10,
+                        status: 'active',
+                        sales: 15,
+                        revenue: 750,
+                        commission: 75
+                    },
+                    {
+                        id: 2,
+                        email: 'maria@vendedora.com',
+                        name: 'Maria Vendedora',
+                        campaignId: 2,
+                        campaignName: 'Smart TV 55"',
+                        commissionType: 'fixed',
+                        commissionValue: 5,
+                        status: 'active',
+                        sales: 8,
+                        revenue: 400,
+                        commission: 40
+                    }
+                ];
+
+                // Simula solicitações pendentes
+                this.requests = [
+                    {
+                        id: 1,
+                        email: 'pedro@promotor.com',
+                        name: 'Pedro Promotor',
+                        campaignName: 'Apple Watch',
+                        requestedCommission: 12,
+                        message: 'Tenho experiência em vendas de eletrônicos e gostaria de promover esta campanha.',
+                        date: '2024-01-15'
+                    }
+                ];
+
+                this.renderMyAffiliates();
+                this.renderMyCampaigns();
+                this.renderRequests();
+                this.updateAffiliateSummary();
+            }
+
+            bindEvents() {
+                // Seletor de tipo de comissão
+                document.querySelectorAll('.commission-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        document.querySelectorAll('.commission-option').forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        
+                        const type = option.dataset.type;
+                        if (type === 'percentage') {
+                            document.getElementById('percentageGroup').style.display = 'block';
+                            document.getElementById('fixedGroup').style.display = 'none';
+                        } else {
+                            document.getElementById('percentageGroup').style.display = 'none';
+                            document.getElementById('fixedGroup').style.display = 'block';
+                        }
+                    });
+                });
+
+                // Formulário de adicionar afiliado
+                document.getElementById('addAffiliateForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleAddAffiliate();
+                });
+            }
+
+            handleAddAffiliate() {
+                const email = document.getElementById('affiliateEmail').value;
+                const campaignId = document.getElementById('affiliateCampaign').value;
+                const commissionType = document.querySelector('.commission-option.selected').dataset.type;
+                const commissionValue = commissionType === 'percentage' 
+                    ? document.getElementById('commissionPercentage').value
+                    : document.getElementById('commissionFixed').value;
+
+                if (!email || !campaignId || !commissionValue) {
+                    alert('Preencha todos os campos obrigatórios!');
+                    return;
+                }
+
+                // Simula adição do afiliado
+                const rifas = dataManager.getRifas();
+                const campaign = rifas.find(r => r.id == campaignId);
+                
+                const newAffiliate = {
+                    id: this.affiliates.length + 1,
+                    email: email,
+                    name: email.split('@')[0],
+                    campaignId: parseInt(campaignId),
+                    campaignName: campaign.title,
+                    commissionType: commissionType,
+                    commissionValue: parseFloat(commissionValue),
+                    status: 'pending',
+                    sales: 0,
+                    revenue: 0,
+                    commission: 0
+                };
+
+                this.affiliates.push(newAffiliate);
+                this.renderMyAffiliates();
+                
+                // Limpa o formulário
+                document.getElementById('addAffiliateForm').reset();
+                document.querySelectorAll('.commission-option').forEach(opt => opt.classList.remove('selected'));
+                document.querySelector('.commission-option[data-type="percentage"]').classList.add('selected');
+                document.getElementById('percentageGroup').style.display = 'block';
+                document.getElementById('fixedGroup').style.display = 'none';
+
+                this.showMessage('Afiliado adicionado com sucesso!', 'success');
+            }
+
+            renderMyAffiliates() {
+                const container = document.getElementById('myAffiliatesList');
+                
+                if (this.affiliates.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🤝</div>
+                            <div class="empty-message">Nenhum afiliado cadastrado</div>
+                            <div class="empty-submessage">Adicione afiliados para expandir suas vendas</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = this.affiliates.map(affiliate => `
+                    <div class="affiliate-item">
+                        <div class="affiliate-header">
+                            <div class="affiliate-info">
+                                <div class="affiliate-name">${affiliate.name}</div>
+                                <div class="affiliate-email">${affiliate.email}</div>
+                            </div>
+                            <div class="affiliate-status status-${affiliate.status}">
+                                ${affiliate.status === 'active' ? 'Ativo' : 'Pendente'}
+                            </div>
+                        </div>
+                        
+                        <div class="affiliate-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">${affiliate.sales}</div>
+                                <div class="stat-label">Vendas</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${dataManager.formatCurrency(affiliate.revenue)}</div>
+                                <div class="stat-label">Receita</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${dataManager.formatCurrency(affiliate.commission)}</div>
+                                <div class="stat-label">Comissão</div>
+                            </div>
+                        </div>
+                        
+                        <div class="commission-info">
+                            <div class="commission-text">
+                                📊 ${affiliate.campaignName} • 
+                                ${affiliate.commissionType === 'percentage' 
+                                    ? `${affiliate.commissionValue}% por venda`
+                                    : `${dataManager.formatCurrency(affiliate.commissionValue)} por venda`}
+                            </div>
+                        </div>
+                        
+                        <div class="affiliate-actions">
+                            <button class="btn-secondary" onclick="editAffiliate(${affiliate.id})">
+                                ✏️ Editar
+                            </button>
+                            <button class="btn-danger" onclick="removeAffiliate(${affiliate.id})">
+                                🗑️ Remover
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderMyCampaigns() {
+                const container = document.getElementById('myCampaignsList');
+                
+                // Simula campanhas que sou afiliado
+                const myCampaigns = [
+                    {
+                        id: 1,
+                        title: 'Notebook Gamer',
+                        creator: 'TechStore',
+                        commission: '8% por venda',
+                        sales: 5,
+                        earnings: 120,
+                        link: 'https://rifaapp.com/ref/abc123'
+                    },
+                    {
+                        id: 2,
+                        title: 'iPhone 15 Pro',
+                        creator: 'MobileShop',
+                        commission: 'R$ 15,00 por venda',
+                        sales: 3,
+                        earnings: 45,
+                        link: 'https://rifaapp.com/ref/def456'
+                    }
+                ];
+
+                if (myCampaigns.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🎯</div>
+                            <div class="empty-message">Você não é afiliado de nenhuma campanha</div>
+                            <div class="empty-submessage">Procure por campanhas para se afiliar</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = myCampaigns.map(campaign => `
+                    <div class="campaign-item">
+                        <div class="campaign-title">${campaign.title}</div>
+                        <div style="color: #666; margin-bottom: 15px;">Por: ${campaign.creator}</div>
+                        
+                        <div class="campaign-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">${campaign.sales}</div>
+                                <div class="stat-label">Vendas</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${dataManager.formatCurrency(campaign.earnings)}</div>
+                                <div class="stat-label">Ganhos</div>
+                            </div>
+                        </div>
+                        
+                        <div class="commission-info">
+                            <div class="commission-text">💰 ${campaign.commission}</div>
+                        </div>
+                        
+                        <div style="margin-top: 15px;">
+                            <button class="btn-secondary" onclick="copyAffiliateLink('${campaign.link}')">
+                                🔗 Copiar Link
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderRequests() {
+                const container = document.getElementById('requestsList');
+                
+                if (this.requests.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">📋</div>
+                            <div class="empty-message">Nenhuma solicitação pendente</div>
+                            <div class="empty-submessage">Solicitações de afiliação aparecerão aqui</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = this.requests.map(request => `
+                    <div class="request-item">
+                        <div class="request-header">
+                            <div class="request-info">
+                                <div class="request-title">${request.name} quer ser afiliado</div>
+                                <div class="request-details">
+                                    ${request.email} • ${request.campaignName} • ${request.requestedCommission}% comissão
+                                </div>
+                            </div>
+                            <div class="request-actions">
+                                <button class="btn-success" onclick="approveRequest(${request.id})">
+                                    ✅ Aprovar
+                                </button>
+                                <button class="btn-danger" onclick="rejectRequest(${request.id})">
+                                    ❌ Rejeitar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                            <strong>Mensagem:</strong><br>
+                            ${request.message}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            updateAffiliateSummary() {
+                // Simula dados como afiliado
+                const totalCommissions = 165; // R$ 120 + R$ 45
+                const totalSales = 8; // 5 + 3
+                const conversionRate = 12.5;
+
+                document.getElementById('totalCommissions').textContent = dataManager.formatCurrency(totalCommissions);
+                document.getElementById('totalSales').textContent = totalSales;
+                document.getElementById('conversionRate').textContent = `${conversionRate}%`;
+            }
+
+            showMessage(message, type = 'info') {
+                const existingMessage = document.querySelector('.app-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'app-message';
+                messageDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#667eea'};
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 8px;
+                    z-index: 3000;
+                    font-weight: 600;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    max-width: 90%;
+                    text-align: center;
+                `;
+                messageDiv.textContent = message;
+
+                document.body.appendChild(messageDiv);
+
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.remove();
+                    }
+                }, 4000);
+            }
+        }
+
+        // Funções globais
+        function switchAffiliateTab(tabName) {
+            // Remove active de todas as abas
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // Ativa a aba selecionada
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function editAffiliate(affiliateId) {
+            alert(`Editando afiliado ${affiliateId}`);
+        }
+
+        function removeAffiliate(affiliateId) {
+            if (confirm('Tem certeza que deseja remover este afiliado?')) {
+                window.afiliadosPage.affiliates = window.afiliadosPage.affiliates.filter(a => a.id !== affiliateId);
+                window.afiliadosPage.renderMyAffiliates();
+                window.afiliadosPage.showMessage('Afiliado removido com sucesso!', 'success');
+            }
+        }
+
+        function copyAffiliateLink(link) {
+            navigator.clipboard.writeText(link).then(() => {
+                window.afiliadosPage.showMessage('Link copiado para a área de transferência!', 'success');
+            });
+        }
+
+        function approveRequest(requestId) {
+            if (confirm('Aprovar esta solicitação de afiliação?')) {
+                window.afiliadosPage.requests = window.afiliadosPage.requests.filter(r => r.id !== requestId);
+                window.afiliadosPage.renderRequests();
+                window.afiliadosPage.showMessage('Solicitação aprovada!', 'success');
+            }
+        }
+
+        function rejectRequest(requestId) {
+            if (confirm('Rejeitar esta solicitação de afiliação?')) {
+                window.afiliadosPage.requests = window.afiliadosPage.requests.filter(r => r.id !== requestId);
+                window.afiliadosPage.renderRequests();
+                window.afiliadosPage.showMessage('Solicitação rejeitada!', 'success');
+            }
+        }
+
+        // Inicializa a página
+        document.addEventListener('DOMContentLoaded', () => {
+            window.afiliadosPage = new AfiliadosPage();
+        });
+
+        // Funções para o suporte
+        function openSupportModal() {
+            document.getElementById('support-modal').classList.add('active');
+        }
+
+        function closeSupportModal() {
+            document.getElementById('support-modal').classList.remove('active');
+        }
+
+        function openWhatsAppSupport() {
+            window.open('https://wa.me/557781484432', '_blank');
+            closeSupportModal();
+        }
+
+        // Fecha o modal de suporte ao clicar fora dele
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'support-modal') {
+                closeSupportModal();
+            }
+        });
+    </script>
+</body>
+</html> 

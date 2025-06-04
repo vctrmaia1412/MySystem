@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Rifa - RifaApp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Estilos específicos para a página de criar rifa */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        .criar-page {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 80px 20px 100px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Estilos específicos do formulário de criar */
+        .create-form {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-info {
+            background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+            border: 2px solid #28a745;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .price-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #28a745;
+            margin-bottom: 5px;
+        }
+
+        .price-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 200px;
+            border: 2px dashed #e9ecef;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .image-preview.has-image {
+            border-style: solid;
+            border-color: #28a745;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .preview-placeholder {
+            text-align: center;
+            color: #666;
+        }
+
+        .preview-placeholder .icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        .tickets-calculator {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .calc-row:last-child {
+            margin-bottom: 0;
+            padding-top: 10px;
+            border-top: 2px solid #dee2e6;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .calc-value {
+            font-weight: 600;
+        }
+
+        .calc-value.total {
+            color: #28a745;
+            font-size: 1.2rem;
+        }
+
+        .form-tips {
+            background: linear-gradient(135deg, #e3f2fd, #f0f8ff);
+            border-left: 4px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .tips-title {
+            font-weight: 700;
+            color: #1976d2;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tips-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .tips-list li:before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+        }
+
+        .success-animation {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Estilos para o botão de suporte */
+        .support-button {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .support-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Estilos para as opções de suporte */
+        .support-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .support-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            width: 100%;
+            text-align: right;
+        }
+
+        .support-option:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .support-icon {
+            font-size: 1.5rem;
+        }
+
+        .support-text {
+            font-weight: 600;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Botão de voltar -->
+    <button class="back-button" onclick="goBack()" title="Voltar">
+        ← 
+    </button>
+
+    <div class="criar-page">
+        <!-- Header da página -->
+        <div class="page-header">
+            <h1 class="page-title">➕ Criar Nova Rifa</h1>
+            <p class="page-subtitle">Crie sua rifa e comece a ganhar dinheiro!</p>
+        </div>
+
+        <!-- Container para o conteúdo -->
+        <div id="criar-content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Carregando formulário...</p>
+            </div>
+        </div>
+    </div>
+
+   <!-- Navegação Inferior -->
+   <nav class="bottom-nav">
+    <button class="nav-btn" onclick="window.location.href='home.html'">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">Início</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='criar.html'">
+        <span class="nav-icon">➕</span>
+        <span class="nav-text">Criar</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='rifas.html'">
+        <span class="nav-icon">📋</span>
+        <span class="nav-text">Minhas</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='dashboard.html'">
+        <span class="nav-icon">📊</span>
+        <span class="nav-text">Dashboard</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='carteira.html'">
+        <span class="nav-icon">💰</span>
+        <span class="nav-text">Carteira</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='afiliados.html'">
+        <span class="nav-icon">🤝</span>
+        <span class="nav-text">Afiliados</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='pedidos.html'">
+        <span class="nav-icon">📋</span>
+        <span class="nav-text">Pedidos</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='integracoes.html'">
+        <span class="nav-icon">🔗</span>
+        <span class="nav-text">Integrações</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='configuracoes.html'">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-text">Configurações</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='campanhas.html'">
+        <span class="nav-icon">📊</span>
+        <span class="nav-text">Campanhas</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='tutoriais.html'">
+        <span class="nav-icon">📚</span>
+        <span class="nav-text">Tutoriais</span>
+    </button>
+    <button class="nav-btn" onclick="window.location.href='perfil.html'">
+        <span class="nav-icon">👤</span>
+        <span class="nav-text">Perfil</span>
+    </button>
+</nav>
+
+    <!-- Botão flutuante de suporte -->
+    <button class="support-button" onclick="openSupportModal()" title="Suporte">
+        💬
+    </button>
+
+    <!-- Modal de suporte -->
+    <div id="support-modal" class="modal">
+        <div class="modal-content" style="max-width: 300px;">
+            <div class="modal-header">
+                <h3>📞 Suporte</h3>
+                <button class="close-btn" onclick="closeSupportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="support-options">
+                    <button class="support-option" onclick="openWhatsAppSupport()">
+                        <span class="support-icon">💬</span>
+                        <span class="support-text">Suporte por WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script>
+        // Classe para gerenciar a página de criar rifa
+        class CriarPage {
+            constructor() {
+                this.currentUser = null;
+                this.init();
+            }
+
+            init() {
+                this.checkAuth();
+                this.loadForm();
+                this.bindEvents();
+            }
+
+            checkAuth() {
+                this.currentUser = dataManager.getCurrentUser();
+                if (!this.currentUser) {
+                    alert('Você precisa estar logado para criar rifas!');
+                    window.location.href = 'index.html';
+                    return;
+                }
+                console.log('Usuário logado:', this.currentUser.email);
+            }
+
+            bindEvents() {
+                // Será vinculado após carregar o formulário
+            }
+
+            loadForm() {
+                const content = document.getElementById('criar-content');
+                
+                const formHtml = `
+                    <div class="create-form fade-in">
+                        <form id="create-rifa-form">
+                            <!-- Seção: Informações Básicas -->
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    🎯 Informações Básicas
+                                </h3>
+                                
+                                <div class="input-group">
+                                    <label>Título da Rifa *</label>
+                                    <input type="text" id="rifa-title" placeholder="Ex: iPhone 14 Pro Max 256GB" required maxlength="100">
+                                    <small style="color: #666; margin-top: 5px; display: block;">Seja específico e atrativo (máx. 100 caracteres)</small>
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label>Descrição Detalhada *</label>
+                                    <textarea id="rifa-description" placeholder="Descreva detalhadamente o prêmio, suas características, estado de conservação, etc..." required rows="4" maxlength="500"></textarea>
+                                    <small style="color: #666; margin-top: 5px; display: block;">Quanto mais detalhes, maior a confiança dos participantes (máx. 500 caracteres)</small>
+                                </div>
+                            </div>
+
+                            <!-- Seção: Imagem -->
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    🖼️ Imagem do Prêmio
+                                </h3>
+                                
+                                <div class="input-group">
+                                    <label>URL da Imagem (opcional)</label>
+                                    <input type="url" id="rifa-image" placeholder="https://exemplo.com/imagem.jpg">
+                                    <small style="color: #666; margin-top: 5px; display: block;">Cole o link de uma imagem do prêmio para atrair mais participantes</small>
+                                </div>
+                                
+                                <div id="image-preview" class="image-preview">
+                                    <div class="preview-placeholder">
+                                        <div class="icon">🖼️</div>
+                                        <p>Preview da imagem aparecerá aqui</p>
+                                        <small>Cole uma URL válida acima</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Seção: Configurações -->
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    ⚙️ Configurações da Rifa
+                                </h3>
+                                
+                                <div class="input-group">
+                                    <label>Valor por Bilhete *</label>
+                                    <input type="number" id="rifa-price" min="1" max="100" step="0.01" value="19.90" placeholder="19.90" required>
+                                    <small style="color: #666; margin-top: 5px; display: block;">
+                                        💡 Valor entre R$ 1,00 e R$ 100,00
+                                    </small>
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label>Número de Bilhetes *</label>
+                                    <input type="number" id="rifa-tickets" min="10" max="1000" placeholder="100" required>
+                                    <small style="color: #666; margin-top: 5px; display: block;">Mínimo: 10 bilhetes | Máximo: 1.000 bilhetes</small>
+                                </div>
+                                
+                                <div id="tickets-calculator" class="tickets-calculator" style="display: none;">
+                                    <h4 style="margin-bottom: 15px; color: #333;">📊 Calculadora de Ganhos</h4>
+                                    <div class="calc-row">
+                                        <span>Número de bilhetes:</span>
+                                        <span class="calc-value" id="calc-tickets">0</span>
+                                    </div>
+                                    <div class="calc-row">
+                                        <span>Valor por bilhete:</span>
+                                        <span class="calc-value">R$ 19,90</span>
+                                    </div>
+                                    <div class="calc-row">
+                                        <span>Arrecadação total:</span>
+                                        <span class="calc-value total" id="calc-total">R$ 0,00</span>
+                                    </div>
+                                    <div class="calc-row" id="affiliate-commission-row" style="display: none;">
+                                        <span>Comissão afiliado:</span>
+                                        <span class="calc-value" id="calc-affiliate" style="color: #dc3545;">R$ 0,00</span>
+                                    </div>
+                                    <div class="calc-row" id="creator-earning-row" style="display: none;">
+                                        <span>Seu ganho líquido:</span>
+                                        <span class="calc-value total" id="calc-creator">R$ 0,00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Seção: Sistema de Afiliados -->
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    🤝 Sistema de Afiliados
+                                </h3>
+                                
+                                <div class="input-group">
+                                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                        <input type="checkbox" id="affiliate-enabled" style="transform: scale(1.2);">
+                                        <span>Ativar sistema de afiliados</span>
+                                    </label>
+                                    <small style="color: #666; margin-top: 5px; display: block;">Permita que outras pessoas ajudem a divulgar sua rifa e ganhem comissão</small>
+                                </div>
+                                
+                                <div id="affiliate-config" style="display: none;">
+                                    <div class="input-group">
+                                        <label>E-mail do Afiliado</label>
+                                        <input type="email" id="affiliate-email" placeholder="afiliado@exemplo.com">
+                                        <small style="color: #666; margin-top: 5px; display: block;">E-mail de um usuário cadastrado no sistema</small>
+                                    </div>
+                                    
+                                    <div class="input-group">
+                                        <label>Tipo de Comissão</label>
+                                        <select id="affiliate-type">
+                                            <option value="percentage">Percentual (%)</option>
+                                            <option value="fixed">Valor Fixo (R$)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="input-group">
+                                        <label id="affiliate-value-label">Percentual da Comissão (%)</label>
+                                        <input type="number" id="affiliate-value" min="1" max="50" placeholder="10" step="0.1">
+                                        <small id="affiliate-value-help" style="color: #666; margin-top: 5px; display: block;">Entre 1% e 50% do valor de cada venda</small>
+                                    </div>
+                                    
+                                    <div style="background: #e8f5e8; border: 1px solid #28a745; border-radius: 8px; padding: 15px; margin-top: 15px;">
+                                        <h4 style="color: #28a745; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                                            💡 Como Funciona
+                                        </h4>
+                                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                                            <li>O afiliado receberá um link especial para divulgar sua rifa</li>
+                                            <li>A cada venda feita através dele, ganhará a comissão definida</li>
+                                            <li>A comissão é descontada do seu ganho, não do valor do bilhete</li>
+                                            <li>Você pode adicionar ou remover afiliados depois de criar a rifa</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botão de criar -->
+                            <button type="submit" class="btn-primary" style="margin-top: 30px;">
+                                🎲 Criar Rifa
+                            </button>
+                        </form>
+
+                        <!-- Dicas -->
+                        <div class="form-tips">
+                            <div class="tips-title">
+                                💡 Dicas para uma Rifa de Sucesso
+                            </div>
+                            <ul class="tips-list">
+                                <li>Use um título claro e atrativo que desperte interesse</li>
+                                <li>Adicione uma descrição detalhada do prêmio</li>
+                                <li>Inclua uma imagem de qualidade do produto</li>
+                                <li>Escolha um número de bilhetes adequado ao valor do prêmio</li>
+                                <li>Seja transparente sobre o estado e características do item</li>
+                                <li>Promova sua rifa nas redes sociais para mais participantes</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+                content.innerHTML = formHtml;
+                this.bindFormEvents();
+            }
+
+            bindFormEvents() {
+                // Formulário de criação
+                document.getElementById('create-rifa-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleCreateRifa();
+                });
+
+                // Preview da imagem
+                document.getElementById('rifa-image').addEventListener('input', (e) => {
+                    this.updateImagePreview(e.target.value);
+                });
+
+                // Calculadora de bilhetes
+                document.getElementById('rifa-tickets').addEventListener('input', (e) => {
+                    this.updateTicketsCalculator(e.target.value);
+                });
+
+                // Preço do bilhete
+                document.getElementById('rifa-price').addEventListener('input', (e) => {
+                    this.updateTicketsCalculator(document.getElementById('rifa-tickets').value);
+                });
+
+                // Contador de caracteres para título
+                document.getElementById('rifa-title').addEventListener('input', (e) => {
+                    this.updateCharacterCount(e.target, 100);
+                });
+
+                // Contador de caracteres para descrição
+                document.getElementById('rifa-description').addEventListener('input', (e) => {
+                    this.updateCharacterCount(e.target, 500);
+                });
+
+                // Sistema de afiliados
+                document.getElementById('affiliate-enabled').addEventListener('change', (e) => {
+                    this.toggleAffiliateConfig(e.target.checked);
+                });
+
+                document.getElementById('affiliate-type').addEventListener('change', (e) => {
+                    this.updateAffiliateTypeLabels(e.target.value);
+                });
+
+                document.getElementById('affiliate-value').addEventListener('input', (e) => {
+                    this.updateTicketsCalculator(document.getElementById('rifa-tickets').value);
+                });
+            }
+
+            updateImagePreview(imageUrl) {
+                const preview = document.getElementById('image-preview');
+                
+                if (imageUrl && this.isValidImageUrl(imageUrl)) {
+                    preview.style.backgroundImage = `url('${imageUrl}')`;
+                    preview.classList.add('has-image');
+                    preview.innerHTML = '';
+                } else {
+                    preview.style.backgroundImage = '';
+                    preview.classList.remove('has-image');
+                    preview.innerHTML = `
+                        <div class="preview-placeholder">
+                            <div class="icon">🖼️</div>
+                            <p>Preview da imagem aparecerá aqui</p>
+                            <small>Cole uma URL válida acima</small>
+                        </div>
+                    `;
+                }
+            }
+
+            isValidImageUrl(url) {
+                try {
+                    new URL(url);
+                    return /\.(jpg|jpeg|png|gif|webp)$/i.test(url) || url.includes('http');
+                } catch {
+                    return false;
+                }
+            }
+
+            updateTicketsCalculator(ticketCount) {
+                const calculator = document.getElementById('tickets-calculator');
+                const tickets = parseInt(ticketCount) || 0;
+                const ticketPrice = parseFloat(document.getElementById('rifa-price').value) || 19.90;
+                
+                if (tickets > 0) {
+                    const total = tickets * ticketPrice;
+                    const platformFee = total * 0.08; // Taxa da plataforma
+                    
+                    // Calcula comissão do afiliado se ativo
+                    let affiliateCommission = 0;
+                    const affiliateEnabled = document.getElementById('affiliate-enabled').checked;
+                    if (affiliateEnabled) {
+                        const affiliateType = document.getElementById('affiliate-type').value;
+                        const affiliateValue = parseFloat(document.getElementById('affiliate-value').value) || 0;
+                        
+                        if (affiliateType === 'percentage') {
+                            affiliateCommission = total * (affiliateValue / 100);
+                        } else {
+                            affiliateCommission = affiliateValue * tickets; // Valor fixo por bilhete
+                        }
+                    }
+                    
+                    const creatorEarning = total - platformFee - affiliateCommission;
+                    
+                    document.getElementById('calc-tickets').textContent = tickets.toLocaleString();
+                    document.getElementById('calc-total').textContent = dataManager.formatCurrency(total);
+                    
+                    // Atualiza o valor por bilhete na calculadora
+                    const ticketPriceElement = calculator.querySelector('.calc-row:nth-child(2) .calc-value');
+                    if (ticketPriceElement) {
+                        ticketPriceElement.textContent = dataManager.formatCurrency(ticketPrice);
+                    }
+                    
+                    // Mostra/esconde linhas de comissão
+                    if (affiliateEnabled && affiliateCommission > 0) {
+                        document.getElementById('affiliate-commission-row').style.display = 'flex';
+                        document.getElementById('creator-earning-row').style.display = 'flex';
+                        document.getElementById('calc-affiliate').textContent = dataManager.formatCurrency(affiliateCommission);
+                        document.getElementById('calc-creator').textContent = dataManager.formatCurrency(creatorEarning);
+                    } else {
+                        document.getElementById('affiliate-commission-row').style.display = 'none';
+                        document.getElementById('creator-earning-row').style.display = 'none';
+                    }
+                    
+                    calculator.style.display = 'block';
+                } else {
+                    calculator.style.display = 'none';
+                }
+            }
+
+            updateCharacterCount(input, maxLength) {
+                const currentLength = input.value.length;
+                const remaining = maxLength - currentLength;
+                
+                // Remove contador anterior se existir
+                const existingCounter = input.parentNode.querySelector('.char-counter');
+                if (existingCounter) {
+                    existingCounter.remove();
+                }
+                
+                // Adiciona novo contador
+                const counter = document.createElement('small');
+                counter.className = 'char-counter';
+                counter.style.cssText = `
+                    display: block;
+                    text-align: right;
+                    margin-top: 5px;
+                    color: ${remaining < 20 ? '#dc3545' : '#666'};
+                    font-weight: 600;
+                `;
+                counter.textContent = `${currentLength}/${maxLength}`;
+                
+                input.parentNode.appendChild(counter);
+            }
+
+            toggleAffiliateConfig(enabled) {
+                const config = document.getElementById('affiliate-config');
+                config.style.display = enabled ? 'block' : 'none';
+                
+                // Atualiza calculadora
+                this.updateTicketsCalculator(document.getElementById('rifa-tickets').value);
+            }
+
+            updateAffiliateTypeLabels(type) {
+                const label = document.getElementById('affiliate-value-label');
+                const help = document.getElementById('affiliate-value-help');
+                const input = document.getElementById('affiliate-value');
+                
+                if (type === 'percentage') {
+                    label.textContent = 'Percentual da Comissão (%)';
+                    help.textContent = 'Entre 1% e 50% do valor de cada venda';
+                    input.placeholder = '10';
+                    input.min = '1';
+                    input.max = '50';
+                    input.step = '0.1';
+                } else {
+                    label.textContent = 'Valor Fixo por Bilhete (R$)';
+                    help.textContent = 'Valor fixo em reais que o afiliado ganhará por bilhete vendido';
+                    input.placeholder = '2.00';
+                    input.min = '0.50';
+                    input.max = '10.00';
+                    input.step = '0.10';
+                }
+                
+                // Atualiza calculadora
+                this.updateTicketsCalculator(document.getElementById('rifa-tickets').value);
+            }
+
+            handleCreateRifa() {
+                const title = document.getElementById('rifa-title').value.trim();
+                const description = document.getElementById('rifa-description').value.trim();
+                const image = document.getElementById('rifa-image').value.trim();
+                const totalTickets = parseInt(document.getElementById('rifa-tickets').value);
+                const ticketPrice = parseFloat(document.getElementById('rifa-price').value);
+
+                // Dados do afiliado
+                const affiliateEnabled = document.getElementById('affiliate-enabled').checked;
+                const affiliateEmail = document.getElementById('affiliate-email').value.trim();
+                const affiliateType = document.getElementById('affiliate-type').value;
+                const affiliateValue = parseFloat(document.getElementById('affiliate-value').value) || 0;
+
+                // Validações básicas
+                if (!title) {
+                    this.showMessage('O título é obrigatório!', 'error');
+                    document.getElementById('rifa-title').focus();
+                    return;
+                }
+
+                if (title.length < 5) {
+                    this.showMessage('O título deve ter pelo menos 5 caracteres!', 'error');
+                    document.getElementById('rifa-title').focus();
+                    return;
+                }
+
+                if (!description) {
+                    this.showMessage('A descrição é obrigatória!', 'error');
+                    document.getElementById('rifa-description').focus();
+                    return;
+                }
+
+                if (description.length < 20) {
+                    this.showMessage('A descrição deve ter pelo menos 20 caracteres!', 'error');
+                    document.getElementById('rifa-description').focus();
+                    return;
+                }
+
+                if (!totalTickets || totalTickets < 10 || totalTickets > 1000) {
+                    this.showMessage('O número de bilhetes deve estar entre 10 e 1.000!', 'error');
+                    document.getElementById('rifa-tickets').focus();
+                    return;
+                }
+
+                if (!ticketPrice || ticketPrice < 1 || ticketPrice > 100) {
+                    this.showMessage('O valor do bilhete deve estar entre R$ 1,00 e R$ 100,00!', 'error');
+                    document.getElementById('rifa-price').focus();
+                    return;
+                }
+
+                if (image && !this.isValidImageUrl(image)) {
+                    this.showMessage('URL da imagem inválida!', 'error');
+                    document.getElementById('rifa-image').focus();
+                    return;
+                }
+
+                // Validações do afiliado
+                if (affiliateEnabled) {
+                    if (!affiliateEmail) {
+                        this.showMessage('E-mail do afiliado é obrigatório quando o sistema está ativo!', 'error');
+                        document.getElementById('affiliate-email').focus();
+                        return;
+                    }
+
+                    if (affiliateEmail === this.currentUser.email) {
+                        this.showMessage('Você não pode ser afiliado da sua própria rifa!', 'error');
+                        document.getElementById('affiliate-email').focus();
+                        return;
+                    }
+
+                    if (!dataManager.getUserByEmail(affiliateEmail)) {
+                        this.showMessage('E-mail do afiliado não encontrado no sistema!', 'error');
+                        document.getElementById('affiliate-email').focus();
+                        return;
+                    }
+
+                    if (!affiliateValue || affiliateValue <= 0) {
+                        this.showMessage('Valor da comissão deve ser maior que zero!', 'error');
+                        document.getElementById('affiliate-value').focus();
+                        return;
+                    }
+
+                    if (affiliateType === 'percentage' && affiliateValue > 50) {
+                        this.showMessage('Percentual máximo de comissão é 50%!', 'error');
+                        document.getElementById('affiliate-value').focus();
+                        return;
+                    }
+
+                    if (affiliateType === 'fixed' && affiliateValue > 10) {
+                        this.showMessage('Valor fixo máximo por bilhete é R$ 10,00!', 'error');
+                        document.getElementById('affiliate-value').focus();
+                        return;
+                    }
+                }
+
+                // Dados da rifa
+                const rifaData = {
+                    title,
+                    description,
+                    image: image || '',
+                    totalTickets,
+                    ticketPrice,
+                    creatorId: this.currentUser.id,
+                    affiliateEnabled,
+                    affiliateEmail: affiliateEnabled ? affiliateEmail : null,
+                    affiliateType: affiliateEnabled ? affiliateType : 'percentage',
+                    affiliateValue: affiliateEnabled ? affiliateValue : 0
+                };
+
+                try {
+                    const newRifa = dataManager.createRifa(rifaData);
+                    
+                    // Se tem afiliado, adiciona ele à rifa
+                    if (affiliateEnabled && affiliateEmail) {
+                        const affiliateAdded = dataManager.addAffiliateToRifa(newRifa.id, {
+                            email: affiliateEmail,
+                            type: affiliateType,
+                            value: affiliateValue
+                        });
+                        
+                        if (!affiliateAdded) {
+                            this.showMessage('Rifa criada, mas houve erro ao adicionar o afiliado!', 'warning');
+                        }
+                    }
+                    
+                    this.showSuccessAnimation(newRifa);
+                } catch (error) {
+                    this.showMessage('Erro ao criar rifa: ' + error.message, 'error');
+                }
+            }
+
+            showSuccessAnimation(rifa) {
+                const content = document.getElementById('criar-content');
+                const arrecadacaoTotal = rifa.totalTickets * rifa.ticketPrice;
+                
+                content.innerHTML = `
+                    <div class="success-animation fade-in">
+                        <div class="success-icon">🎉</div>
+                        <h2 style="color: #28a745; margin-bottom: 20px;">Rifa Criada com Sucesso!</h2>
+                        
+                        <div style="background: white; border-radius: 16px; padding: 25px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                            <h3 style="margin-bottom: 15px; color: #333;">${rifa.title}</h3>
+                            <div style="text-align: left;">
+                                <p><strong>📝 Descrição:</strong> ${rifa.description}</p>
+                                <p><strong>🎫 Bilhetes:</strong> ${rifa.totalTickets}</p>
+                                <p><strong>💰 Valor por bilhete:</strong> ${dataManager.formatCurrency(rifa.ticketPrice)}</p>
+                                <p><strong>💵 Arrecadação máxima:</strong> ${dataManager.formatCurrency(arrecadacaoTotal)}</p>
+                                <p><strong>📅 Criada em:</strong> ${dataManager.formatDate(rifa.createdAt)}</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 30px;">
+                            <button class="btn-primary" onclick="window.location.href='home.html'" style="margin: 0; min-width: 150px;">
+                                🏠 Ver Home
+                            </button>
+                            <button class="btn-secondary" onclick="criarPage.loadForm()" style="margin: 0; min-width: 150px;">
+                                ➕ Criar Outra
+                            </button>
+                        </div>
+                        
+                        <div style="background: #e8f5e8; border-radius: 12px; padding: 20px; margin-top: 25px;">
+                            <h4 style="color: #28a745; margin-bottom: 10px;">🚀 Próximos Passos:</h4>
+                            <ul style="text-align: left; color: #666; margin: 0; padding-left: 20px;">
+                                <li>Compartilhe sua rifa nas redes sociais</li>
+                                <li>Divulgue para amigos e familiares</li>
+                                <li>Acompanhe as vendas na seção "Minhas Rifas"</li>
+                                <li>Realize o sorteio quando todos os bilhetes forem vendidos</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+                this.showMessage('Rifa criada com sucesso!', 'success');
+            }
+
+            showMessage(message, type = 'info') {
+                const existingMessage = document.querySelector('.app-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'app-message';
+                messageDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#667eea'};
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 8px;
+                    z-index: 3000;
+                    font-weight: 600;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    max-width: 90%;
+                    text-align: center;
+                `;
+                messageDiv.textContent = message;
+
+                document.body.appendChild(messageDiv);
+
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.remove();
+                    }
+                }, 4000);
+            }
+        }
+
+        // Funções globais
+        function goBack() {
+            window.location.href = 'home.html';
+        }
+
+        // Inicializa a página quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            window.criarPage = new CriarPage();
+        });
+
+        // Funções para o suporte
+        function openSupportModal() {
+            document.getElementById('support-modal').classList.add('active');
+        }
+
+        function closeSupportModal() {
+            document.getElementById('support-modal').classList.remove('active');
+        }
+
+        function openWhatsAppSupport() {
+            window.open('https://wa.me/557781484432', '_blank');
+            closeSupportModal();
+        }
+
+        // Fecha o modal de suporte ao clicar fora dele
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'support-modal') {
+                closeSupportModal();
+            }
+        });
+    </script>
+</body>
+</html> 

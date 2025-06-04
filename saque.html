@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saque - RifaApp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Estilos específicos para a página de saque */
+        .withdrawal-page {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 20px 20px 100px;
+        }
+
+        .withdrawal-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .withdrawal-header {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .withdrawal-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .withdrawal-subtitle {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        .balance-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .balance-info {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .withdrawal-form {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .amount-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .amount-btn {
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .amount-btn:hover {
+            border-color: #28a745;
+            background: #f8fff9;
+        }
+
+        .amount-btn.active {
+            border-color: #28a745;
+            background: #28a745;
+            color: white;
+        }
+
+        .fee-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .fee-breakdown {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .fee-breakdown:last-child {
+            margin-bottom: 0;
+            padding-top: 10px;
+            border-top: 1px solid #ffeaa7;
+            font-weight: 700;
+            color: #28a745;
+        }
+
+        .bank-types {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .bank-type-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .bank-type-btn:hover {
+            border-color: #28a745;
+            background: #f8fff9;
+        }
+
+        .bank-type-btn.active {
+            border-color: #28a745;
+            background: #28a745;
+            color: white;
+        }
+
+        .pix-section {
+            display: none;
+        }
+
+        .pix-section.active {
+            display: block;
+        }
+
+        .bank-section {
+            display: none;
+        }
+
+        .bank-section.active {
+            display: block;
+        }
+
+        .btn-withdraw {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-withdraw:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-withdraw:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .security-info {
+            background: #e8f5e8;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .security-info .security-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .security-info .security-text {
+            color: #155724;
+            font-size: 0.9rem;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #28a745;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-animation {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 20px;
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        .withdrawal-limits {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .withdrawal-limits h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .withdrawal-limits ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #1976d2;
+        }
+
+        .withdrawal-limits li {
+            margin-bottom: 5px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 480px) {
+            .withdrawal-page {
+                padding: 10px 10px 100px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .amount-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .bank-types {
+                flex-direction: column;
+            }
+
+            .balance-amount {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Botão de voltar -->
+    <button class="back-button" onclick="goBack()" title="Voltar">
+        ← 
+    </button>
+
+    <div class="withdrawal-page">
+        <div class="withdrawal-container">
+            <!-- Header -->
+            <div class="withdrawal-header">
+                <h1 class="withdrawal-title">💰 Solicitar Saque</h1>
+                <p class="withdrawal-subtitle">Transfira seus ganhos para sua conta</p>
+            </div>
+
+            <!-- Saldo Disponível -->
+            <div class="balance-card">
+                <div class="balance-label">Saldo Disponível</div>
+                <div class="balance-amount" id="current-balance">R$ 0,00</div>
+                <div class="balance-info">Disponível para saque imediato</div>
+            </div>
+
+            <!-- Limites e Informações -->
+            <div class="withdrawal-limits">
+                <h4>📋 Informações Importantes</h4>
+                <ul>
+                    <li>Valor mínimo: R$ 10,00</li>
+                    <li>Taxa de saque: 8% sobre o valor</li>
+                    <li>Processamento: 1-2 dias úteis</li>
+                    <li>Horário: Segunda a sexta, 9h às 18h</li>
+                </ul>
+            </div>
+
+            <!-- Formulário de Saque -->
+            <div class="withdrawal-form">
+                <!-- Valor do Saque -->
+                <div class="form-section">
+                    <h3 class="section-title">💵 Valor do Saque</h3>
+                    
+                    <div class="amount-selector">
+                        <button class="amount-btn" onclick="selectAmount(50)">R$ 50,00</button>
+                        <button class="amount-btn" onclick="selectAmount(100)">R$ 100,00</button>
+                        <button class="amount-btn" onclick="selectAmount(200)">R$ 200,00</button>
+                        <button class="amount-btn" onclick="selectAmount(500)">R$ 500,00</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="withdrawal-amount">Ou digite o valor:</label>
+                        <input type="number" id="withdrawal-amount" class="form-input" placeholder="0,00" min="10" step="0.01">
+                    </div>
+
+                    <div class="fee-info" id="fee-info" style="display: none;">
+                        <div class="fee-breakdown">
+                            <span>Valor solicitado:</span>
+                            <span id="gross-amount">R$ 0,00</span>
+                        </div>
+                        <div class="fee-breakdown">
+                            <span>Taxa de saque (8%):</span>
+                            <span id="fee-amount">R$ 0,00</span>
+                        </div>
+                        <div class="fee-breakdown">
+                            <span>Valor a receber:</span>
+                            <span id="net-amount">R$ 0,00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tipo de Conta -->
+                <div class="form-section">
+                    <h3 class="section-title">🏦 Tipo de Conta</h3>
+                    
+                    <div class="bank-types">
+                        <button class="bank-type-btn active" onclick="selectBankType('pix')">📱 PIX</button>
+                        <button class="bank-type-btn" onclick="selectBankType('bank')">🏦 Conta Bancária</button>
+                    </div>
+
+                    <!-- Seção PIX -->
+                    <div class="pix-section active" id="pix-section">
+                        <div class="form-group">
+                            <label for="pix-key">Chave PIX:</label>
+                            <select id="pix-type" class="form-input" style="margin-bottom: 10px;" onchange="updatePixPlaceholder()">
+                                <option value="cpf">CPF</option>
+                                <option value="email">E-mail</option>
+                                <option value="phone">Telefone</option>
+                                <option value="random">Chave Aleatória</option>
+                            </select>
+                            <input type="text" id="pix-key" class="form-input" placeholder="000.000.000-00">
+                        </div>
+                        <div class="form-group">
+                            <label for="pix-name">Nome do Titular:</label>
+                            <input type="text" id="pix-name" class="form-input" placeholder="Nome completo como no CPF">
+                        </div>
+                    </div>
+
+                    <!-- Seção Conta Bancária -->
+                    <div class="bank-section" id="bank-section">
+                        <div class="form-group">
+                            <label for="bank-name">Banco:</label>
+                            <select id="bank-name" class="form-input">
+                                <option value="">Selecione o banco</option>
+                                <option value="001">Banco do Brasil</option>
+                                <option value="104">Caixa Econômica Federal</option>
+                                <option value="237">Bradesco</option>
+                                <option value="341">Itaú</option>
+                                <option value="033">Santander</option>
+                                <option value="260">Nu Pagamentos (Nubank)</option>
+                                <option value="077">Banco Inter</option>
+                                <option value="212">Banco Original</option>
+                                <option value="290">PagSeguro</option>
+                                <option value="323">Mercado Pago</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="agency">Agência:</label>
+                                <input type="text" id="agency" class="form-input" placeholder="0000">
+                            </div>
+                            <div class="form-group">
+                                <label for="account">Conta:</label>
+                                <input type="text" id="account" class="form-input" placeholder="00000-0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="account-type">Tipo de Conta:</label>
+                            <select id="account-type" class="form-input">
+                                <option value="corrente">Conta Corrente</option>
+                                <option value="poupanca">Conta Poupança</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="account-holder">Nome do Titular:</label>
+                            <input type="text" id="account-holder" class="form-input" placeholder="Nome completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf">CPF do Titular:</label>
+                            <input type="text" id="cpf" class="form-input" placeholder="000.000.000-00" maxlength="14">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão de Saque -->
+                <button class="btn-withdraw" onclick="processWithdrawal()" id="withdraw-button">
+                    💰 Solicitar Saque
+                </button>
+
+                <!-- Informações de Segurança -->
+                <div class="security-info">
+                    <div class="security-icon">🔒</div>
+                    <div class="security-text">
+                        <strong>Transferência 100% Segura</strong><br>
+                        Seus dados bancários são protegidos e criptografados
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <h3>Processando Saque...</h3>
+                <p>Validando dados e iniciando transferência</p>
+            </div>
+
+            <!-- Sucesso -->
+            <div id="success" class="success-animation">
+                <div class="success-icon">✅</div>
+                <h2 style="color: #28a745; margin-bottom: 15px;">Saque Solicitado!</h2>
+                <div id="success-details"></div>
+                <button class="btn-withdraw" onclick="goToWallet()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    💰 Ver Carteira
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script>
+        class WithdrawalManager {
+            constructor() {
+                this.currentUser = null;
+                this.selectedAmount = 0;
+                this.bankType = 'pix';
+                this.init();
+            }
+
+            init() {
+                this.checkAuth();
+                this.loadUserBalance();
+                this.bindEvents();
+            }
+
+            checkAuth() {
+                this.currentUser = dataManager.getCurrentUser();
+                if (!this.currentUser) {
+                    alert('Você precisa estar logado para acessar esta página!');
+                    window.location.href = 'index.html';
+                    return;
+                }
+            }
+
+            loadUserBalance() {
+                const balance = this.currentUser.balance || 0;
+                document.getElementById('current-balance').textContent = dataManager.formatCurrency(balance);
+            }
+
+            bindEvents() {
+                // Atualização do valor
+                document.getElementById('withdrawal-amount').addEventListener('input', () => {
+                    this.updateFeeCalculation();
+                });
+
+                // Formatação do CPF
+                document.getElementById('cpf').addEventListener('input', (e) => {
+                    this.formatCPF(e.target);
+                });
+
+                // Atualização do placeholder PIX
+                this.updatePixPlaceholder();
+            }
+
+            updateFeeCalculation() {
+                const amount = parseFloat(document.getElementById('withdrawal-amount').value) || 0;
+                
+                if (amount > 0) {
+                    const fee = amount * 0.08;
+                    const netAmount = amount - fee;
+                    
+                    document.getElementById('gross-amount').textContent = dataManager.formatCurrency(amount);
+                    document.getElementById('fee-amount').textContent = dataManager.formatCurrency(fee);
+                    document.getElementById('net-amount').textContent = dataManager.formatCurrency(netAmount);
+                    document.getElementById('fee-info').style.display = 'block';
+                } else {
+                    document.getElementById('fee-info').style.display = 'none';
+                }
+
+                // Remove seleção dos botões
+                document.querySelectorAll('.amount-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+            }
+
+            formatCPF(input) {
+                let value = input.value.replace(/\D/g, '');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                input.value = value;
+            }
+
+            processWithdrawal() {
+                if (!this.validateWithdrawal()) {
+                    return;
+                }
+
+                // Mostra loading
+                document.querySelector('.withdrawal-form').style.display = 'none';
+                document.querySelector('.balance-card').style.display = 'none';
+                document.querySelector('.withdrawal-limits').style.display = 'none';
+                document.getElementById('loading').style.display = 'block';
+
+                // Simula processamento
+                setTimeout(() => {
+                    this.completeWithdrawal();
+                }, 3000);
+            }
+
+            validateWithdrawal() {
+                const amount = parseFloat(document.getElementById('withdrawal-amount').value);
+                
+                if (!amount || amount <= 0) {
+                    alert('Por favor, informe um valor válido!');
+                    return false;
+                }
+
+                if (amount < 10) {
+                    alert('Valor mínimo para saque é R$ 10,00!');
+                    return false;
+                }
+
+                if (amount > this.currentUser.balance) {
+                    alert('Saldo insuficiente!');
+                    return false;
+                }
+
+                if (this.bankType === 'pix') {
+                    const pixKey = document.getElementById('pix-key').value;
+                    const pixName = document.getElementById('pix-name').value;
+
+                    if (!pixKey || !pixName) {
+                        alert('Por favor, preencha todos os dados PIX!');
+                        return false;
+                    }
+                } else {
+                    const bank = document.getElementById('bank-name').value;
+                    const agency = document.getElementById('agency').value;
+                    const account = document.getElementById('account').value;
+                    const holder = document.getElementById('account-holder').value;
+                    const cpf = document.getElementById('cpf').value;
+
+                    if (!bank || !agency || !account || !holder || !cpf) {
+                        alert('Por favor, preencha todos os dados bancários!');
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            completeWithdrawal() {
+                const amount = parseFloat(document.getElementById('withdrawal-amount').value);
+                
+                // Processa o saque
+                const result = dataManager.requestWithdrawal(this.currentUser.id, amount);
+                
+                if (result) {
+                    // Mostra tela de sucesso
+                    document.getElementById('loading').style.display = 'none';
+                    
+                    const successDetails = document.getElementById('success-details');
+                    successDetails.innerHTML = `
+                        <div style="background: #f8f9fa; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: left;">
+                            <h4 style="margin-bottom: 15px;">📋 Detalhes do Saque</h4>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span>Valor solicitado:</span>
+                                <span style="font-weight: 600;">${dataManager.formatCurrency(result.grossAmount)}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span>Taxa (8%):</span>
+                                <span style="color: #dc3545;">-${dataManager.formatCurrency(result.fee)}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding-top: 8px; border-top: 1px solid #dee2e6; font-weight: 700; color: #28a745;">
+                                <span>Valor a receber:</span>
+                                <span>${dataManager.formatCurrency(result.netAmount)}</span>
+                            </div>
+                            <div style="margin-top: 15px; padding: 10px; background: #e8f5e8; border-radius: 8px; font-size: 0.9rem; color: #155724;">
+                                <strong>⏰ Prazo:</strong> O valor será transferido em até 2 dias úteis
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.getElementById('success').style.display = 'block';
+                } else {
+                    alert('Erro ao processar saque!');
+                    document.getElementById('loading').style.display = 'none';
+                    document.querySelector('.withdrawal-form').style.display = 'block';
+                    document.querySelector('.balance-card').style.display = 'block';
+                    document.querySelector('.withdrawal-limits').style.display = 'block';
+                }
+            }
+        }
+
+        // Funções globais
+        function selectAmount(amount) {
+            // Remove active de todos os botões
+            document.querySelectorAll('.amount-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Ativa o botão clicado
+            event.target.classList.add('active');
+
+            // Define o valor
+            document.getElementById('withdrawal-amount').value = amount;
+            window.withdrawalManager.updateFeeCalculation();
+        }
+
+        function selectBankType(type) {
+            // Remove active de todos os botões
+            document.querySelectorAll('.bank-type-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Ativa o botão clicado
+            event.target.classList.add('active');
+
+            // Mostra/esconde seções
+            document.querySelectorAll('.pix-section, .bank-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            document.getElementById(type + '-section').classList.add('active');
+            window.withdrawalManager.bankType = type;
+        }
+
+        function updatePixPlaceholder() {
+            const pixType = document.getElementById('pix-type').value;
+            const pixInput = document.getElementById('pix-key');
+
+            switch(pixType) {
+                case 'cpf':
+                    pixInput.placeholder = '000.000.000-00';
+                    break;
+                case 'email':
+                    pixInput.placeholder = 'seu@email.com';
+                    break;
+                case 'phone':
+                    pixInput.placeholder = '(11) 99999-9999';
+                    break;
+                case 'random':
+                    pixInput.placeholder = 'chave-aleatoria-uuid';
+                    break;
+            }
+        }
+
+        function processWithdrawal() {
+            window.withdrawalManager.processWithdrawal();
+        }
+
+        function goBack() {
+            window.location.href = 'carteira.html';
+        }
+
+        function goToWallet() {
+            window.location.href = 'carteira.html';
+        }
+
+        // Inicializa quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            window.withdrawalManager = new WithdrawalManager();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrações - RifaApp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Estilos específicos para integrações */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px 40px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .integrations-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 100px;
+        }
+
+        .integration-category {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .category-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .category-info p {
+            color: #666;
+            margin: 0;
+        }
+
+        .integrations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .integration-card {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .integration-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .integration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .integration-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .integration-card.active {
+            background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+            border-color: #28a745;
+        }
+
+        .integration-card.active::before {
+            background: linear-gradient(90deg, #28a745, #20c997);
+            transform: scaleX(1);
+        }
+
+        .integration-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .integration-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .integration-logo.facebook {
+            background: linear-gradient(135deg, #1877f2, #42a5f5);
+        }
+
+        .integration-logo.meta {
+            background: linear-gradient(135deg, #0668e1, #1877f2);
+        }
+
+        .integration-logo.tiktok {
+            background: linear-gradient(135deg, #000000, #ff0050);
+        }
+
+        .integration-logo.google {
+            background: linear-gradient(135deg, #4285f4, #34a853);
+        }
+
+        .integration-logo.analytics {
+            background: linear-gradient(135deg, #ff6f00, #ff8f00);
+        }
+
+        .integration-logo.hotjar {
+            background: linear-gradient(135deg, #fd3a5c, #ff6b6b);
+        }
+
+        .integration-logo.clarity {
+            background: linear-gradient(135deg, #0078d4, #40e0d0);
+        }
+
+        .integration-logo.whatsapp {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+        }
+
+        .integration-logo.telegram {
+            background: linear-gradient(135deg, #0088cc, #229ed9);
+        }
+
+        .integration-logo.mailchimp {
+            background: linear-gradient(135deg, #ffe01b, #ffcc02);
+        }
+
+        .integration-info h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .integration-info p {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .integration-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .status-indicator.active {
+            background: #28a745;
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+        }
+
+        .status-indicator.inactive {
+            background: #dc3545;
+        }
+
+        .status-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .status-text.active {
+            color: #28a745;
+        }
+
+        .status-text.inactive {
+            color: #dc3545;
+        }
+
+        .integration-config {
+            margin-bottom: 20px;
+        }
+
+        .config-item {
+            margin-bottom: 15px;
+        }
+
+        .config-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .config-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .config-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .config-input.active {
+            border-color: #28a745;
+            background: #f8fff8;
+        }
+
+        .integration-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-integration {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-activate {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .btn-deactivate {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+        }
+
+        .btn-test {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-integration:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-integration:disabled {
+            background: #e9ecef;
+            color: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .integration-help {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .help-title {
+            font-weight: 700;
+            color: #1976d2;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .help-content {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .help-content ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .help-content li {
+            margin-bottom: 5px;
+        }
+
+        .stats-overview {
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-number.active {
+            color: #28a745;
+        }
+
+        .stat-number.total {
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .integrations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .integration-actions {
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Estilos para o botão de suporte */
+        .support-button {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .support-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Estilos para as opções de suporte */
+        .support-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .support-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            width: 100%;
+            text-align: right;
+        }
+
+        .support-option:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .support-icon {
+            font-size: 1.5rem;
+        }
+
+        .support-text {
+            font-weight: 600;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='home.html'">
+        ←
+    </button>
+
+    <div class="page-header">
+        <h1 class="page-title">🔗 Integrações</h1>
+        <p class="page-subtitle">Configure pixels e ferramentas de marketing para otimizar suas campanhas</p>
+    </div>
+
+    <div class="integrations-container">
+        <!-- Estatísticas das Integrações -->
+        <div class="stats-overview">
+            <h3 style="margin-bottom: 20px; color: #333; text-align: center;">📊 Status das Integrações</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number active" id="active-integrations">0</div>
+                    <div class="stat-label">Integrações Ativas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number total" id="total-integrations">12</div>
+                    <div class="stat-label">Total Disponível</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" style="color: #ffc107;" id="events-tracked">0</div>
+                    <div class="stat-label">Eventos Rastreados</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" style="color: #dc3545;" id="conversion-rate">0%</div>
+                    <div class="stat-label">Taxa de Conversão</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pixels de Rastreamento -->
+        <div class="integration-category">
+            <div class="category-header">
+                <div class="category-icon">📊</div>
+                <div class="category-info">
+                    <h3>Pixels de Rastreamento</h3>
+                    <p>Configure pixels para rastrear conversões e otimizar campanhas publicitárias</p>
+                </div>
+            </div>
+
+            <div class="integrations-grid">
+                <!-- Meta Pixel (Facebook) -->
+                <div class="integration-card" data-integration="meta-pixel">
+                    <div class="integration-header">
+                        <div class="integration-logo meta">Meta</div>
+                        <div class="integration-info">
+                            <h4>Meta Pixel (Facebook)</h4>
+                            <p>Rastreie conversões do Facebook e Instagram</p>
+                        </div>
+                    </div>
+
+                    <div class="integration-status">
+                        <div class="status-indicator inactive"></div>
+                        <span class="status-text inactive">Inativo</span>
+                    </div>
+
+                    <div class="integration-config">
+                        <div class="config-item">
+                            <label class="config-label">Pixel ID</label>
+                            <input type="text" class="config-input" placeholder="Ex: 123456789012345" data-field="pixelId">
+                        </div>
+                        <div class="config-item">
+                            <label class="config-label">Token de Acesso (Opcional)</label>
+                            <input type="text" class="config-input" placeholder="Para Conversions API" data-field="accessToken">
+                        </div>
+                    </div>
+
+                    <div class="integration-actions">
+                        <button class="btn-integration btn-activate" onclick="toggleIntegration('meta-pixel')">Ativar</button>
+                        <button class="btn-integration btn-test" onclick="testIntegration('meta-pixel')" disabled>Testar</button>
+                    </div>
+
+                    <div class="integration-help">
+                        <div class="help-title">💡 Como configurar</div>
+                        <div class="help-content">
+                            <ul>
+                                <li>Acesse o Gerenciador de Eventos do Facebook</li>
+                                <li>Copie o ID do seu pixel</li>
+                                <li>Cole aqui e ative a integração</li>
+                                <li>Eventos rastreados: PageView, Purchase, AddToCart</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TikTok Pixel -->
+                <div class="integration-card" data-integration="tiktok-pixel">
+                    <div class="integration-header">
+                        <div class="integration-logo tiktok">TT</div>
+                        <div class="integration-info">
+                            <h4>TikTok Pixel</h4>
+                            <p>Rastreie conversões do TikTok Ads</p>
+                        </div>
+                    </div>
+
+                    <div class="integration-status">
+                        <div class="status-indicator inactive"></div>
+                        <span class="status-text inactive">Inativo</span>
+                    </div>
+
+                    <div class="integration-config">
+                        <div class="config-item">
+                            <label class="config-label">Pixel ID</label>
+                            <input type="text" class="config-input" placeholder="Ex: C9ABC123DEF456GHI789" data-field="pixelId">
+                        </div>
+                    </div>
+
+                    <div class="integration-actions">
+                        <button class="btn-integration btn-activate" onclick="toggleIntegration('tiktok-pixel')">Ativar</button>
+                        <button class="btn-integration btn-test" onclick="testIntegration('tiktok-pixel')" disabled>Testar</button>
+                    </div>
+
+                    <div class="integration-help">
+                        <div class="help-title">💡 Como configurar</div>
+                        <div class="help-content">
+                            <ul>
+                                <li>Acesse o TikTok Ads Manager</li>
+                                <li>Vá em Ferramentas > Eventos</li>
+                                <li>Copie o Pixel ID</li>
+                                <li>Eventos: PageView, CompletePayment, AddToCart</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Ads -->
+                <div class="integration-card" data-integration="google-ads">
+                    <div class="integration-header">
+                        <div class="integration-logo google">G</div>
+                        <div class="integration-info">
+                            <h4>Google Ads</h4>
+                            <p>Rastreamento de conversões do Google</p>
+                        </div>
+                    </div>
+
+                    <div class="integration-status">
+                        <div class="status-indicator inactive"></div>
+                        <span class="status-text inactive">Inativo</span>
+                    </div>
+
+                    <div class="integration-config">
+                        <div class="config-item">
+                            <label class="config-label">Conversion ID</label>
+                            <input type="text" class="config-input" placeholder="Ex: AW-123456789" data-field="conversionId">
+                        </div>
+                        <div class="config-item">
+                            <label class="config-label">Conversion Label</label>
+                            <input type="text" class="config-input" placeholder="Ex: abcDEF123ghiJKL" data-field="conversionLabel">
+                        </div>
+                    </div>
+
+                    <div class="integration-actions">
+                        <button class="btn-integration btn-activate" onclick="toggleIntegration('google-ads')">Ativar</button>
+                        <button class="btn-integration btn-test" onclick="testIntegration('google-ads')" disabled>Testar</button>
+                    </div>
+
+                    <div class="integration-help">
+                        <div class="help-title">💡 Como configurar</div>
+                        <div class="help-content">
+                            <ul>
+                                <li>Acesse o Google Ads</li>
+                                <li>Vá em Ferramentas > Conversões</li>
+                                <li>Crie uma ação de conversão</li>
+                                <li>Copie o ID e Label da conversão</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ferramentas de Análise -->
+        <div class="integration-category">
+            <div class="category-header">
+                <div class="category-icon">📈</div>
+                <div class="category-info">
+                    <h3>Ferramentas de Análise</h3>
+                    <p>Monitore o comportamento dos usuários e otimize a experiência</p>
+                </div>
+            </div>
+
+            <div class="integrations-grid">
+                <!-- Google Analytics -->
+                <div class="integration-card" data-integration="google-analytics">
+                    <div class="integration-header">
+                        <div class="integration-logo analytics">GA</div>
+                        <div class="integration-info">
+                            <h4>Google Analytics 4</h4>
+                            <p>Análise completa de tráfego e conversões</p>
+                        </div>
+                    </div>
+
+                    <div class="integration-status">
+                        <div class="status-indicator inactive"></div>
+                        <span class="status-text inactive">Inativo</span>
+                    </div>
+
+                    <div class="integration-config">
+                        <div class="config-item">
+                            <label class="config-label">Measurement ID</label>
+                            <input type="text" class="config-input" placeholder="Ex: G-XXXXXXXXXX" data-field="measurementId">
+                        </div>
+                    </div>
+
+                    <div class="integration-actions">
+                        <button class="btn-integration btn-activate" onclick="toggleIntegration('google-analytics')">Ativar</button>
+                        <button class="btn-integration btn-test" onclick="testIntegration('google-analytics')" disabled>Testar</button>
+                    </div>
+
+                    <div class="integration-help">
+                        <div class="help-title">💡 Como configurar</div>
+                        <div class="help-content">
+                            <ul>
+                                <li>Acesse o Google Analytics</li>
+                                <li>Crie uma propriedade GA4</li>
+                                <li>Copie o Measurement ID</li>
+                                <li>Eventos personalizados serão enviados automaticamente</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotjar -->
+                <div class="integration-card" data-integration="hotjar">
+                    <div class="integration-header">
+                        <div class="integration-logo hotjar">HJ</div>
+                        <div class="integration-info">
+                            <h4>Hotjar</h4>
+                            <p>Mapas de calor e gravações de sessão</p>
+                        </div>
+                    </div>
+
+                    <div class="integration-status">
+                        <div class="status-indicator inactive"></div>
+                        <span class="status-text inactive">Inativo</span>
+                    </div>
+
+                    <div class="integration-config">
+                        <div class="config-item">
+                            <label class="config-label">Site ID</label>
+                            <input type="text" class="config-input" placeholder="Ex: 1234567" data-field="siteId">
+                        </div>
+                    </div>
+
+                    <div class="integration-actions">
+                        <button class="btn-integration btn-activate" onclick="toggleIntegration('hotjar')">Ativar</button>
+                        <button class="btn-integration btn-test" onclick="testIntegration('hotjar')" disabled>Testar</button>
+                    </div>
+
+                    <div class="integration-help">
+                        <div class="help-title">💡 Como configurar</div>
+                        <div class="help-content">
+                            <ul>
+                                <li>Crie uma conta no Hotjar</li>
+                                <li>Adicione seu site</li>
+                                <li>Copie o Site ID do código de rastreamento</li>
+                                <li>Configure heatmaps e gravações</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Microsoft Clarity -->
+                <div class="integration-card" data-integration="clarity">
+                    <div class="integration-header">
+                        <div class="integration-logo clarity">MC</div>
+                        <div class="integration-info">
+                            <h4>Microsoft Clarity</h4>
+                            <p>Análise gratuita de comportamento</p>
+                        </div>
+                    </div>
+
+                    <div class="integration-status">
+                        <div class="status-indicator inactive"></div>
+                        <span class="status-text inactive">Inativo</span>
+                    </div>
+
+                    <div class="integration-config">
+                        <div class="config-item">
+                            <label class="config-label">Project ID</label>
+                            <input type="text" class="config-input" placeholder="Ex: abcdefghij" data-field="projectId">
+                        </div>
+                    </div>
+
+                    <div class="integration-actions">
+                        <button class="btn-integration btn-activate" onclick="toggleIntegration('clarity')">Ativar</button>
+                        <button class="btn-integration btn-test" onclick="testIntegration('clarity')" disabled>Testar</button>
+                    </div>
+
+                    <div class="integration-help">
+                        <div class="help-title">💡 Como configurar</div>
+                        <div class="help-content">
+                            <ul>
+                                <li>Acesse clarity.microsoft.com</li>
+                                <li>Crie um novo projeto</li>
+                                <li>Copie o Project ID</li>
+                                <li>Ferramenta gratuita da Microsoft</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comunicação e Marketing -->
+        <div class="integration-category">
+            <div class="category-header">
+                <div class="category-icon">💬</div>
+                <div class="category-info">
+                    <h3>Comunicação e Marketing</h3>
+                    <p>Automatize comunicação e campanhas de email marketing</p>
+                </div>
+            </div>
+
+            <div class="integrations-grid">
+                <!-- WhatsApp Business -->
+                <div class="integration-card" data-integration="whatsapp">
+                    <div class="integration-header">
+                        <div class="integration-logo whatsapp">WA</div>
+                        <div class="integration-info">
+                            <h4>WhatsApp Business</h4>
+                            <p>Notificações automáticas via WhatsApp</p>
+                        </div>
+                    </div>
+
+                    <div class="integration-status">
+                        <div class="status-indicator inactive"></div>
+                        <span class="status-text inactive">Inativo</span>
+                    </div>
+
+                    <div class="integration-config">
+                        <div class="config-item">
+                            <label class="config-label">Número do WhatsApp</label>
+                            <input type="text" class="config-input" placeholder="Ex: +5511999999999" data-field="phoneNumber">
+                        </div>
+                        <div class="config-item">
+                            <label class="config-label">Token da API</label>
+                            <input type="text" class="config-input" placeholder="Token do WhatsApp Business API" data-field="apiToken">
+                        </div>
+                    </div>
+
+                    <div class="integration-actions">
+                        <button class="btn-integration btn-activate" onclick="toggleIntegration('whatsapp')">Ativar</button>
+                        <button class="btn-integration btn-test" onclick="testIntegration('whatsapp')" disabled>Testar</button>
+                    </div>
+
+                    <div class="integration-help">
+                        <div class="help-title">💡 Como configurar</div>
+                        <div class="help-content">
+                            <ul>
+                                <li>Configure WhatsApp Business API</li>
+                                <li>Obtenha token de acesso</li>
+                                <li>Notificações automáticas para ganhadores</li>
+                                <li>Confirmações de participação</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Telegram Bot -->
+                <div class="integration-card" data-integration="telegram">
+                    <div class="integration-header">
+                        <div class="integration-logo telegram">TG</div>
+                        <div class="integration-info">
+                            <h4>Telegram Bot</h4>
+                            <p>Notificações via bot do Telegram</p>
+                        </div>
+                    </div>
+
+                    <div class="integration-status">
+                        <div class="status-indicator inactive"></div>
+                        <span class="status-text inactive">Inativo</span>
+                    </div>
+
+                    <div class="integration-config">
+                        <div class="config-item">
+                            <label class="config-label">Bot Token</label>
+                            <input type="text" class="config-input" placeholder="Ex: 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11" data-field="botToken">
+                        </div>
+                        <div class="config-item">
+                            <label class="config-label">Chat ID</label>
+                            <input type="text" class="config-input" placeholder="Ex: -1001234567890" data-field="chatId">
+                        </div>
+                    </div>
+
+                    <div class="integration-actions">
+                        <button class="btn-integration btn-activate" onclick="toggleIntegration('telegram')">Ativar</button>
+                        <button class="btn-integration btn-test" onclick="testIntegration('telegram')" disabled>Testar</button>
+                    </div>
+
+                    <div class="integration-help">
+                        <div class="help-title">💡 Como configurar</div>
+                        <div class="help-content">
+                            <ul>
+                                <li>Crie um bot com @BotFather</li>
+                                <li>Copie o token do bot</li>
+                                <li>Obtenha o Chat ID do grupo/canal</li>
+                                <li>Notificações de sorteios e vendas</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mailchimp -->
+                <div class="integration-card" data-integration="mailchimp">
+                    <div class="integration-header">
+                        <div class="integration-logo mailchimp">MC</div>
+                        <div class="integration-info">
+                            <h4>Mailchimp</h4>
+                            <p>Email marketing automatizado</p>
+                        </div>
+                    </div>
+
+                    <div class="integration-status">
+                        <div class="status-indicator inactive"></div>
+                        <span class="status-text inactive">Inativo</span>
+                    </div>
+
+                    <div class="integration-config">
+                        <div class="config-item">
+                            <label class="config-label">API Key</label>
+                            <input type="text" class="config-input" placeholder="Ex: abc123def456-us1" data-field="apiKey">
+                        </div>
+                        <div class="config-item">
+                            <label class="config-label">List ID</label>
+                            <input type="text" class="config-input" placeholder="Ex: 1234567890" data-field="listId">
+                        </div>
+                    </div>
+
+                    <div class="integration-actions">
+                        <button class="btn-integration btn-activate" onclick="toggleIntegration('mailchimp')">Ativar</button>
+                        <button class="btn-integration btn-test" onclick="testIntegration('mailchimp')" disabled>Testar</button>
+                    </div>
+
+                    <div class="integration-help">
+                        <div class="help-title">💡 Como configurar</div>
+                        <div class="help-content">
+                            <ul>
+                                <li>Acesse sua conta Mailchimp</li>
+                                <li>Gere uma API Key</li>
+                                <li>Copie o ID da lista de contatos</li>
+                                <li>Participantes serão adicionados automaticamente</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegação Inferior -->
+    <nav class="bottom-nav">
+        <button class="nav-btn" onclick="window.location.href='home.html'">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-text">Início</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='criar.html'">
+            <span class="nav-icon">➕</span>
+            <span class="nav-text">Criar</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='rifas.html'">
+            <span class="nav-icon">📋</span>
+            <span class="nav-text">Minhas</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='dashboard.html'">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Dashboard</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='carteira.html'">
+            <span class="nav-icon">💰</span>
+            <span class="nav-text">Carteira</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='afiliados.html'">
+            <span class="nav-icon">🤝</span>
+            <span class="nav-text">Afiliados</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='pedidos.html'">
+            <span class="nav-icon">📋</span>
+            <span class="nav-text">Pedidos</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='integracoes.html'">
+            <span class="nav-icon">🔗</span>
+            <span class="nav-text">Integrações</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='configuracoes.html'">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-text">Configurações</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='campanhas.html'">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Campanhas</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='tutoriais.html'">
+            <span class="nav-icon">📚</span>
+            <span class="nav-text">Tutoriais</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='perfil.html'">
+            <span class="nav-icon">👤</span>
+            <span class="nav-text">Perfil</span>
+        </button>
+    </nav>
+
+    <!-- Botão flutuante de suporte -->
+    <button class="support-button" onclick="openSupportModal()" title="Suporte">
+        💬
+    </button>
+
+    <!-- Modal de suporte -->
+    <div id="support-modal" class="modal">
+        <div class="modal-content" style="max-width: 300px;">
+            <div class="modal-header">
+                <h3>📞 Suporte</h3>
+                <button class="close-btn" onclick="closeSupportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="support-options">
+                    <button class="support-option" onclick="openWhatsAppSupport()">
+                        <span class="support-icon">💬</span>
+                        <span class="support-text">Suporte por WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script>
+        // Classe para gerenciar integrações
+        class IntegrationsPage {
+            constructor() {
+                this.currentUser = null;
+                this.integrations = {};
+                this.init();
+            }
+
+            init() {
+                this.checkAuth();
+                this.loadIntegrations();
+                this.updateStats();
+            }
+
+            checkAuth() {
+                this.currentUser = dataManager.getCurrentUser();
+                if (!this.currentUser) {
+                    alert('Você precisa estar logado para acessar as integrações!');
+                    window.location.href = 'index.html';
+                    return;
+                }
+                console.log('Usuário logado:', this.currentUser.email);
+            }
+
+            loadIntegrations() {
+                // Carrega integrações salvas do localStorage
+                const saved = localStorage.getItem('rifaapp_integrations');
+                if (saved) {
+                    this.integrations = JSON.parse(saved);
+                    this.applyIntegrationStates();
+                }
+            }
+
+            saveIntegrations() {
+                localStorage.setItem('rifaapp_integrations', JSON.stringify(this.integrations));
+            }
+
+            applyIntegrationStates() {
+                Object.keys(this.integrations).forEach(integrationId => {
+                    const integration = this.integrations[integrationId];
+                    const card = document.querySelector(`[data-integration="${integrationId}"]`);
+                    
+                    if (card && integration.active) {
+                        this.activateIntegrationUI(card, integration);
+                    }
+                });
+            }
+
+            toggleIntegration(integrationId) {
+                const card = document.querySelector(`[data-integration="${integrationId}"]`);
+                const isActive = this.integrations[integrationId]?.active || false;
+
+                if (isActive) {
+                    this.deactivateIntegration(integrationId, card);
+                } else {
+                    this.activateIntegration(integrationId, card);
+                }
+            }
+
+            activateIntegration(integrationId, card) {
+                const inputs = card.querySelectorAll('.config-input');
+                const config = {};
+                let hasRequiredFields = true;
+
+                // Valida campos obrigatórios
+                inputs.forEach(input => {
+                    const field = input.dataset.field;
+                    const value = input.value.trim();
+                    
+                    if (field === 'pixelId' || field === 'measurementId' || field === 'siteId' || 
+                        field === 'projectId' || field === 'conversionId' || field === 'botToken' || 
+                        field === 'apiKey' || field === 'phoneNumber') {
+                        if (!value) {
+                            hasRequiredFields = false;
+                            input.style.borderColor = '#dc3545';
+                            return;
+                        }
+                    }
+                    
+                    config[field] = value;
+                    input.style.borderColor = '#28a745';
+                });
+
+                if (!hasRequiredFields) {
+                    this.showMessage('Preencha todos os campos obrigatórios!', 'error');
+                    return;
+                }
+
+                // Ativa a integração
+                this.integrations[integrationId] = {
+                    active: true,
+                    config: config,
+                    activatedAt: new Date().toISOString()
+                };
+
+                this.activateIntegrationUI(card, this.integrations[integrationId]);
+                this.saveIntegrations();
+                this.updateStats();
+                this.showMessage(`Integração ${this.getIntegrationName(integrationId)} ativada com sucesso!`, 'success');
+
+                // Instala o pixel/script se necessário
+                this.installIntegrationScript(integrationId, config);
+            }
+
+            deactivateIntegration(integrationId, card) {
+                if (this.integrations[integrationId]) {
+                    this.integrations[integrationId].active = false;
+                }
+
+                this.deactivateIntegrationUI(card);
+                this.saveIntegrations();
+                this.updateStats();
+                this.showMessage(`Integração ${this.getIntegrationName(integrationId)} desativada!`, 'info');
+
+                // Remove o script se necessário
+                this.removeIntegrationScript(integrationId);
+            }
+
+            activateIntegrationUI(card, integration) {
+                card.classList.add('active');
+                
+                const statusIndicator = card.querySelector('.status-indicator');
+                const statusText = card.querySelector('.status-text');
+                const inputs = card.querySelectorAll('.config-input');
+                const activateBtn = card.querySelector('.btn-activate');
+                const testBtn = card.querySelector('.btn-test');
+
+                statusIndicator.classList.remove('inactive');
+                statusIndicator.classList.add('active');
+                statusText.classList.remove('inactive');
+                statusText.classList.add('active');
+                statusText.textContent = 'Ativo';
+
+                inputs.forEach(input => {
+                    input.classList.add('active');
+                    if (integration.config[input.dataset.field]) {
+                        input.value = integration.config[input.dataset.field];
+                    }
+                });
+
+                activateBtn.textContent = 'Desativar';
+                activateBtn.classList.remove('btn-activate');
+                activateBtn.classList.add('btn-deactivate');
+                
+                testBtn.disabled = false;
+            }
+
+            deactivateIntegrationUI(card) {
+                card.classList.remove('active');
+                
+                const statusIndicator = card.querySelector('.status-indicator');
+                const statusText = card.querySelector('.status-text');
+                const inputs = card.querySelectorAll('.config-input');
+                const activateBtn = card.querySelector('.btn-activate, .btn-deactivate');
+                const testBtn = card.querySelector('.btn-test');
+
+                statusIndicator.classList.remove('active');
+                statusIndicator.classList.add('inactive');
+                statusText.classList.remove('active');
+                statusText.classList.add('inactive');
+                statusText.textContent = 'Inativo';
+
+                inputs.forEach(input => {
+                    input.classList.remove('active');
+                    input.style.borderColor = '#e1e5e9';
+                });
+
+                activateBtn.textContent = 'Ativar';
+                activateBtn.classList.remove('btn-deactivate');
+                activateBtn.classList.add('btn-activate');
+                
+                testBtn.disabled = true;
+            }
+
+            testIntegration(integrationId) {
+                const integration = this.integrations[integrationId];
+                if (!integration || !integration.active) {
+                    this.showMessage('Integração não está ativa!', 'error');
+                    return;
+                }
+
+                this.showMessage('Enviando evento de teste...', 'info');
+
+                // Simula teste da integração
+                setTimeout(() => {
+                    this.sendTestEvent(integrationId, integration.config);
+                }, 1000);
+            }
+
+            sendTestEvent(integrationId, config) {
+                try {
+                    switch(integrationId) {
+                        case 'meta-pixel':
+                            if (window.fbq) {
+                                fbq('track', 'Purchase', {
+                                    value: 19.90,
+                                    currency: 'BRL',
+                                    content_name: 'Teste RifaApp'
+                                });
+                                this.showMessage('Evento de teste enviado para Meta Pixel!', 'success');
+                            }
+                            break;
+
+                        case 'tiktok-pixel':
+                            if (window.ttq) {
+                                ttq.track('CompletePayment', {
+                                    value: 19.90,
+                                    currency: 'BRL'
+                                });
+                                this.showMessage('Evento de teste enviado para TikTok Pixel!', 'success');
+                            }
+                            break;
+
+                        case 'google-ads':
+                            if (window.gtag) {
+                                gtag('event', 'conversion', {
+                                    'send_to': `${config.conversionId}/${config.conversionLabel}`,
+                                    'value': 19.90,
+                                    'currency': 'BRL'
+                                });
+                                this.showMessage('Evento de teste enviado para Google Ads!', 'success');
+                            }
+                            break;
+
+                        case 'google-analytics':
+                            if (window.gtag) {
+                                gtag('event', 'purchase', {
+                                    'transaction_id': 'test_' + Date.now(),
+                                    'value': 19.90,
+                                    'currency': 'BRL'
+                                });
+                                this.showMessage('Evento de teste enviado para Google Analytics!', 'success');
+                            }
+                            break;
+
+                        default:
+                            this.showMessage('Teste simulado com sucesso!', 'success');
+                    }
+
+                    // Incrementa contador de eventos
+                    this.incrementEventCounter();
+                } catch (error) {
+                    this.showMessage('Erro no teste: ' + error.message, 'error');
+                }
+            }
+
+            installIntegrationScript(integrationId, config) {
+                switch(integrationId) {
+                    case 'meta-pixel':
+                        this.installMetaPixel(config.pixelId);
+                        break;
+                    case 'tiktok-pixel':
+                        this.installTikTokPixel(config.pixelId);
+                        break;
+                    case 'google-ads':
+                        this.installGoogleAds(config.conversionId);
+                        break;
+                    case 'google-analytics':
+                        this.installGoogleAnalytics(config.measurementId);
+                        break;
+                    case 'hotjar':
+                        this.installHotjar(config.siteId);
+                        break;
+                    case 'clarity':
+                        this.installClarity(config.projectId);
+                        break;
+                }
+            }
+
+            installMetaPixel(pixelId) {
+                if (document.getElementById('meta-pixel-script')) return;
+
+                const script = document.createElement('script');
+                script.id = 'meta-pixel-script';
+                script.innerHTML = `
+                    !function(f,b,e,v,n,t,s)
+                    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                    n.queue=[];t=b.createElement(e);t.async=!0;
+                    t.src=v;s=b.getElementsByTagName(e)[0];
+                    s.parentNode.insertBefore(t,s)}(window, document,'script',
+                    'https://connect.facebook.net/en_US/fbevents.js');
+                    fbq('init', '${pixelId}');
+                    fbq('track', 'PageView');
+                `;
+                document.head.appendChild(script);
+            }
+
+            installTikTokPixel(pixelId) {
+                if (document.getElementById('tiktok-pixel-script')) return;
+
+                const script = document.createElement('script');
+                script.id = 'tiktok-pixel-script';
+                script.innerHTML = `
+                    !function (w, d, t) {
+                        w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+                        ttq.load('${pixelId}');
+                        ttq.page();
+                    }(window, document, 'ttq');
+                `;
+                document.head.appendChild(script);
+            }
+
+            installGoogleAds(conversionId) {
+                if (document.getElementById('google-ads-script')) return;
+
+                const script = document.createElement('script');
+                script.id = 'google-ads-script';
+                script.async = true;
+                script.src = `https://www.googletagmanager.com/gtag/js?id=${conversionId}`;
+                document.head.appendChild(script);
+
+                const configScript = document.createElement('script');
+                configScript.innerHTML = `
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${conversionId}');
+                `;
+                document.head.appendChild(configScript);
+            }
+
+            installGoogleAnalytics(measurementId) {
+                if (document.getElementById('google-analytics-script')) return;
+
+                const script = document.createElement('script');
+                script.id = 'google-analytics-script';
+                script.async = true;
+                script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+                document.head.appendChild(script);
+
+                const configScript = document.createElement('script');
+                configScript.innerHTML = `
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${measurementId}');
+                `;
+                document.head.appendChild(configScript);
+            }
+
+            installHotjar(siteId) {
+                if (document.getElementById('hotjar-script')) return;
+
+                const script = document.createElement('script');
+                script.id = 'hotjar-script';
+                script.innerHTML = `
+                    (function(h,o,t,j,a,r){
+                        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                        h._hjSettings={hjid:${siteId},hjsv:6};
+                        a=o.getElementsByTagName('head')[0];
+                        r=o.createElement('script');r.async=1;
+                        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                        a.appendChild(r);
+                    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+                `;
+                document.head.appendChild(script);
+            }
+
+            installClarity(projectId) {
+                if (document.getElementById('clarity-script')) return;
+
+                const script = document.createElement('script');
+                script.id = 'clarity-script';
+                script.innerHTML = `
+                    (function(c,l,a,r,i,t,y){
+                        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                    })(window, document, "clarity", "script", "${projectId}");
+                `;
+                document.head.appendChild(script);
+            }
+
+            removeIntegrationScript(integrationId) {
+                const scriptIds = {
+                    'meta-pixel': 'meta-pixel-script',
+                    'tiktok-pixel': 'tiktok-pixel-script',
+                    'google-ads': 'google-ads-script',
+                    'google-analytics': 'google-analytics-script',
+                    'hotjar': 'hotjar-script',
+                    'clarity': 'clarity-script'
+                };
+
+                const scriptId = scriptIds[integrationId];
+                if (scriptId) {
+                    const script = document.getElementById(scriptId);
+                    if (script) {
+                        script.remove();
+                    }
+                }
+            }
+
+            getIntegrationName(integrationId) {
+                const names = {
+                    'meta-pixel': 'Meta Pixel',
+                    'tiktok-pixel': 'TikTok Pixel',
+                    'google-ads': 'Google Ads',
+                    'google-analytics': 'Google Analytics',
+                    'hotjar': 'Hotjar',
+                    'clarity': 'Microsoft Clarity',
+                    'whatsapp': 'WhatsApp Business',
+                    'telegram': 'Telegram Bot',
+                    'mailchimp': 'Mailchimp'
+                };
+                return names[integrationId] || integrationId;
+            }
+
+            updateStats() {
+                const activeCount = Object.values(this.integrations).filter(i => i.active).length;
+                const eventsTracked = localStorage.getItem('rifaapp_events_tracked') || 0;
+                
+                document.getElementById('active-integrations').textContent = activeCount;
+                document.getElementById('events-tracked').textContent = eventsTracked;
+                
+                // Simula taxa de conversão
+                const conversionRate = activeCount > 0 ? (2.5 + (activeCount * 0.5)).toFixed(1) : 0;
+                document.getElementById('conversion-rate').textContent = conversionRate + '%';
+            }
+
+            incrementEventCounter() {
+                const current = parseInt(localStorage.getItem('rifaapp_events_tracked') || 0);
+                localStorage.setItem('rifaapp_events_tracked', current + 1);
+                this.updateStats();
+            }
+
+            showMessage(message, type = 'info') {
+                const existingMessage = document.querySelector('.app-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'app-message';
+                messageDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#667eea'};
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 8px;
+                    z-index: 3000;
+                    font-weight: 600;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    max-width: 90%;
+                    text-align: center;
+                `;
+                messageDiv.textContent = message;
+
+                document.body.appendChild(messageDiv);
+
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.remove();
+                    }
+                }, 4000);
+            }
+        }
+
+        // Funções globais
+        function toggleIntegration(integrationId) {
+            integrationsPage.toggleIntegration(integrationId);
+        }
+
+        function testIntegration(integrationId) {
+            integrationsPage.testIntegration(integrationId);
+        }
+
+        // Inicializa a página quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            window.integrationsPage = new IntegrationsPage();
+        });
+
+        // Funções para o suporte
+        function openSupportModal() {
+            document.getElementById('support-modal').classList.add('active');
+        }
+
+        function closeSupportModal() {
+            document.getElementById('support-modal').classList.remove('active');
+        }
+
+        function openWhatsAppSupport() {
+            window.open('https://wa.me/557781484432', '_blank');
+            closeSupportModal();
+        }
+
+        // Fecha o modal de suporte ao clicar fora dele
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'support-modal') {
+                closeSupportModal();
+            }
+        });
+    </script>
+</body>
+</html> 

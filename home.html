@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - RifaApp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Estilos específicos para a página home */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        .home-page {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 80px 20px 100px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Estilos específicos do home */
+        .welcome-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .welcome-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            opacity: 0.9;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .quick-stat {
+            text-align: center;
+        }
+
+        .quick-stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .quick-stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .featured-section {
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .view-all-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .rifas-carousel {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scroll-behavior: smooth;
+        }
+
+        .rifas-carousel::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .rifas-carousel::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .rifas-carousel::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 3px;
+        }
+
+        .rifa-card-mini {
+            min-width: 280px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .rifa-card-mini:hover {
+            transform: translateY(-5px);
+        }
+
+        .rifa-image-mini {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #999;
+            position: relative;
+        }
+
+        .rifa-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .rifa-content-mini {
+            padding: 15px;
+        }
+
+        .rifa-title-mini {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #333;
+            line-height: 1.3;
+        }
+
+        .rifa-price-mini {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .rifa-progress-mini {
+            background: #e9ecef;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .rifa-progress-fill-mini {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            transition: width 0.3s ease;
+        }
+
+        .rifa-info-mini {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .categories-section {
+            margin-bottom: 30px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .category-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .category-card.category-active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .category-card.category-active .category-name,
+        .category-card.category-active .category-count {
+            color: white;
+        }
+
+        .category-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .category-count {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Estilos para botões pequenos */
+        .btn-small {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-small.btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-small.btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-small.btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-small.btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+
+        .btn-small.btn-disabled {
+            background: #e9ecef;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .btn-small:disabled {
+            background: #e9ecef;
+            color: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Estilos para o botão de suporte */
+        .support-button {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .support-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Estilos para as opções de suporte */
+        .support-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .support-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            width: 100%;
+            text-align: right;
+        }
+
+        .support-option:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .support-icon {
+            font-size: 1.5rem;
+        }
+
+        .support-text {
+            font-weight: 600;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Botão de voltar -->
+    <button class="back-button" onclick="goBack()" title="Voltar">
+        ← 
+    </button>
+
+    <div class="home-page">
+        <!-- Header da página -->
+        <div class="page-header">
+            <h1 class="page-title">🏠 Home</h1>
+            <p class="page-subtitle">Descubra rifas incríveis e concorra a prêmios!</p>
+            <!-- Botão temporário para resetar dados -->
+            <button onclick="resetarDados()" style="background: #dc3545; color: white; padding: 8px 16px; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer;">
+                🔄 Resetar Dados (Carregar 19 Rifas)
+            </button>
+        </div>
+
+        <!-- Container para o conteúdo -->
+        <div id="home-content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Carregando rifas...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegação Inferior -->
+    <nav class="bottom-nav">
+        <button class="nav-btn" onclick="window.location.href='home.html'">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-text">Início</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='criar.html'">
+            <span class="nav-icon">➕</span>
+            <span class="nav-text">Criar</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='rifas.html'">
+            <span class="nav-icon">📋</span>
+            <span class="nav-text">Minhas</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='dashboard.html'">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Dashboard</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='carteira.html'">
+            <span class="nav-icon">💰</span>
+            <span class="nav-text">Carteira</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='afiliados.html'">
+            <span class="nav-icon">🤝</span>
+            <span class="nav-text">Afiliados</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='pedidos.html'">
+            <span class="nav-icon">📋</span>
+            <span class="nav-text">Pedidos</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='integracoes.html'">
+            <span class="nav-icon">🔗</span>
+            <span class="nav-text">Integrações</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='configuracoes.html'">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-text">Configurações</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='campanhas.html'">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Campanhas</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='tutoriais.html'">
+            <span class="nav-icon">📚</span>
+            <span class="nav-text">Tutoriais</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='perfil.html'">
+            <span class="nav-icon">👤</span>
+            <span class="nav-text">Perfil</span>
+        </button>
+    </nav>
+
+    <!-- Modal para participar de rifa -->
+    <div id="participate-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🎯 Participar da Rifa</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="rifa-details"></div>
+                <div class="input-group">
+                    <label>Quantidade de bilhetes:</label>
+                    <input type="number" id="ticket-quantity" min="1" value="1">
+                </div>
+                <div class="total-price">
+                    <strong>Total: R$ <span id="total-price">19,90</span></strong>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn-primary" onclick="confirmParticipation()">💳 Ir para Pagamento</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de detalhes da rifa -->
+    <div id="details-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📋 Detalhes da Rifa</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="rifa-detail-content"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Fechar</button>
+                <button class="btn-primary" id="participate-from-details" onclick="participateFromDetails()">🎯 Participar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botão flutuante de suporte -->
+    <button class="support-button" onclick="openSupportModal()" title="Suporte">
+        💬
+    </button>
+
+    <!-- Modal de suporte -->
+    <div id="support-modal" class="modal">
+        <div class="modal-content" style="max-width: 300px;">
+            <div class="modal-header">
+                <h3>📞 Suporte</h3>
+                <button class="close-btn" onclick="closeSupportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="support-options">
+                    <button class="support-option" onclick="openWhatsAppSupport()">
+                        <span class="support-icon">💬</span>
+                        <span class="support-text">Suporte por WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script>
+        // Classe para gerenciar a página home
+        class HomePage {
+            constructor() {
+                this.currentUser = null;
+                this.selectedRifaId = null;
+                this.currentFilter = 'all';
+                this.init();
+            }
+
+            init() {
+                this.checkAuth();
+                this.loadHome();
+            }
+
+            checkAuth() {
+                this.currentUser = dataManager.getCurrentUser();
+                if (!this.currentUser) {
+                    alert('Você precisa estar logado para acessar o app!');
+                    window.location.href = 'index.html';
+                    return;
+                }
+                console.log('Usuário logado:', this.currentUser.email);
+            }
+
+            loadHome() {
+                const user = dataManager.getCurrentUser();
+                const allRifas = dataManager.getRifas(); // Pega todas as rifas (ativas e finalizadas)
+                const otherUsersRifas = allRifas.filter(rifa => rifa.creatorId !== user.id);
+                const content = document.getElementById('home-content');
+
+                // Estatísticas das rifas
+                const rifasAtivas = otherUsersRifas.filter(r => r.status === 'active').length;
+                const rifasFinalizadas = otherUsersRifas.filter(r => r.status === 'finished').length;
+                const totalRifasDisponiveis = rifasAtivas;
+
+                // Banner de boas-vindas
+                const welcomeHtml = `
+                    <div class="welcome-banner fade-in">
+                        <div class="welcome-title">Bem-vindo, ${this.getDisplayName(user.email)}! 👋</div>
+                        <div class="welcome-subtitle">Explore rifas de outros usuários e encontre prêmios incríveis</div>
+                        <div class="quick-stats">
+                            <div class="quick-stat">
+                                <div class="quick-stat-number">${rifasAtivas}</div>
+                                <div class="quick-stat-label">Rifas Ativas</div>
+                            </div>
+                            <div class="quick-stat">
+                                <div class="quick-stat-number">${rifasFinalizadas}</div>
+                                <div class="quick-stat-label">Finalizadas</div>
+                            </div>
+                            <div class="quick-stat">
+                                <div class="quick-stat-number">${dataManager.formatCurrency(user.balance)}</div>
+                                <div class="quick-stat-label">Seu Saldo</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Rifas em destaque (mais populares) - apenas ativas
+                const activeRifas = otherUsersRifas.filter(r => r.status === 'active');
+                const featuredRifas = this.getFeaturedRifas(activeRifas);
+                const featuredHtml = `
+                    <div class="featured-section fade-in">
+                        <div class="section-header">
+                            <h3 class="section-title">🔥 Rifas em Destaque</h3>
+                            <button class="view-all-btn" onclick="window.location.href='rifas.html'">Ver Todas</button>
+                        </div>
+                        <div class="rifas-carousel">
+                            ${this.generateRifaCards(featuredRifas)}
+                        </div>
+                    </div>
+                `;
+
+                // Rifas recentes - apenas ativas
+                const recentRifas = this.getRecentRifas(activeRifas);
+                const recentHtml = `
+                    <div class="featured-section fade-in">
+                        <div class="section-header">
+                            <h3 class="section-title">🆕 Rifas Recentes</h3>
+                            <button class="view-all-btn" onclick="window.location.href='rifas.html'">Ver Todas</button>
+                        </div>
+                        <div class="rifas-carousel">
+                            ${this.generateRifaCards(recentRifas)}
+                        </div>
+                    </div>
+                `;
+
+                // Categorias populares - apenas rifas ativas
+                const categoriesHtml = `
+                    <div class="categories-section fade-in">
+                        <div class="section-header">
+                            <h3 class="section-title">📂 Categorias Populares</h3>
+                        </div>
+                        <div class="categories-grid">
+                            ${this.generateCategories(activeRifas)}
+                        </div>
+                    </div>
+                `;
+
+                if (rifasAtivas === 0) {
+                    content.innerHTML = `
+                        ${welcomeHtml}
+                        <div class="empty-state fade-in">
+                            <div class="empty-state-icon">🎲</div>
+                            <h3>Nenhuma rifa ativa de outros usuários</h3>
+                            <p>Aguarde novas rifas serem criadas ou crie a sua própria!</p>
+                            <button class="btn-primary" onclick="window.location.href='criar.html'" style="margin-top: 20px;">
+                                ➕ Criar Rifa
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    content.innerHTML = welcomeHtml + featuredHtml + recentHtml + categoriesHtml;
+                    
+                    // Inicializa o filtro como "Ver Todas"
+                    this.currentFilter = 'all';
+                }
+            }
+
+            getDisplayName(email) {
+                return email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
+            }
+
+            getFeaturedRifas(rifas) {
+                // Ordena por progresso (mais vendidas) e pega as 5 primeiras
+                return rifas
+                    .sort((a, b) => {
+                        const progressA = (a.soldTickets / a.totalTickets) * 100;
+                        const progressB = (b.soldTickets / b.totalTickets) * 100;
+                        return progressB - progressA;
+                    })
+                    .slice(0, 5);
+            }
+
+            getRecentRifas(rifas) {
+                // Ordena por data de criação e pega as 5 mais recentes
+                return rifas
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                    .slice(0, 5);
+            }
+
+            generateRifaCards(rifas) {
+                if (rifas.length === 0) {
+                    const categoryName = this.currentFilter !== 'all' ? this.getCategoryName(this.currentFilter) : '';
+                    return `
+                        <div style="text-align: center; padding: 40px; color: #666; width: 100%; min-width: 300px;">
+                            <div style="font-size: 3rem; margin-bottom: 15px;">🔍</div>
+                            <h4 style="margin-bottom: 10px;">Nenhuma rifa encontrada</h4>
+                            <p style="margin-bottom: 20px;">${categoryName ? `Não há rifas na categoria "${categoryName}"` : 'Nenhuma rifa disponível no momento'}</p>
+                            ${this.currentFilter !== 'all' ? 
+                                `<button class="btn-small btn-primary" onclick="homePage.clearFilter()">🎯 Ver Todas as Rifas</button>` : 
+                                `<button class="btn-small btn-primary" onclick="window.location.href='criar.html'">➕ Criar Rifa</button>`
+                            }
+                        </div>
+                    `;
+                }
+
+                return rifas.map(rifa => {
+                    const progress = (rifa.soldTickets / rifa.totalTickets) * 100;
+                    const creator = dataManager.getUserById(rifa.creatorId);
+                    const timeAgo = this.getTimeAgo(rifa.createdAt);
+                    
+                    let badge = '';
+                    if (progress >= 90) {
+                        badge = '🔥 Quase Esgotada';
+                    } else if (progress >= 70) {
+                        badge = '⚡ Popular';
+                    } else if (rifa.totalTickets - rifa.soldTickets <= 10) {
+                        badge = '⏰ Últimos Bilhetes';
+                    } else {
+                        badge = timeAgo;
+                    }
+
+                    const bilhetesRestantes = rifa.totalTickets - rifa.soldTickets;
+                    const isEsgotada = bilhetesRestantes === 0;
+
+                    return `
+                        <div class="rifa-card-mini">
+                            <div class="rifa-image-mini" style="background-image: url('${rifa.image}'); background-size: cover; background-position: center;" onclick="homePage.viewRifaDetails(${rifa.id})">
+                                ${!rifa.image.includes('http') ? '🎁' : ''}
+                                <div class="rifa-badge">${badge}</div>
+                            </div>
+                            <div class="rifa-content-mini">
+                                <div class="rifa-title-mini" onclick="homePage.viewRifaDetails(${rifa.id})" style="cursor: pointer;">${rifa.title}</div>
+                                <div class="rifa-price-mini">R$ 19,90</div>
+                                <div class="rifa-progress-mini">
+                                    <div class="rifa-progress-fill-mini" style="width: ${progress}%"></div>
+                                </div>
+                                <div class="rifa-info-mini">
+                                    <span>${rifa.soldTickets}/${rifa.totalTickets} vendidos</span>
+                                    <span>Por: ${creator?.email.split('@')[0] || 'Usuário'}</span>
+                                </div>
+                                <div style="margin-top: 10px; display: flex; gap: 8px;">
+                                    <button class="btn-small ${isEsgotada ? 'btn-disabled' : 'btn-primary'}" 
+                                            onclick="homePage.openParticipateModal(${rifa.id})" 
+                                            ${isEsgotada ? 'disabled' : ''} 
+                                            style="flex: 1; font-size: 0.8rem; padding: 6px 12px;">
+                                        ${isEsgotada ? '🚫 Esgotada' : '🎯 Participar'}
+                                    </button>
+                                    <button class="btn-small btn-secondary" 
+                                            onclick="homePage.viewRifaDetails(${rifa.id})" 
+                                            style="font-size: 0.8rem; padding: 6px 12px;">
+                                        👁️ Ver
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            generateCategories(rifas) {
+                const categories = [
+                    { icon: '📱', name: 'Eletrônicos', keywords: ['iphone', 'samsung', 'notebook', 'tv', 'celular', 'tablet', 'fone'] },
+                    { icon: '🏠', name: 'Casa & Jardim', keywords: ['casa', 'cozinha', 'jardim', 'móvel', 'decoração', 'micro', 'air', 'aspirador', 'máquina', 'café'] },
+                    { icon: '🚗', name: 'Veículos', keywords: ['carro', 'moto', 'bicicleta', 'bike', 'veículo'] },
+                    { icon: '👕', name: 'Moda', keywords: ['roupa', 'sapato', 'bolsa', 'relógio', 'óculos', 'maquiagem', 'perfume', 'tênis'] },
+                    { icon: '🎮', name: 'Games', keywords: ['playstation', 'xbox', 'nintendo', 'game', 'console', 'switch'] },
+                    { icon: '🍺', name: 'Bebidas', keywords: ['cerveja', 'whisky', 'vinho', 'bebida', 'drink'] }
+                ];
+
+                // Botão "Ver Todas" sempre primeiro
+                let categoriesHtml = `
+                    <div class="category-card ${this.currentFilter === 'all' ? 'category-active' : ''}" onclick="homePage.clearFilter()">
+                        <div class="category-icon">🎯</div>
+                        <div class="category-name">Ver Todas</div>
+                        <div class="category-count">${rifas.length} rifas</div>
+                    </div>
+                `;
+
+                categoriesHtml += categories.map(category => {
+                    const count = rifas.filter(rifa => 
+                        category.keywords.some(keyword => 
+                            rifa.title.toLowerCase().includes(keyword) || 
+                            rifa.description.toLowerCase().includes(keyword)
+                        )
+                    ).length;
+
+                    const keywordsString = category.keywords.join('|');
+                    const isActive = this.currentFilter === keywordsString;
+
+                    return `
+                        <div class="category-card ${isActive ? 'category-active' : ''}" onclick="homePage.filterByCategory('${keywordsString}')">
+                            <div class="category-icon">${category.icon}</div>
+                            <div class="category-name">${category.name}</div>
+                            <div class="category-count">${count} rifas</div>
+                        </div>
+                    `;
+                }).join('');
+
+                return categoriesHtml;
+            }
+
+            getTimeAgo(dateString) {
+                const now = new Date();
+                const date = new Date(dateString);
+                const diffInSeconds = Math.floor((now - date) / 1000);
+                
+                if (diffInSeconds < 60) return 'Agora';
+                if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}min`;
+                if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h`;
+                return `${Math.floor(diffInSeconds / 86400)}d`;
+            }
+
+            openParticipateModal(rifaId) {
+                this.selectedRifaId = rifaId;
+                const rifa = dataManager.getRifaById(rifaId);
+                const creator = dataManager.getUserById(rifa.creatorId);
+                const bilhetesRestantes = rifa.totalTickets - rifa.soldTickets;
+                
+                if (bilhetesRestantes === 0) {
+                    this.showMessage('Esta rifa está esgotada!', 'error');
+                    return;
+                }
+
+                document.getElementById('rifa-details').innerHTML = `
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="background-image: url('${rifa.image}'); background-size: cover; background-position: center; height: 120px; border-radius: 12px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; font-size: 3rem;">
+                            ${!rifa.image.includes('http') ? '🎁' : ''}
+                        </div>
+                        <h4 style="margin-bottom: 10px;">${rifa.title}</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Por: ${creator?.email.split('@')[0] || 'Usuário'}</p>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center;">
+                            <div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #28a745;">R$ 19,90</div>
+                                <div style="font-size: 0.8rem; color: #666;">Valor por bilhete</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #667eea;">${bilhetesRestantes}</div>
+                                <div style="font-size: 0.8rem; color: #666;">Bilhetes disponíveis</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('ticket-quantity').value = 1;
+                document.getElementById('ticket-quantity').max = bilhetesRestantes;
+                this.updateTotalPrice();
+                
+                document.getElementById('participate-modal').classList.add('active');
+            }
+
+            updateTotalPrice() {
+                const quantity = parseInt(document.getElementById('ticket-quantity').value) || 1;
+                const total = quantity * 19.90;
+                document.getElementById('total-price').textContent = total.toFixed(2);
+            }
+
+            confirmParticipation() {
+                const quantity = parseInt(document.getElementById('ticket-quantity').value);
+                const rifa = dataManager.getRifaById(this.selectedRifaId);
+                const bilhetesRestantes = rifa.totalTickets - rifa.soldTickets;
+                
+                if (quantity > bilhetesRestantes) {
+                    this.showMessage('Quantidade de bilhetes não disponível!', 'error');
+                    return;
+                }
+
+                if (quantity <= 0) {
+                    this.showMessage('Quantidade deve ser maior que zero!', 'error');
+                    return;
+                }
+
+                // Redireciona para a página de pagamento
+                window.location.href = `pagamento.html?rifaId=${this.selectedRifaId}&quantity=${quantity}`;
+            }
+
+            viewRifaDetails(rifaId) {
+                const rifa = dataManager.getRifaById(rifaId);
+                const creator = dataManager.getUserById(rifa.creatorId);
+                const participations = dataManager.getRifaParticipations(rifaId);
+                const progress = (rifa.soldTickets / rifa.totalTickets) * 100;
+                const bilhetesRestantes = rifa.totalTickets - rifa.soldTickets;
+                
+                const participantStats = participations.reduce((stats, p) => {
+                    const user = dataManager.getUserById(p.userId);
+                    if (user) {
+                        stats.push({
+                            email: user.email.split('@')[0],
+                            tickets: p.ticketCount,
+                            date: dataManager.formatDate(p.createdAt)
+                        });
+                    }
+                    return stats;
+                }, []);
+
+                const participantsHtml = participantStats.length > 0 ? 
+                    participantStats.slice(0, 5).map(p => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee;">
+                            <span style="font-weight: 600;">${p.email}</span>
+                            <span style="color: #667eea;">${p.tickets} bilhete(s)</span>
+                        </div>
+                    `).join('') :
+                    '<p style="text-align: center; color: #666; padding: 20px;">Nenhum participante ainda</p>';
+
+                document.getElementById('rifa-detail-content').innerHTML = `
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="background-image: url('${rifa.image}'); background-size: cover; background-position: center; height: 200px; border-radius: 12px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; font-size: 4rem;">
+                            ${!rifa.image.includes('http') ? '🎁' : ''}
+                        </div>
+                        <h3 style="margin-bottom: 10px;">${rifa.title}</h3>
+                        <p style="color: #666; margin-bottom: 20px;">${rifa.description}</p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #28a745;">R$ 19,90</div>
+                            <div style="font-size: 0.9rem; color: #666;">Valor do bilhete</div>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #667eea;">${bilhetesRestantes}</div>
+                            <div style="font-size: 0.9rem; color: #666;">Bilhetes restantes</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>👤 Criador:</span>
+                            <span style="font-weight: 600;">${creator?.email.split('@')[0] || 'Usuário'}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>📅 Criada em:</span>
+                            <span>${dataManager.formatDate(rifa.createdAt)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>📊 Progresso:</span>
+                            <span style="font-weight: 600; color: #667eea;">${progress.toFixed(1)}%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>💵 Arrecadação:</span>
+                            <span style="font-weight: 600; color: #28a745;">${dataManager.formatCurrency(rifa.soldTickets * rifa.ticketPrice)}</span>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #e9ecef; height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 20px;">
+                        <div style="height: 100%; background: linear-gradient(90deg, #28a745, #20c997); width: ${progress}%;"></div>
+                    </div>
+                    
+                    <h4 style="margin-bottom: 15px;">👥 Participantes (${participations.length})</h4>
+                    <div style="max-height: 200px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; padding: 10px;">
+                        ${participantsHtml}
+                        ${participantStats.length > 5 ? `<p style="text-align: center; color: #666; margin-top: 10px;">E mais ${participantStats.length - 5} participante(s)...</p>` : ''}
+                    </div>
+                `;
+
+                // Atualiza o botão de participar no modal de detalhes
+                const participateBtn = document.getElementById('participate-from-details');
+                if (bilhetesRestantes === 0) {
+                    participateBtn.textContent = '🚫 Esgotada';
+                    participateBtn.disabled = true;
+                    participateBtn.className = 'btn-disabled';
+                } else {
+                    participateBtn.textContent = '🎯 Participar';
+                    participateBtn.disabled = false;
+                    participateBtn.className = 'btn-primary';
+                    participateBtn.onclick = () => {
+                        this.closeModal();
+                        this.openParticipateModal(rifaId);
+                    };
+                }
+                
+                document.getElementById('details-modal').classList.add('active');
+            }
+
+            closeModal() {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+            }
+
+            filterByCategory(keywords) {
+                // Filtra as rifas localmente na página Home
+                this.currentFilter = keywords;
+                this.applyFilter();
+            }
+
+            applyFilter() {
+                const activeRifas = this.getAllActiveRifas();
+                let filteredRifas = activeRifas;
+
+                if (this.currentFilter && this.currentFilter !== 'all') {
+                    const keywordArray = this.currentFilter.split('|');
+                    filteredRifas = activeRifas.filter(rifa => 
+                        keywordArray.some(keyword => 
+                            rifa.title.toLowerCase().includes(keyword) || 
+                            rifa.description.toLowerCase().includes(keyword)
+                        )
+                    );
+                }
+
+                this.updateRifasDisplay(filteredRifas);
+                this.updateCategoryHighlight();
+            }
+
+            getAllActiveRifas() {
+                const user = dataManager.getCurrentUser();
+                const allRifas = dataManager.getRifas();
+                return allRifas.filter(rifa => rifa.creatorId !== user.id && rifa.status === 'active');
+            }
+
+            updateRifasDisplay(rifas) {
+                // Atualiza seção de rifas em destaque
+                const featuredRifas = this.getFeaturedRifas(rifas);
+                const featuredContainer = document.querySelector('.featured-section .rifas-carousel');
+                if (featuredContainer) {
+                    featuredContainer.innerHTML = this.generateRifaCards(featuredRifas);
+                }
+
+                // Atualiza seção de rifas recentes
+                const recentRifas = this.getRecentRifas(rifas);
+                const recentContainer = document.querySelectorAll('.featured-section .rifas-carousel')[1];
+                if (recentContainer) {
+                    recentContainer.innerHTML = this.generateRifaCards(recentRifas);
+                }
+
+                // Atualiza título das seções baseado no filtro
+                const featuredTitle = document.querySelector('.featured-section .section-title');
+                const recentTitle = document.querySelectorAll('.featured-section .section-title')[1];
+                
+                if (this.currentFilter && this.currentFilter !== 'all') {
+                    const categoryName = this.getCategoryName(this.currentFilter);
+                    if (featuredTitle) featuredTitle.innerHTML = `🔥 ${categoryName} - Em Destaque`;
+                    if (recentTitle) recentTitle.innerHTML = `🆕 ${categoryName} - Recentes`;
+                } else {
+                    if (featuredTitle) featuredTitle.innerHTML = '🔥 Rifas em Destaque';
+                    if (recentTitle) recentTitle.innerHTML = '🆕 Rifas Recentes';
+                }
+            }
+
+            getCategoryName(keywords) {
+                const categories = {
+                    'iphone|samsung|notebook|tv|celular|tablet|fone': 'Eletrônicos',
+                    'casa|cozinha|jardim|móvel|decoração|micro|air|aspirador|máquina|café': 'Casa & Jardim',
+                    'carro|moto|bicicleta|bike|veículo': 'Veículos',
+                    'roupa|sapato|bolsa|relógio|óculos|maquiagem|perfume|tênis': 'Moda',
+                    'playstation|xbox|nintendo|game|console|switch': 'Games',
+                    'cerveja|whisky|vinho|bebida|drink': 'Bebidas'
+                };
+                
+                for (const [key, value] of Object.entries(categories)) {
+                    if (key === keywords) return value;
+                }
+                return 'Categoria';
+            }
+
+            updateCategoryHighlight() {
+                // Remove highlight de todas as categorias
+                document.querySelectorAll('.category-card').forEach(card => {
+                    card.classList.remove('category-active');
+                });
+
+                // Adiciona highlight na categoria ativa
+                if (this.currentFilter && this.currentFilter !== 'all') {
+                    const categoryCards = document.querySelectorAll('.category-card');
+                    categoryCards.forEach(card => {
+                        const onclick = card.getAttribute('onclick');
+                        if (onclick && onclick.includes(this.currentFilter)) {
+                            card.classList.add('category-active');
+                        }
+                    });
+                }
+            }
+
+            clearFilter() {
+                this.currentFilter = 'all';
+                this.applyFilter();
+            }
+
+            showMessage(message, type = 'info') {
+                const existingMessage = document.querySelector('.app-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'app-message';
+                messageDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#667eea'};
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 8px;
+                    z-index: 3000;
+                    font-weight: 600;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    max-width: 90%;
+                    text-align: center;
+                `;
+                messageDiv.textContent = message;
+
+                document.body.appendChild(messageDiv);
+
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.remove();
+                    }
+                }, 4000);
+            }
+        }
+
+        // Funções globais
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        function closeModal() {
+            window.homePage.closeModal();
+        }
+
+        function confirmParticipation() {
+            window.homePage.confirmParticipation();
+        }
+
+        function participateFromDetails() {
+            // Esta função é definida dinamicamente no viewRifaDetails
+        }
+
+        function clearFilter() {
+            window.homePage.clearFilter();
+        }
+
+        function resetarDados() {
+            if (confirm('Isso irá limpar todos os dados e recarregar com as 19 rifas de exemplo. Continuar?')) {
+                // Limpa todos os dados do localStorage
+                localStorage.clear();
+                
+                // Recarrega a página para inicializar com os dados padrão
+                window.location.reload();
+            }
+        }
+
+        // Inicializa a página quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            window.homePage = new HomePage();
+            
+            // Atualização de quantidade de bilhetes no modal
+            document.getElementById('ticket-quantity').addEventListener('input', () => {
+                window.homePage.updateTotalPrice();
+            });
+        });
+
+        // Fecha modais ao clicar fora deles
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                closeModal();
+            }
+        });
+
+        // Funções para o suporte
+        function openSupportModal() {
+            document.getElementById('support-modal').classList.add('active');
+        }
+
+        function closeSupportModal() {
+            document.getElementById('support-modal').classList.remove('active');
+        }
+
+        function openWhatsAppSupport() {
+            window.open('https://wa.me/557781484432', '_blank');
+            closeSupportModal();
+        }
+
+        // Fecha o modal de suporte ao clicar fora dele
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'support-modal') {
+                closeSupportModal();
+            }
+        });
+    </script>
+</body>
+</html> 

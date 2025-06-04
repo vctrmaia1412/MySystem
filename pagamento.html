@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento - RifaApp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Estilos específicos para a página de pagamento */
+        .payment-page {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 20px 20px 100px;
+        }
+
+        .payment-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .payment-header {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .payment-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .payment-subtitle {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .order-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .order-item:last-child {
+            margin-bottom: 0;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .payment-methods {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .method-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .method-tab {
+            flex: 1;
+            padding: 12px 8px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .method-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .payment-form {
+            display: none;
+        }
+
+        .payment-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .card-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-preview::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .card-number {
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .card-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+        }
+
+        .card-holder {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .card-expiry {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .card-brand {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+        }
+
+        .pix-container {
+            text-align: center;
+        }
+
+        .pix-qr {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: inline-block;
+        }
+
+        .pix-code {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+            margin: 15px 0;
+        }
+
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+
+        .payment-timer {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .timer-text {
+            color: #856404;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-pay:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-pay:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .security-info {
+            background: #e8f5e8;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .security-info .security-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .security-info .security-text {
+            color: #155724;
+            font-size: 0.9rem;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-animation {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 20px;
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        /* Responsividade */
+        @media (max-width: 480px) {
+            .payment-page {
+                padding: 10px 10px 100px;
+            }
+
+            .method-tab {
+                font-size: 0.8rem;
+                padding: 10px 6px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .card-number {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Botão de voltar -->
+    <button class="back-button" onclick="goBack()" title="Voltar">
+        ← 
+    </button>
+
+    <div class="payment-page">
+        <div class="payment-container">
+            <!-- Header -->
+            <div class="payment-header">
+                <h1 class="payment-title">💳 Finalizar Pagamento</h1>
+                <p class="payment-subtitle">Escolha sua forma de pagamento preferida</p>
+            </div>
+
+            <!-- Resumo do Pedido -->
+            <div class="order-summary">
+                <h3 style="margin-bottom: 15px;">📋 Resumo do Pedido</h3>
+                <div id="order-details">
+                    <!-- Será preenchido via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Métodos de Pagamento -->
+            <div class="payment-methods">
+                <div class="method-tabs">
+                    <button class="method-tab active" onclick="switchPaymentMethod('card')">
+                        💳 Cartão
+                    </button>
+                    <button class="method-tab" onclick="switchPaymentMethod('pix')">
+                        📱 PIX
+                    </button>
+                    <button class="method-tab" onclick="switchPaymentMethod('boleto')">
+                        📄 Boleto
+                    </button>
+                </div>
+
+                <!-- Formulário Cartão de Crédito -->
+                <div id="card-form" class="payment-form active">
+                    <div class="card-preview">
+                        <div class="card-brand" id="card-brand">💳</div>
+                        <div class="card-number" id="card-display">•••• •••• •••• ••••</div>
+                        <div class="card-info">
+                            <div class="card-holder" id="holder-display">NOME DO PORTADOR</div>
+                            <div class="card-expiry" id="expiry-display">••/••</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="card-number">Número do Cartão:</label>
+                        <input type="text" id="card-number" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="card-holder">Nome do Portador:</label>
+                        <input type="text" id="card-holder" class="form-input" placeholder="NOME COMO NO CARTÃO">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="card-expiry">Validade:</label>
+                            <input type="text" id="card-expiry" class="form-input" placeholder="MM/AA" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="card-cvv">CVV:</label>
+                            <input type="text" id="card-cvv" class="form-input" placeholder="123" maxlength="4">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="installments">Parcelas:</label>
+                            <select id="installments" class="form-input">
+                                <option value="1">1x sem juros</option>
+                                <option value="2">2x sem juros</option>
+                                <option value="3">3x sem juros</option>
+                                <option value="6">6x com juros</option>
+                                <option value="12">12x com juros</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulário PIX -->
+                <div id="pix-form" class="payment-form">
+                    <div class="pix-container">
+                        <h3>📱 Pagamento via PIX</h3>
+                        <p>Escaneie o QR Code ou copie o código PIX</p>
+                        
+                        <div class="pix-qr">
+                            <div style="font-size: 8rem; line-height: 1;">📱</div>
+                            <p style="margin: 10px 0 0 0; font-size: 0.9rem; color: #666;">QR Code PIX</p>
+                        </div>
+
+                        <div class="pix-code" id="pix-code">
+                            00020126580014BR.GOV.BCB.PIX013636401234-5678-9012-3456-789012345678520400005303986540519.905802BR5925RIFAAPP PAGAMENTOS LTDA6009SAO PAULO62070503***6304ABCD
+                        </div>
+
+                        <button class="copy-btn" onclick="copyPixCode()">📋 Copiar Código PIX</button>
+
+                        <div class="payment-timer">
+                            <div class="timer-text">⏰ Tempo para pagamento: <span id="pix-timer">15:00</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulário Boleto -->
+                <div id="boleto-form" class="payment-form">
+                    <div style="text-align: center;">
+                        <h3>📄 Boleto Bancário</h3>
+                        <p>O boleto será gerado após a confirmação</p>
+                        
+                        <div style="background: #f8f9fa; border-radius: 12px; padding: 30px; margin: 20px 0;">
+                            <div style="font-size: 4rem; margin-bottom: 15px;">📄</div>
+                            <h4>Vencimento: Amanhã</h4>
+                            <p style="color: #666;">Você poderá pagar em qualquer banco, lotérica ou app bancário</p>
+                        </div>
+
+                        <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 15px; margin: 15px 0;">
+                            <p style="color: #856404; margin: 0;">
+                                <strong>⚠️ Atenção:</strong> O boleto leva até 2 dias úteis para compensar
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão de Pagamento -->
+                <button class="btn-pay" onclick="processPayment()" id="pay-button">
+                    🔒 Pagar Agora
+                </button>
+
+                <!-- Informações de Segurança -->
+                <div class="security-info">
+                    <div class="security-icon">🔒</div>
+                    <div class="security-text">
+                        <strong>Pagamento 100% Seguro</strong><br>
+                        Seus dados são protegidos com criptografia SSL
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <h3>Processando Pagamento...</h3>
+                <p>Aguarde enquanto confirmamos sua transação</p>
+            </div>
+
+            <!-- Sucesso -->
+            <div id="success" class="success-animation">
+                <div class="success-icon">✅</div>
+                <h2 style="color: #28a745; margin-bottom: 15px;">Pagamento Aprovado!</h2>
+                <p style="margin-bottom: 25px;">Sua participação na rifa foi confirmada com sucesso!</p>
+                <button class="btn-pay" onclick="goToHome()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    🏠 Voltar ao Início
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script>
+        class PaymentManager {
+            constructor() {
+                this.currentMethod = 'card';
+                this.orderData = null;
+                this.pixTimer = null;
+                this.init();
+            }
+
+            init() {
+                this.loadOrderData();
+                this.bindEvents();
+                this.startPixTimer();
+            }
+
+            loadOrderData() {
+                // Pega dados da URL ou localStorage
+                const urlParams = new URLSearchParams(window.location.search);
+                const rifaId = urlParams.get('rifaId');
+                const quantity = parseInt(urlParams.get('quantity')) || 1;
+
+                if (!rifaId) {
+                    alert('Dados do pedido não encontrados!');
+                    window.location.href = 'home.html';
+                    return;
+                }
+
+                const rifa = dataManager.getRifaById(parseInt(rifaId));
+                if (!rifa) {
+                    alert('Rifa não encontrada!');
+                    window.location.href = 'home.html';
+                    return;
+                }
+
+                this.orderData = {
+                    rifa: rifa,
+                    quantity: quantity,
+                    unitPrice: 19.90,
+                    total: quantity * 19.90
+                };
+
+                this.displayOrderSummary();
+            }
+
+            displayOrderSummary() {
+                const container = document.getElementById('order-details');
+                container.innerHTML = `
+                    <div class="order-item">
+                        <span>${this.orderData.rifa.title}</span>
+                        <span>${dataManager.formatCurrency(this.orderData.unitPrice)}</span>
+                    </div>
+                    <div class="order-item">
+                        <span>Quantidade:</span>
+                        <span>${this.orderData.quantity} bilhete(s)</span>
+                    </div>
+                    <div class="order-item">
+                        <span>Total:</span>
+                        <span>${dataManager.formatCurrency(this.orderData.total)}</span>
+                    </div>
+                `;
+            }
+
+            bindEvents() {
+                // Formatação do cartão
+                document.getElementById('card-number').addEventListener('input', (e) => {
+                    this.formatCardNumber(e.target);
+                });
+
+                document.getElementById('card-holder').addEventListener('input', (e) => {
+                    this.updateCardPreview();
+                });
+
+                document.getElementById('card-expiry').addEventListener('input', (e) => {
+                    this.formatExpiry(e.target);
+                });
+
+                document.getElementById('card-cvv').addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/\D/g, '');
+                });
+            }
+
+            formatCardNumber(input) {
+                let value = input.value.replace(/\D/g, '');
+                value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+                input.value = value;
+                this.updateCardPreview();
+                this.detectCardBrand(value.replace(/\s/g, ''));
+            }
+
+            formatExpiry(input) {
+                let value = input.value.replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                }
+                input.value = value;
+                this.updateCardPreview();
+            }
+
+            detectCardBrand(number) {
+                const brandElement = document.getElementById('card-brand');
+                if (number.startsWith('4')) {
+                    brandElement.textContent = '💳'; // Visa
+                } else if (number.startsWith('5')) {
+                    brandElement.textContent = '💳'; // Mastercard
+                } else if (number.startsWith('3')) {
+                    brandElement.textContent = '💳'; // Amex
+                } else {
+                    brandElement.textContent = '💳';
+                }
+            }
+
+            updateCardPreview() {
+                const number = document.getElementById('card-number').value || '•••• •••• •••• ••••';
+                const holder = document.getElementById('card-holder').value.toUpperCase() || 'NOME DO PORTADOR';
+                const expiry = document.getElementById('card-expiry').value || '••/••';
+
+                document.getElementById('card-display').textContent = number;
+                document.getElementById('holder-display').textContent = holder;
+                document.getElementById('expiry-display').textContent = expiry;
+            }
+
+            startPixTimer() {
+                let timeLeft = 15 * 60; // 15 minutos
+                
+                this.pixTimer = setInterval(() => {
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    const timerElement = document.getElementById('pix-timer');
+                    if (timerElement) {
+                        timerElement.textContent = display;
+                    }
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(this.pixTimer);
+                        if (timerElement) {
+                            timerElement.textContent = 'EXPIRADO';
+                            timerElement.style.color = '#dc3545';
+                        }
+                    }
+                    
+                    timeLeft--;
+                }, 1000);
+            }
+
+            processPayment() {
+                if (!this.validatePayment()) {
+                    return;
+                }
+
+                // Mostra loading
+                document.querySelector('.payment-methods').style.display = 'none';
+                document.getElementById('loading').style.display = 'block';
+
+                // Simula processamento
+                setTimeout(() => {
+                    this.completePayment();
+                }, 3000);
+            }
+
+            validatePayment() {
+                if (this.currentMethod === 'card') {
+                    const number = document.getElementById('card-number').value.replace(/\s/g, '');
+                    const holder = document.getElementById('card-holder').value;
+                    const expiry = document.getElementById('card-expiry').value;
+                    const cvv = document.getElementById('card-cvv').value;
+
+                    if (!number || number.length < 13) {
+                        alert('Número do cartão inválido!');
+                        return false;
+                    }
+                    if (!holder || holder.length < 3) {
+                        alert('Nome do portador inválido!');
+                        return false;
+                    }
+                    if (!expiry || expiry.length < 5) {
+                        alert('Data de validade inválida!');
+                        return false;
+                    }
+                    if (!cvv || cvv.length < 3) {
+                        alert('CVV inválido!');
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            completePayment() {
+                // Processa a participação na rifa
+                const success = dataManager.addParticipation(
+                    this.orderData.rifa.id,
+                    dataManager.getCurrentUser().id,
+                    this.orderData.quantity
+                );
+
+                if (success) {
+                    // Mostra tela de sucesso
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('success').style.display = 'block';
+                } else {
+                    alert('Erro ao processar pagamento!');
+                    document.getElementById('loading').style.display = 'none';
+                    document.querySelector('.payment-methods').style.display = 'block';
+                }
+            }
+        }
+
+        // Funções globais
+        function switchPaymentMethod(method) {
+            // Remove active de todas as abas
+            document.querySelectorAll('.method-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active de todos os formulários
+            document.querySelectorAll('.payment-form').forEach(form => {
+                form.classList.remove('active');
+            });
+
+            // Ativa a aba e formulário selecionados
+            event.target.classList.add('active');
+            document.getElementById(method + '-form').classList.add('active');
+
+            // Atualiza método atual
+            window.paymentManager.currentMethod = method;
+
+            // Atualiza texto do botão
+            const button = document.getElementById('pay-button');
+            switch(method) {
+                case 'card':
+                    button.innerHTML = '🔒 Pagar com Cartão';
+                    break;
+                case 'pix':
+                    button.innerHTML = '📱 Confirmar PIX';
+                    break;
+                case 'boleto':
+                    button.innerHTML = '📄 Gerar Boleto';
+                    break;
+            }
+        }
+
+        function copyPixCode() {
+            const pixCode = document.getElementById('pix-code').textContent;
+            navigator.clipboard.writeText(pixCode).then(() => {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '✅ Copiado!';
+                button.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#28a745';
+                }, 2000);
+            });
+        }
+
+        function processPayment() {
+            window.paymentManager.processPayment();
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function goToHome() {
+            window.location.href = 'home.html';
+        }
+
+        // Inicializa quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            window.paymentManager = new PaymentManager();
+        });
+    </script>
+</body>
+</html> 

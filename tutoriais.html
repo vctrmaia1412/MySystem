@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoriais - RifaApp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Estilos específicos para a página de tutoriais */
+        .tutorials-page {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 20px 20px 100px;
+        }
+
+        .tutorials-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tutorials-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .tutorials-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .tutorials-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .tutorial-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .category-card.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .category-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .category-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .tutorial-content {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .tutorial-section {
+            display: none;
+        }
+
+        .tutorial-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .step-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tip-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .tip-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .example-box {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .example-title {
+            font-weight: 700;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .checklist li::before {
+            content: '✅';
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .tutorials-page {
+                padding: 10px 10px 100px;
+            }
+
+            .tutorial-categories {
+                grid-template-columns: 1fr;
+            }
+
+            .tutorials-title {
+                font-size: 1.8rem;
+            }
+
+            .tutorial-content {
+                padding: 20px;
+            }
+        }
+
+        /* Estilos para o botão de suporte */
+        .support-button {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .support-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Estilos para as opções de suporte */
+        .support-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .support-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            width: 100%;
+            text-align: right;
+        }
+
+        .support-option:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .support-icon {
+            font-size: 1.5rem;
+        }
+
+        .support-text {
+            font-weight: 600;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Botão de voltar -->
+    <button class="back-button" onclick="goBack()" title="Voltar">
+        ← 
+    </button>
+
+    <div class="tutorials-page">
+        <div class="tutorials-container">
+            <!-- Header -->
+            <div class="tutorials-header">
+                <h1 class="tutorials-title">📚 Tutoriais RifaApp</h1>
+                <p class="tutorials-subtitle">Aprenda tudo sobre como criar, divulgar e gerenciar suas rifas com sucesso!</p>
+            </div>
+
+            <!-- Categorias de Tutoriais -->
+            <div class="tutorial-categories">
+                <div class="category-card active" onclick="showTutorial('criacao')">
+                    <div class="category-icon">🎯</div>
+                    <div class="category-title">Como Criar Rifas</div>
+                    <div class="category-description">Passo a passo para criar rifas atrativas e bem-sucedidas</div>
+                </div>
+
+                <div class="category-card" onclick="showTutorial('divulgacao')">
+                    <div class="category-icon">📢</div>
+                    <div class="category-title">Como Divulgar</div>
+                    <div class="category-description">Estratégias eficazes para promover suas rifas</div>
+                </div>
+
+                <div class="category-card" onclick="showTutorial('conteudo')">
+                    <div class="category-icon">✍️</div>
+                    <div class="category-title">O que Divulgar</div>
+                    <div class="category-description">Conteúdo ideal para atrair mais participantes</div>
+                </div>
+
+                <div class="category-card" onclick="showTutorial('dicas')">
+                    <div class="category-icon">💡</div>
+                    <div class="category-title">Dicas de Sucesso</div>
+                    <div class="category-description">Estratégias avançadas e melhores práticas</div>
+                </div>
+            </div>
+
+            <!-- Conteúdo dos Tutoriais -->
+            <div class="tutorial-content">
+                <!-- Tutorial: Como Criar Rifas -->
+                <div id="criacao" class="tutorial-section active">
+                    <h2 class="section-title">🎯 Como Criar Rifas de Sucesso</h2>
+
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Escolha o Prêmio Ideal</div>
+                        <div class="step-description">
+                            Selecione um prêmio atrativo e de valor. Produtos populares como eletrônicos, eletrodomésticos e vouchers têm maior apelo. 
+                            Considere o público-alvo e escolha algo que desperte interesse genuíno.
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Defina o Número de Bilhetes</div>
+                        <div class="step-description">
+                            Para prêmios de R$ 500-1000: use 50-100 bilhetes<br>
+                            Para prêmios de R$ 1000-2000: use 100-150 bilhetes<br>
+                            Para prêmios acima de R$ 2000: use 150-200 bilhetes
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Crie um Título Atrativo</div>
+                        <div class="step-description">
+                            Use palavras-chave como "Novo", "Original", "Lacrado", "Garantia". 
+                            Seja específico sobre marca, modelo e características principais.
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <div class="step-title">Escreva uma Descrição Completa</div>
+                        <div class="step-description">
+                            Inclua todas as especificações, estado do produto, garantia, acessórios inclusos. 
+                            Seja transparente sobre qualquer detalhe importante.
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">5</div>
+                        <div class="step-title">Adicione uma Imagem de Qualidade</div>
+                        <div class="step-description">
+                            Use fotos nítidas, bem iluminadas e que mostrem o produto claramente. 
+                            Evite imagens genéricas da internet - prefira fotos reais do produto.
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <div class="tip-icon">💡</div>
+                        <div class="tip-title">Dica de Ouro</div>
+                        <div>Rifas com prêmios entre R$ 500-1500 têm as melhores taxas de conversão. O valor do bilhete (R$ 19,90) representa um bom custo-benefício para essa faixa de prêmios.</div>
+                    </div>
+                </div>
+
+                <!-- Tutorial: Como Divulgar -->
+                <div id="divulgacao" class="tutorial-section">
+                    <h2 class="section-title">📢 Como Divulgar Suas Rifas</h2>
+
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Redes Sociais</div>
+                        <div class="step-description">
+                            <strong>WhatsApp:</strong> Compartilhe em grupos de família, amigos e comunidades<br>
+                            <strong>Facebook:</strong> Publique em grupos locais e de interesse<br>
+                            <strong>Instagram:</strong> Use stories e posts com hashtags relevantes<br>
+                            <strong>TikTok:</strong> Crie vídeos mostrando o prêmio
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Círculo Pessoal</div>
+                        <div class="step-description">
+                            Comece sempre com família, amigos e colegas de trabalho. 
+                            Eles são mais propensos a participar e ajudar na divulgação.
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Comunidades Online</div>
+                        <div class="step-description">
+                            Participe de grupos no Facebook, Telegram e Discord relacionados ao seu prêmio. 
+                            Por exemplo: grupos de gamers para rifas de consoles.
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <div class="step-title">Divulgação Local</div>
+                        <div class="step-description">
+                            Espalhe a notícia no trabalho, escola, academia, vizinhança. 
+                            O boca a boca ainda é uma das formas mais eficazes de divulgação.
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <div class="tip-icon">⚠️</div>
+                        <div class="tip-title">Importante</div>
+                        <div>Sempre seja transparente sobre ser uma rifa. Nunca use termos enganosos ou promessas falsas. A honestidade gera confiança e participantes recorrentes.</div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">70%</div>
+                            <div class="stat-label">WhatsApp</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">20%</div>
+                            <div class="stat-label">Facebook</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">10%</div>
+                            <div class="stat-label">Outros</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tutorial: O que Divulgar -->
+                <div id="conteudo" class="tutorial-section">
+                    <h2 class="section-title">✍️ O que Divulgar</h2>
+
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Informações Essenciais</div>
+                        <div class="step-description">
+                            • Nome completo do prêmio<br>
+                            • Valor estimado do produto<br>
+                            • Número total de bilhetes<br>
+                            • Valor do bilhete (R$ 19,90)<br>
+                            • Data prevista do sorteio
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Detalhes do Produto</div>
+                        <div class="step-description">
+                            • Estado: novo, usado, lacrado<br>
+                            • Garantia disponível<br>
+                            • Acessórios inclusos<br>
+                            • Local de retirada<br>
+                            • Forma de entrega
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Credibilidade</div>
+                        <div class="step-description">
+                            • Suas informações de contato<br>
+                            • Histórico de rifas anteriores<br>
+                            • Depoimentos de ganhadores<br>
+                            • Fotos do produto real<br>
+                            • Comprovante de compra (se possível)
+                        </div>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">📝 Exemplo de Post Ideal</div>
+                        <div>
+                            "🎮 RIFA PLAYSTATION 5 NOVO LACRADO! 🎮<br><br>
+                            
+                            ✅ Console PS5 novo na caixa<br>
+                            ✅ Garantia de 1 ano<br>
+                            ✅ Todos os acessórios originais<br>
+                            ✅ Valor: R$ 4.500<br><br>
+                            
+                            🎫 Apenas 100 bilhetes<br>
+                            💰 R$ 19,90 cada bilhete<br>
+                            🏆 Sorteio quando esgotar<br><br>
+                            
+                            📱 Participe pelo link: [link da rifa]<br>
+                            📞 Dúvidas: (11) 99999-9999"
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <div class="tip-icon">📸</div>
+                        <div class="tip-title">Dica Visual</div>
+                        <div>Use emojis para chamar atenção, mas sem exagerar. Organize as informações de forma clara e fácil de ler. Uma boa formatação aumenta o engajamento.</div>
+                    </div>
+                </div>
+
+                <!-- Tutorial: Dicas de Sucesso -->
+                <div id="dicas" class="tutorial-section">
+                    <h2 class="section-title">💡 Dicas de Sucesso</h2>
+
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Timing é Tudo</div>
+                        <div class="step-description">
+                            <strong>Melhores dias:</strong> Quinta, sexta e sábado<br>
+                            <strong>Melhores horários:</strong> 19h às 22h<br>
+                            <strong>Evite:</strong> Segunda-feira e feriados<br>
+                            <strong>Datas especiais:</strong> Próximo ao Natal, Dia das Mães, etc.
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Crie Urgência</div>
+                        <div class="step-description">
+                            • "Últimos 10 bilhetes!"<br>
+                            • "Sorteio amanhã!"<br>
+                            • "Promoção por tempo limitado"<br>
+                            • Mostre quantos bilhetes restam
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Interaja com os Participantes</div>
+                        <div class="step-description">
+                            • Responda rapidamente às dúvidas<br>
+                            • Agradeça cada participação<br>
+                            • Poste atualizações do progresso<br>
+                            • Seja sempre educado e profissional
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <div class="step-title">Construa Confiança</div>
+                        <div class="step-description">
+                            • Seja transparente em tudo<br>
+                            • Cumpra sempre o prometido<br>
+                            • Documente o sorteio<br>
+                            • Entregue o prêmio rapidamente<br>
+                            • Peça feedback dos ganhadores
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">5</div>
+                        <div class="step-title">Analise e Melhore</div>
+                        <div class="step-description">
+                            • Acompanhe quais rifas vendem mais<br>
+                            • Veja quais canais trazem mais participantes<br>
+                            • Teste diferentes tipos de prêmios<br>
+                            • Ajuste estratégias baseado nos resultados
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <div class="tip-icon">🏆</div>
+                        <div class="tip-title">Segredo do Sucesso</div>
+                        <div>Consistência é a chave! Rifeiros de sucesso fazem rifas regularmente, constroem uma base de participantes fiéis e sempre entregam o que prometem.</div>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">📊 Checklist de Sucesso</div>
+                        <ul class="checklist">
+                            <li>Prêmio atrativo e bem fotografado</li>
+                            <li>Preço justo para o valor do prêmio</li>
+                            <li>Descrição completa e honesta</li>
+                            <li>Divulgação em múltiplos canais</li>
+                            <li>Interação constante com participantes</li>
+                            <li>Sorteio transparente e documentado</li>
+                            <li>Entrega rápida do prêmio</li>
+                            <li>Feedback positivo do ganhador</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <div class="tip-icon">⚖️</div>
+                        <div class="tip-title">Legalidade</div>
+                        <div>Sempre verifique as leis locais sobre rifas e sorteios. Mantenha registros de todas as transações e seja transparente sobre taxas e regulamentos.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegação Inferior -->
+    <nav class="bottom-nav">
+        <button class="nav-btn" onclick="window.location.href='home.html'">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-text">Início</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='criar.html'">
+            <span class="nav-icon">➕</span>
+            <span class="nav-text">Criar</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='rifas.html'">
+            <span class="nav-icon">📋</span>
+            <span class="nav-text">Minhas</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='dashboard.html'">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Dashboard</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='carteira.html'">
+            <span class="nav-icon">💰</span>
+            <span class="nav-text">Carteira</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='afiliados.html'">
+            <span class="nav-icon">🤝</span>
+            <span class="nav-text">Afiliados</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='pedidos.html'">
+            <span class="nav-icon">📋</span>
+            <span class="nav-text">Pedidos</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='integracoes.html'">
+            <span class="nav-icon">🔗</span>
+            <span class="nav-text">Integrações</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='configuracoes.html'">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-text">Configurações</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='campanhas.html'">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Campanhas</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='tutoriais.html'">
+            <span class="nav-icon">📚</span>
+            <span class="nav-text">Tutoriais</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='perfil.html'">
+            <span class="nav-icon">👤</span>
+            <span class="nav-text">Perfil</span>
+        </button>
+    </nav>
+
+    <!-- Botão flutuante de suporte -->
+    <button class="support-button" onclick="openSupportModal()" title="Suporte">
+        💬
+    </button>
+
+    <!-- Modal de suporte -->
+    <div id="support-modal" class="modal">
+        <div class="modal-content" style="max-width: 300px;">
+            <div class="modal-header">
+                <h3>📞 Suporte</h3>
+                <button class="close-btn" onclick="closeSupportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="support-options">
+                    <button class="support-option" onclick="openWhatsAppSupport()">
+                        <span class="support-icon">💬</span>
+                        <span class="support-text">Suporte por WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script>
+        class TutorialsPage {
+            constructor() {
+                this.currentUser = null;
+                this.init();
+            }
+
+            init() {
+                this.checkAuth();
+            }
+
+            checkAuth() {
+                this.currentUser = dataManager.getCurrentUser();
+                if (!this.currentUser) {
+                    alert('Você precisa estar logado para acessar os tutoriais!');
+                    window.location.href = 'index.html';
+                    return;
+                }
+                console.log('Usuário logado:', this.currentUser.email);
+            }
+        }
+
+        // Funções globais
+        function showTutorial(tutorialId) {
+            // Remove active de todas as categorias
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.classList.remove('active');
+            });
+
+            // Remove active de todas as seções
+            document.querySelectorAll('.tutorial-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Ativa a categoria clicada
+            event.target.closest('.category-card').classList.add('active');
+
+            // Ativa a seção correspondente
+            document.getElementById(tutorialId).classList.add('active');
+
+            // Scroll suave para o conteúdo
+            document.querySelector('.tutorial-content').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        function goBack() {
+            window.location.href = 'home.html';
+        }
+
+        // Inicializa a página quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            window.tutorialsPage = new TutorialsPage();
+        });
+
+        // Funções para o suporte
+        function openSupportModal() {
+            document.getElementById('support-modal').classList.add('active');
+        }
+
+        function closeSupportModal() {
+            document.getElementById('support-modal').classList.remove('active');
+        }
+
+        function openWhatsAppSupport() {
+            window.open('https://wa.me/557781484432', '_blank');
+            closeSupportModal();
+        }
+
+        // Fecha o modal de suporte ao clicar fora dele
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'support-modal') {
+                closeSupportModal();
+            }
+        });
+    </script>
+</body>
+</html> 

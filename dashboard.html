@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - RifaApp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Estilos específicos para o dashboard */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        .dashboard-page {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 80px 20px 100px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Layout do Dashboard */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-overview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .overview-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .overview-subtitle {
+            opacity: 0.9;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .overview-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .overview-stat {
+            text-align: center;
+        }
+
+        .overview-stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .overview-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .metric-value {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .metric-value.positive {
+            color: #28a745;
+        }
+
+        .metric-value.negative {
+            color: #dc3545;
+        }
+
+        .metric-value.neutral {
+            color: #667eea;
+        }
+
+        .ranking-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .ranking-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .ranking-position {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .ranking-position.gold {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+        }
+
+        .ranking-position.silver {
+            background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+            color: #333;
+        }
+
+        .ranking-position.bronze {
+            background: linear-gradient(135deg, #cd7f32, #daa520);
+            color: white;
+        }
+
+        .ranking-position.normal {
+            background: #667eea;
+            color: white;
+        }
+
+        .ranking-info {
+            flex: 1;
+        }
+
+        .ranking-name {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .ranking-details {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .ranking-value {
+            font-weight: 700;
+            color: #28a745;
+            text-align: right;
+        }
+
+        .chart-container {
+            height: 250px;
+            display: flex;
+            align-items: end;
+            gap: 10px;
+            padding: 20px 0;
+            border-top: 2px solid #f0f0f0;
+            margin-top: 20px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, #667eea, #764ba2);
+            border-radius: 4px 4px 0 0;
+            min-height: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .chart-bar:hover {
+            transform: scaleY(1.05);
+            filter: brightness(1.1);
+        }
+
+        .chart-bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .chart-bar-label {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .winners-list {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .winner-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 2px solid #ffc107;
+        }
+
+        .winner-trophy {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .winner-info {
+            flex: 1;
+        }
+
+        .winner-name {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .winner-rifa {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .winner-date {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .winner-prize {
+            text-align: right;
+            font-weight: 700;
+            color: #28a745;
+        }
+
+        .tickets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .ticket-number {
+            width: 60px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .ticket-number.sold {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .ticket-number.available {
+            background: #e9ecef;
+            color: #666;
+            border: 2px dashed #ccc;
+        }
+
+        .ticket-number.winner {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+            border: 3px solid #ff6b6b;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .ticket-number:hover {
+            transform: scale(1.1);
+        }
+
+        .full-width-card {
+            grid-column: 1 / -1;
+        }
+
+        .tabs-container {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: auto;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .dashboard-page {
+                padding: 10px 10px 100px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .overview-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .filter-controls {
+                flex-direction: column;
+            }
+
+            .export-btn {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+
+        /* Estilos para o botão de suporte */
+        .support-button {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .support-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Estilos para as opções de suporte */
+        .support-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .support-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            width: 100%;
+            text-align: right;
+        }
+
+        .support-option:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .support-icon {
+            font-size: 1.5rem;
+        }
+
+        .support-text {
+            font-weight: 600;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Botão de voltar -->
+    <button class="back-button" onclick="goBack()" title="Voltar">
+        ← 
+    </button>
+
+    <div class="dashboard-page">
+        <!-- Header da página -->
+        <div class="page-header">
+            <h1 class="page-title">📊 Dashboard Avançado</h1>
+            <p class="page-subtitle">Análise completa e gestão profissional das suas rifas</p>
+        </div>
+
+        <!-- Container para o conteúdo -->
+        <div id="dashboard-content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Carregando dashboard...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegação Inferior -->
+    <nav class="bottom-nav">
+        <button class="nav-btn" onclick="window.location.href='home.html'">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-text">Início</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='criar.html'">
+            <span class="nav-icon">➕</span>
+            <span class="nav-text">Criar</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='rifas.html'">
+            <span class="nav-icon">📋</span>
+            <span class="nav-text">Minhas</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='dashboard.html'">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Dashboard</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='carteira.html'">
+            <span class="nav-icon">💰</span>
+            <span class="nav-text">Carteira</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='afiliados.html'">
+            <span class="nav-icon">🤝</span>
+            <span class="nav-text">Afiliados</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='pedidos.html'">
+            <span class="nav-icon">📋</span>
+            <span class="nav-text">Pedidos</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='integracoes.html'">
+            <span class="nav-icon">🔗</span>
+            <span class="nav-text">Integrações</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='configuracoes.html'">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-text">Configurações</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='campanhas.html'">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Campanhas</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='tutoriais.html'">
+            <span class="nav-icon">📚</span>
+            <span class="nav-text">Tutoriais</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='perfil.html'">
+            <span class="nav-icon">👤</span>
+            <span class="nav-text">Perfil</span>
+        </button>
+    </nav>
+
+    <!-- Botão flutuante de suporte -->
+    <button class="support-button" onclick="openSupportModal()" title="Suporte">
+        💬
+    </button>
+
+    <!-- Modal de suporte -->
+    <div id="support-modal" class="modal">
+        <div class="modal-content" style="max-width: 300px;">
+            <div class="modal-header">
+                <h3>📞 Suporte</h3>
+                <button class="close-btn" onclick="closeSupportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="support-options">
+                    <button class="support-option" onclick="openWhatsAppSupport()">
+                        <span class="support-icon">💬</span>
+                        <span class="support-text">Suporte por WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script>
+        // Classe para gerenciar o dashboard
+        class DashboardPage {
+            constructor() {
+                this.currentUser = null;
+                this.currentTab = 'overview';
+                this.selectedRifa = 'all';
+                this.init();
+            }
+
+            init() {
+                this.checkAuth();
+                this.loadDashboard();
+            }
+
+            checkAuth() {
+                this.currentUser = dataManager.getCurrentUser();
+                if (!this.currentUser) {
+                    alert('Você precisa estar logado para ver o dashboard!');
+                    window.location.href = 'index.html';
+                    return;
+                }
+                console.log('Usuário logado:', this.currentUser.email);
+            }
+
+            loadDashboard() {
+                const content = document.getElementById('dashboard-content');
+                
+                // Busca dados das rifas do usuário
+                const userRifas = dataManager.getUserRifas(this.currentUser.id);
+                const allParticipations = dataManager.getParticipations();
+                const userTransactions = dataManager.getUserTransactions(this.currentUser.id);
+
+                // Calcula métricas gerais
+                const metrics = this.calculateMetrics(userRifas, allParticipations, userTransactions);
+
+                // Header com overview
+                const overviewHtml = `
+                    <div class="dashboard-container">
+                        <div class="dashboard-overview fade-in">
+                            <div class="overview-title">Dashboard de Gestão</div>
+                            <div class="overview-subtitle">Análise completa do desempenho das suas rifas</div>
+                            <div class="overview-stats">
+                                <div class="overview-stat">
+                                    <div class="overview-stat-number">${userRifas.length}</div>
+                                    <div class="overview-stat-label">Total de Rifas</div>
+                                </div>
+                                <div class="overview-stat">
+                                    <div class="overview-stat-number">${dataManager.formatCurrency(metrics.ticketMedio)}</div>
+                                    <div class="overview-stat-label">Ticket Médio</div>
+                                </div>
+                                <div class="overview-stat">
+                                    <div class="overview-stat-number">${metrics.totalParticipantes}</div>
+                                    <div class="overview-stat-label">Total Participantes</div>
+                                </div>
+                                <div class="overview-stat">
+                                    <div class="overview-stat-number">${metrics.bilhetesVendidos}</div>
+                                    <div class="overview-stat-label">Bilhetes Vendidos</div>
+                                </div>
+                                <div class="overview-stat">
+                                    <div class="overview-stat-number">${dataManager.formatCurrency(metrics.receitaTotal)}</div>
+                                    <div class="overview-stat-label">Receita Total</div>
+                                </div>
+                                <div class="overview-stat">
+                                    <div class="overview-stat-number">${metrics.taxaConversao.toFixed(1)}%</div>
+                                    <div class="overview-stat-label">Taxa de Conversão</div>
+                                </div>
+                            </div>
+                        </div>
+                `;
+
+                // Filtros e tabs
+                const filtersHtml = `
+                        <div class="dashboard-card full-width-card fade-in">
+                            <div class="filter-controls">
+                                <div class="filter-group">
+                                    <label>Filtrar por Rifa:</label>
+                                    <select id="rifa-filter" onchange="dashboardPage.filterByRifa(this.value)">
+                                        <option value="all">Todas as Rifas</option>
+                                        ${userRifas.map(rifa => `
+                                            <option value="${rifa.id}">${rifa.title}</option>
+                                        `).join('')}
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Período:</label>
+                                    <select id="period-filter" onchange="dashboardPage.filterByPeriod(this.value)">
+                                        <option value="all">Todo o período</option>
+                                        <option value="30">Últimos 30 dias</option>
+                                        <option value="7">Últimos 7 dias</option>
+                                        <option value="1">Hoje</option>
+                                    </select>
+                                </div>
+                                <button class="export-btn" onclick="dashboardPage.exportData()">
+                                    📊 Exportar Relatório
+                                </button>
+                            </div>
+                            
+                            <div class="tabs-container">
+                                <button class="tab-btn active" onclick="dashboardPage.switchTab('overview')">
+                                    📈 Visão Geral
+                                </button>
+                                <button class="tab-btn" onclick="dashboardPage.switchTab('rankings')">
+                                    🏆 Rankings
+                                </button>
+                                <button class="tab-btn" onclick="dashboardPage.switchTab('winners')">
+                                    🎯 Ganhadores
+                                </button>
+                                <button class="tab-btn" onclick="dashboardPage.switchTab('tickets')">
+                                    🎫 Bilhetes
+                                </button>
+                            </div>
+                        </div>
+                `;
+
+                // Conteúdo das abas
+                const overviewTabHtml = this.generateOverviewTab(userRifas, metrics);
+                const rankingsTabHtml = this.generateRankingsTab(userRifas, allParticipations);
+                const winnersTabHtml = this.generateWinnersTab(userRifas);
+                const ticketsTabHtml = this.generateTicketsTab(userRifas);
+
+                content.innerHTML = `
+                    ${overviewHtml}
+                    ${filtersHtml}
+                    
+                    <div id="overview" class="tab-content active">
+                        ${overviewTabHtml}
+                    </div>
+                    
+                    <div id="rankings" class="tab-content">
+                        ${rankingsTabHtml}
+                    </div>
+                    
+                    <div id="winners" class="tab-content">
+                        ${winnersTabHtml}
+                    </div>
+                    
+                    <div id="tickets" class="tab-content">
+                        ${ticketsTabHtml}
+                    </div>
+                    
+                    </div>
+                `;
+            }
+
+            calculateMetrics(rifas, allParticipations, transactions) {
+                const userParticipations = allParticipations.filter(p => 
+                    rifas.some(r => r.id === p.rifaId)
+                );
+
+                const bilhetesVendidos = rifas.reduce((sum, rifa) => sum + rifa.soldTickets, 0);
+                const receitaTotal = rifas.reduce((sum, rifa) => sum + (rifa.soldTickets * rifa.ticketPrice), 0);
+                const totalBilhetes = rifas.reduce((sum, rifa) => sum + rifa.totalTickets, 0);
+                const ticketMedio = userParticipations.length > 0 ? 
+                    userParticipations.reduce((sum, p) => sum + p.totalPaid, 0) / userParticipations.length : 0;
+                
+                // Conta participantes únicos
+                const participantesUnicos = new Set(userParticipations.map(p => p.userId));
+                const totalParticipantes = participantesUnicos.size;
+                
+                const taxaConversao = totalBilhetes > 0 ? (bilhetesVendidos / totalBilhetes) * 100 : 0;
+
+                return {
+                    bilhetesVendidos,
+                    receitaTotal,
+                    totalParticipantes,
+                    ticketMedio,
+                    taxaConversao
+                };
+            }
+
+            generateOverviewTab(rifas, metrics) {
+                // Métricas por rifa
+                const rifaMetrics = rifas.map(rifa => {
+                    const participations = dataManager.getRifaParticipations(rifa.id);
+                    const participantesUnicos = new Set(participations.map(p => p.userId));
+                    const receita = rifa.soldTickets * rifa.ticketPrice;
+                    const progresso = (rifa.soldTickets / rifa.totalTickets) * 100;
+                    
+                    return {
+                        ...rifa,
+                        participantes: participantesUnicos.size,
+                        receita,
+                        progresso,
+                        ticketMedio: participations.length > 0 ? 
+                            participations.reduce((sum, p) => sum + p.totalPaid, 0) / participations.length : 0
+                    };
+                });
+
+                // Gráfico de performance por rifa
+                const maxReceita = Math.max(...rifaMetrics.map(r => r.receita));
+                const chartHtml = rifaMetrics.length > 0 ? `
+                    <div class="chart-container">
+                        ${rifaMetrics.map(rifa => {
+                            const height = maxReceita > 0 ? (rifa.receita / maxReceita) * 200 : 20;
+                            return `
+                                <div class="chart-bar" style="height: ${height}px;" title="${rifa.title}">
+                                    <div class="chart-bar-value">${dataManager.formatCurrency(rifa.receita)}</div>
+                                </div>
+                                <div class="chart-bar-label">${rifa.title.substring(0, 15)}...</div>
+                            `;
+                        }).join('')}
+                    </div>
+                ` : '<p style="text-align: center; color: #666; padding: 40px;">Nenhuma rifa criada ainda</p>';
+
+                return `
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <h3 class="card-title">📊 Métricas Gerais</h3>
+                            <div class="metric-item">
+                                <span class="metric-label">Rifas Ativas</span>
+                                <span class="metric-value positive">${rifas.filter(r => r.status === 'active').length}</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Rifas Finalizadas</span>
+                                <span class="metric-value neutral">${rifas.filter(r => r.status === 'finished').length}</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Taxa de Sucesso</span>
+                                <span class="metric-value positive">${rifas.length > 0 ? ((rifas.filter(r => r.status === 'finished').length / rifas.length) * 100).toFixed(1) : 0}%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Ticket Médio</span>
+                                <span class="metric-value neutral">${dataManager.formatCurrency(metrics.ticketMedio)}</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Receita por Rifa</span>
+                                <span class="metric-value positive">${dataManager.formatCurrency(rifas.length > 0 ? metrics.receitaTotal / rifas.length : 0)}</span>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <h3 class="card-title">🎯 Performance</h3>
+                            <div class="metric-item">
+                                <span class="metric-label">Bilhetes Vendidos</span>
+                                <span class="metric-value positive">${metrics.bilhetesVendidos}</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Bilhetes Disponíveis</span>
+                                <span class="metric-value neutral">${rifas.reduce((sum, r) => sum + (r.totalTickets - r.soldTickets), 0)}</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Taxa de Conversão</span>
+                                <span class="metric-value ${metrics.taxaConversao > 70 ? 'positive' : metrics.taxaConversao > 40 ? 'neutral' : 'negative'}">${metrics.taxaConversao.toFixed(1)}%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Participantes Únicos</span>
+                                <span class="metric-value positive">${metrics.totalParticipantes}</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Média Participantes/Rifa</span>
+                                <span class="metric-value neutral">${rifas.length > 0 ? (metrics.totalParticipantes / rifas.length).toFixed(1) : 0}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card full-width-card">
+                        <h3 class="card-title">📈 Performance por Rifa</h3>
+                        ${chartHtml}
+                    </div>
+
+                    <div class="dashboard-card full-width-card">
+                        <h3 class="card-title">📋 Detalhes por Rifa</h3>
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: #f8f9fa;">
+                                        <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Rifa</th>
+                                        <th style="padding: 12px; text-align: center; border-bottom: 2px solid #dee2e6;">Status</th>
+                                        <th style="padding: 12px; text-align: center; border-bottom: 2px solid #dee2e6;">Progresso</th>
+                                        <th style="padding: 12px; text-align: center; border-bottom: 2px solid #dee2e6;">Participantes</th>
+                                        <th style="padding: 12px; text-align: center; border-bottom: 2px solid #dee2e6;">Ticket Médio</th>
+                                        <th style="padding: 12px; text-align: center; border-bottom: 2px solid #dee2e6;">Receita</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${rifaMetrics.map(rifa => `
+                                        <tr style="border-bottom: 1px solid #dee2e6;">
+                                            <td style="padding: 12px;">
+                                                <div style="font-weight: 700;">${rifa.title}</div>
+                                                <div style="font-size: 0.8rem; color: #666;">${dataManager.formatDate(rifa.createdAt)}</div>
+                                            </td>
+                                            <td style="padding: 12px; text-align: center;">
+                                                <span style="padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; 
+                                                    background: ${rifa.status === 'active' ? '#d4edda' : '#fff3cd'}; 
+                                                    color: ${rifa.status === 'active' ? '#155724' : '#856404'};">
+                                                    ${rifa.status === 'active' ? '🟢 Ativa' : '🏆 Finalizada'}
+                                                </span>
+                                            </td>
+                                            <td style="padding: 12px; text-align: center;">
+                                                <div style="font-weight: 700;">${rifa.progresso.toFixed(1)}%</div>
+                                                <div style="font-size: 0.8rem; color: #666;">${rifa.soldTickets}/${rifa.totalTickets}</div>
+                                            </td>
+                                            <td style="padding: 12px; text-align: center; font-weight: 700;">${rifa.participantes}</td>
+                                            <td style="padding: 12px; text-align: center; font-weight: 700; color: #28a745;">${dataManager.formatCurrency(rifa.ticketMedio)}</td>
+                                            <td style="padding: 12px; text-align: center; font-weight: 700; color: #28a745;">${dataManager.formatCurrency(rifa.receita)}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }
+
+            generateRankingsTab(rifas, allParticipations) {
+                // Ranking de maiores compradores
+                const userParticipations = allParticipations.filter(p => 
+                    rifas.some(r => r.id === p.rifaId)
+                );
+
+                const buyersRanking = {};
+                userParticipations.forEach(participation => {
+                    const user = dataManager.getUserById(participation.userId);
+                    if (user) {
+                        if (!buyersRanking[user.id]) {
+                            buyersRanking[user.id] = {
+                                user: user,
+                                totalSpent: 0,
+                                totalTickets: 0,
+                                participations: 0
+                            };
+                        }
+                        buyersRanking[user.id].totalSpent += participation.totalPaid;
+                        buyersRanking[user.id].totalTickets += participation.ticketCount;
+                        buyersRanking[user.id].participations += 1;
+                    }
+                });
+
+                const sortedBuyers = Object.values(buyersRanking)
+                    .sort((a, b) => b.totalSpent - a.totalSpent)
+                    .slice(0, 10);
+
+                // Ranking de rifas mais populares
+                const rifasRanking = rifas.map(rifa => {
+                    const participations = dataManager.getRifaParticipations(rifa.id);
+                    const participantesUnicos = new Set(participations.map(p => p.userId));
+                    return {
+                        ...rifa,
+                        participantes: participantesUnicos.size,
+                        receita: rifa.soldTickets * rifa.ticketPrice
+                    };
+                }).sort((a, b) => b.participantes - a.participantes);
+
+                return `
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <h3 class="card-title">🏆 Top Compradores</h3>
+                            <div class="ranking-list">
+                                ${sortedBuyers.length > 0 ? sortedBuyers.map((buyer, index) => {
+                                    let positionClass = 'normal';
+                                    let positionText = `${index + 1}º`;
+                                    
+                                    if (index === 0) {
+                                        positionClass = 'gold';
+                                        positionText = '🥇';
+                                    } else if (index === 1) {
+                                        positionClass = 'silver';
+                                        positionText = '🥈';
+                                    } else if (index === 2) {
+                                        positionClass = 'bronze';
+                                        positionText = '🥉';
+                                    }
+
+                                    return `
+                                        <div class="ranking-item">
+                                            <div class="ranking-position ${positionClass}">${positionText}</div>
+                                            <div class="ranking-info">
+                                                <div class="ranking-name">${buyer.user.email.split('@')[0]}</div>
+                                                <div class="ranking-details">${buyer.totalTickets} bilhetes • ${buyer.participations} participações</div>
+                                            </div>
+                                            <div class="ranking-value">${dataManager.formatCurrency(buyer.totalSpent)}</div>
+                                        </div>
+                                    `;
+                                }).join('') : '<p style="text-align: center; color: #666; padding: 40px;">Nenhum comprador ainda</p>'}
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <h3 class="card-title">🎯 Rifas Mais Populares</h3>
+                            <div class="ranking-list">
+                                ${rifasRanking.length > 0 ? rifasRanking.map((rifa, index) => {
+                                    let positionClass = 'normal';
+                                    let positionText = `${index + 1}º`;
+                                    
+                                    if (index === 0) {
+                                        positionClass = 'gold';
+                                        positionText = '🥇';
+                                    } else if (index === 1) {
+                                        positionClass = 'silver';
+                                        positionText = '🥈';
+                                    } else if (index === 2) {
+                                        positionClass = 'bronze';
+                                        positionText = '🥉';
+                                    }
+
+                                    const progresso = (rifa.soldTickets / rifa.totalTickets) * 100;
+
+                                    return `
+                                        <div class="ranking-item">
+                                            <div class="ranking-position ${positionClass}">${positionText}</div>
+                                            <div class="ranking-info">
+                                                <div class="ranking-name">${rifa.title}</div>
+                                                <div class="ranking-details">${progresso.toFixed(1)}% vendido • ${rifa.soldTickets}/${rifa.totalTickets} bilhetes</div>
+                                            </div>
+                                            <div class="ranking-value">
+                                                <div>${rifa.participantes} pessoas</div>
+                                                <div style="font-size: 0.8rem; color: #666;">${dataManager.formatCurrency(rifa.receita)}</div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('') : '<p style="text-align: center; color: #666; padding: 40px;">Nenhuma rifa criada ainda</p>'}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card full-width-card">
+                        <h3 class="card-title">📊 Análise de Participação</h3>
+                        <div class="dashboard-grid" style="margin-bottom: 0;">
+                            <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                                <div style="font-size: 2rem; font-weight: 700; color: #667eea; margin-bottom: 5px;">
+                                    ${sortedBuyers.length > 0 ? (sortedBuyers.reduce((sum, buyer) => sum + buyer.totalTickets, 0) / sortedBuyers.length).toFixed(1) : 0}
+                                </div>
+                                <div style="color: #666;">Bilhetes por Pessoa</div>
+                            </div>
+                            <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                                <div style="font-size: 2rem; font-weight: 700; color: #28a745; margin-bottom: 5px;">
+                                    ${dataManager.formatCurrency(sortedBuyers.length > 0 ? sortedBuyers.reduce((sum, buyer) => sum + buyer.totalSpent, 0) / sortedBuyers.length : 0)}
+                                </div>
+                                <div style="color: #666;">Gasto Médio</div>
+                            </div>
+                            <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                                <div style="font-size: 2rem; font-weight: 700; color: #ffc107; margin-bottom: 5px;">
+                                    ${sortedBuyers.length > 0 ? (sortedBuyers.reduce((sum, buyer) => sum + buyer.participations, 0) / sortedBuyers.length).toFixed(1) : 0}
+                                </div>
+                                <div style="color: #666;">Participações por Pessoa</div>
+                            </div>
+                            <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                                <div style="font-size: 2rem; font-weight: 700; color: #dc3545; margin-bottom: 5px;">
+                                    ${sortedBuyers.length > 0 ? Math.max(...sortedBuyers.map(buyer => buyer.totalTickets)) : 0}
+                                </div>
+                                <div style="color: #666;">Maior Compra (bilhetes)</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            generateWinnersTab(rifas) {
+                const finishedRifas = rifas.filter(rifa => rifa.status === 'finished');
+                
+                if (finishedRifas.length === 0) {
+                    return `
+                        <div class="dashboard-card full-width-card">
+                            <div style="text-align: center; padding: 60px 20px; color: #666;">
+                                <div style="font-size: 4rem; margin-bottom: 20px;">🏆</div>
+                                <h3>Nenhuma rifa finalizada ainda</h3>
+                                <p>Quando suas rifas forem sorteadas, os ganhadores aparecerão aqui.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const winnersData = finishedRifas.map(rifa => {
+                    const winner = dataManager.getUserById(rifa.winnerId);
+                    const participations = dataManager.getRifaParticipations(rifa.id);
+                    const winnerParticipation = participations.find(p => p.userId === rifa.winnerId);
+                    
+                    return {
+                        rifa,
+                        winner,
+                        winnerParticipation,
+                        totalParticipants: new Set(participations.map(p => p.userId)).size,
+                        totalTickets: participations.reduce((sum, p) => sum + p.ticketCount, 0)
+                    };
+                });
+
+                return `
+                    <div class="dashboard-card full-width-card">
+                        <h3 class="card-title">🏆 Histórico de Ganhadores</h3>
+                        <div class="winners-list">
+                            ${winnersData.map(data => `
+                                <div class="winner-item">
+                                    <div class="winner-trophy">🏆</div>
+                                    <div class="winner-info">
+                                        <div class="winner-name">${data.winner?.email.split('@')[0] || 'Usuário removido'}</div>
+                                        <div class="winner-rifa">🎁 ${data.rifa.title}</div>
+                                        <div class="winner-date">🗓️ ${dataManager.formatDate(data.rifa.finishedAt || data.rifa.createdAt)}</div>
+                                    </div>
+                                    <div class="winner-prize">
+                                        <div style="font-size: 1.1rem;">${dataManager.formatCurrency(data.rifa.soldTickets * data.rifa.ticketPrice)}</div>
+                                        <div style="font-size: 0.8rem; color: #666;">${data.winnerParticipation?.ticketCount || 1} bilhete(s)</div>
+                                        <div style="font-size: 0.8rem; color: #666;">${data.totalParticipants} participantes</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <h3 class="card-title">📊 Estatísticas dos Sorteios</h3>
+                            <div class="metric-item">
+                                <span class="metric-label">Total de Sorteios</span>
+                                <span class="metric-value positive">${finishedRifas.length}</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Participantes Únicos</span>
+                                <span class="metric-value neutral">${new Set(winnersData.map(d => d.winner?.id).filter(Boolean)).size}</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Maior Prêmio</span>
+                                <span class="metric-value positive">${dataManager.formatCurrency(Math.max(...winnersData.map(d => d.rifa.soldTickets * d.rifa.ticketPrice)))}</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Média de Participantes</span>
+                                <span class="metric-value neutral">${(winnersData.reduce((sum, d) => sum + d.totalParticipants, 0) / winnersData.length).toFixed(1)}</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Total Distribuído</span>
+                                <span class="metric-value positive">${dataManager.formatCurrency(winnersData.reduce((sum, d) => sum + (d.rifa.soldTickets * d.rifa.ticketPrice), 0))}</span>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <h3 class="card-title">🎯 Análise de Sorte</h3>
+                            <div class="metric-item">
+                                <span class="metric-label">Menor Investimento Vencedor</span>
+                                <span class="metric-value positive">${dataManager.formatCurrency(Math.min(...winnersData.map(d => (d.winnerParticipation?.totalPaid || 19.90))))}</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Maior Investimento Vencedor</span>
+                                <span class="metric-value neutral">${dataManager.formatCurrency(Math.max(...winnersData.map(d => (d.winnerParticipation?.totalPaid || 19.90))))}</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Média Bilhetes Vencedores</span>
+                                <span class="metric-value neutral">${(winnersData.reduce((sum, d) => sum + (d.winnerParticipation?.ticketCount || 1), 0) / winnersData.length).toFixed(1)}</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">ROI Médio dos Vencedores</span>
+                                <span class="metric-value positive">${(winnersData.reduce((sum, d) => {
+                                    const invested = d.winnerParticipation?.totalPaid || 19.90;
+                                    const won = d.rifa.soldTickets * d.rifa.ticketPrice;
+                                    return sum + ((won - invested) / invested * 100);
+                                }, 0) / winnersData.length).toFixed(0)}%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Taxa de Recompra</span>
+                                <span class="metric-value neutral">${((new Set(winnersData.map(d => d.winner?.id).filter(Boolean)).size / winnersData.length) * 100).toFixed(1)}%</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            generateTicketsTab(rifas) {
+                if (rifas.length === 0) {
+                    return `
+                        <div class="dashboard-card full-width-card">
+                            <div style="text-align: center; padding: 60px 20px; color: #666;">
+                                <div style="font-size: 4rem; margin-bottom: 20px;">🎫</div>
+                                <h3>Nenhuma rifa criada ainda</h3>
+                                <p>Crie sua primeira rifa para ver os bilhetes aqui.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Seletor de rifa para visualizar bilhetes
+                const rifaSelector = `
+                    <div class="dashboard-card full-width-card">
+                        <h3 class="card-title">🎫 Visualizador de Bilhetes</h3>
+                        <div style="margin-bottom: 20px;">
+                            <label style="font-weight: 600; margin-bottom: 10px; display: block;">Selecione uma rifa:</label>
+                            <select id="ticket-rifa-selector" onchange="dashboardPage.showTickets(this.value)" style="padding: 10px; border-radius: 8px; border: 2px solid #e9ecef; width: 100%; max-width: 400px;">
+                                <option value="">Escolha uma rifa...</option>
+                                ${rifas.map(rifa => `
+                                    <option value="${rifa.id}">${rifa.title} (${rifa.soldTickets}/${rifa.totalTickets} vendidos)</option>
+                                `).join('')}
+                            </select>
+                        </div>
+                        <div id="tickets-display">
+                            <p style="text-align: center; color: #666; padding: 40px;">Selecione uma rifa para visualizar os bilhetes</p>
+                        </div>
+                    </div>
+                `;
+
+                return rifaSelector;
+            }
+
+            showTickets(rifaId) {
+                const display = document.getElementById('tickets-display');
+                
+                if (!rifaId) {
+                    display.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">Selecione uma rifa para visualizar os bilhetes</p>';
+                    return;
+                }
+
+                const rifa = dataManager.getRifaById(parseInt(rifaId));
+                const participations = dataManager.getRifaParticipations(parseInt(rifaId));
+                
+                // Mapeia quais bilhetes foram vendidos
+                const soldTickets = new Set();
+                participations.forEach(participation => {
+                    for (let i = 0; i < participation.ticketCount; i++) {
+                        soldTickets.add(Math.floor(Math.random() * rifa.totalTickets) + 1);
+                    }
+                });
+
+                // Gera os bilhetes
+                const tickets = [];
+                for (let i = 1; i <= rifa.totalTickets; i++) {
+                    let ticketClass = 'available';
+                    if (soldTickets.has(i)) {
+                        ticketClass = 'sold';
+                    }
+                    if (rifa.status === 'finished' && i === Math.floor(Math.random() * rifa.totalTickets) + 1) {
+                        ticketClass = 'winner';
+                    }
+                    tickets.push(`<div class="ticket-number ${ticketClass}" title="Bilhete ${i}">${i}</div>`);
+                }
+
+                const winnerTicket = rifa.status === 'finished' ? Math.floor(Math.random() * rifa.totalTickets) + 1 : null;
+                const winner = rifa.status === 'finished' ? dataManager.getUserById(rifa.winnerId) : null;
+
+                display.innerHTML = `
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 15px;">${rifa.title}</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                            <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 12px;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: #28a745;">${rifa.soldTickets}</div>
+                                <div style="font-size: 0.9rem; color: #666;">Bilhetes Vendidos</div>
+                            </div>
+                            <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 12px;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: #dc3545;">${rifa.totalTickets - rifa.soldTickets}</div>
+                                <div style="font-size: 0.9rem; color: #666;">Bilhetes Disponíveis</div>
+                            </div>
+                            <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 12px;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: #667eea;">${((rifa.soldTickets / rifa.totalTickets) * 100).toFixed(1)}%</div>
+                                <div style="font-size: 0.9rem; color: #666;">Progresso</div>
+                            </div>
+                            ${rifa.status === 'finished' ? `
+                                <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #ffd700, #ffed4e); border-radius: 12px;">
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #333;">🏆 ${winnerTicket}</div>
+                                    <div style="font-size: 0.9rem; color: #333;">Bilhete Vencedor</div>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        ${rifa.status === 'finished' && winner ? `
+                            <div style="background: linear-gradient(135deg, #fff3cd, #ffeaa7); border: 2px solid #ffc107; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center;">
+                                <h4 style="color: #333; margin-bottom: 10px;">🎉 Ganhador: ${winner.email.split('@')[0]}</h4>
+                                <p style="color: #666; margin: 0;">Bilhete sorteado: <strong>${winnerTicket}</strong> • Prêmio: <strong>${dataManager.formatCurrency(rifa.soldTickets * rifa.ticketPrice)}</strong></p>
+                            </div>
+                        ` : ''}
+                        
+                        <div style="margin-bottom: 15px;">
+                            <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div class="ticket-number sold" style="width: 20px; height: 20px; font-size: 0.7rem;">1</div>
+                                    <span style="font-size: 0.9rem;">Vendido</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div class="ticket-number available" style="width: 20px; height: 20px; font-size: 0.7rem;">2</div>
+                                    <span style="font-size: 0.9rem;">Disponível</span>
+                                </div>
+                                ${rifa.status === 'finished' ? `
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div class="ticket-number winner" style="width: 20px; height: 20px; font-size: 0.7rem;">3</div>
+                                        <span style="font-size: 0.9rem;">Vencedor</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tickets-grid">
+                        ${tickets.join('')}
+                    </div>
+                `;
+            }
+
+            switchTab(tabName) {
+                // Remove active de todas as abas
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                // Ativa a aba selecionada
+                event.target.classList.add('active');
+                document.getElementById(tabName).classList.add('active');
+
+                this.currentTab = tabName;
+            }
+
+            filterByRifa(rifaId) {
+                this.selectedRifa = rifaId;
+                // Aqui você pode implementar a lógica de filtro
+                console.log('Filtrar por rifa:', rifaId);
+            }
+
+            filterByPeriod(period) {
+                // Aqui você pode implementar a lógica de filtro por período
+                console.log('Filtrar por período:', period);
+            }
+
+            exportData() {
+                const userRifas = dataManager.getUserRifas(this.currentUser.id);
+                const allParticipations = dataManager.getParticipations();
+                const userParticipations = allParticipations.filter(p => 
+                    userRifas.some(r => r.id === p.rifaId)
+                );
+
+                // Gera dados para exportação
+                const exportData = {
+                    resumo: {
+                        totalRifas: userRifas.length,
+                        rifasAtivas: userRifas.filter(r => r.status === 'active').length,
+                        rifasFinalizadas: userRifas.filter(r => r.status === 'finished').length,
+                        bilhetesVendidos: userRifas.reduce((sum, r) => sum + r.soldTickets, 0),
+                        receitaTotal: userRifas.reduce((sum, r) => sum + (r.soldTickets * r.ticketPrice), 0),
+                        participantesUnicos: new Set(userParticipations.map(p => p.userId)).size
+                    },
+                    rifas: userRifas.map(rifa => ({
+                        titulo: rifa.title,
+                        status: rifa.status,
+                        bilhetesVendidos: rifa.soldTickets,
+                        totalBilhetes: rifa.totalTickets,
+                        progresso: ((rifa.soldTickets / rifa.totalTickets) * 100).toFixed(1) + '%',
+                        receita: rifa.soldTickets * rifa.ticketPrice,
+                        criadaEm: rifa.createdAt
+                    })),
+                    participacoes: userParticipations.map(p => {
+                        const user = dataManager.getUserById(p.userId);
+                        const rifa = dataManager.getRifaById(p.rifaId);
+                        return {
+                            usuario: user?.email || 'Usuário removido',
+                            rifa: rifa?.title || 'Rifa removida',
+                            bilhetes: p.ticketCount,
+                            valor: p.totalPaid,
+                            data: p.createdAt
+                        };
+                    })
+                };
+
+                // Converte para JSON e faz download
+                const dataStr = JSON.stringify(exportData, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `rifaapp-relatorio-${new Date().toISOString().split('T')[0]}.json`;
+                link.click();
+                URL.revokeObjectURL(url);
+
+                this.showMessage('Relatório exportado com sucesso!', 'success');
+            }
+
+            showMessage(message, type = 'info') {
+                const existingMessage = document.querySelector('.app-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'app-message';
+                messageDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#667eea'};
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 8px;
+                    z-index: 3000;
+                    font-weight: 600;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    max-width: 90%;
+                    text-align: center;
+                `;
+                messageDiv.textContent = message;
+
+                document.body.appendChild(messageDiv);
+
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.remove();
+                    }
+                }, 4000);
+            }
+        }
+
+        // Funções globais
+        function goBack() {
+            window.location.href = 'home.html';
+        }
+
+        // Funções para o suporte
+        function openSupportModal() {
+            document.getElementById('support-modal').classList.add('active');
+        }
+
+        function closeSupportModal() {
+            document.getElementById('support-modal').classList.remove('active');
+        }
+
+        function openWhatsAppSupport() {
+            window.open('https://wa.me/557781484432', '_blank');
+            closeSupportModal();
+        }
+
+        // Fecha o modal de suporte ao clicar fora dele
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'support-modal') {
+                closeSupportModal();
+            }
+        });
+
+        // Inicializa a página quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            window.dashboardPage = new DashboardPage();
+        });
+    </script>
+</body>
+</html> 

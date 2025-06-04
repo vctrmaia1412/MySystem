@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RifaApp - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Estilos específicos para a página de login */
+        .login-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .app-logo {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .app-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .app-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .form-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .demo-accounts {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .demo-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .demo-account {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .demo-account:hover {
+            background: #e9ecef;
+        }
+
+        .demo-account:last-child {
+            margin-bottom: 0;
+        }
+
+        .demo-info {
+            text-align: left;
+        }
+
+        .demo-email {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .demo-role {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .demo-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsividade */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+
+            .app-title {
+                font-size: 2rem;
+            }
+
+            .app-logo {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-container fade-in">
+            <!-- Logo e Título -->
+            <div class="app-logo">🎲</div>
+            <h1 class="app-title">RifaApp</h1>
+            <p class="app-subtitle">Crie e participe de rifas online</p>
+
+            <!-- Mensagens -->
+            <div id="error-message" class="error-message"></div>
+            <div id="success-message" class="success-message"></div>
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Processando...</p>
+            </div>
+
+            <!-- Abas de Login/Cadastro -->
+            <div class="form-tabs">
+                <button class="tab-btn active" onclick="switchTab('login')">Entrar</button>
+                <button class="tab-btn" onclick="switchTab('register')">Cadastrar</button>
+            </div>
+
+            <!-- Formulário de Login -->
+            <form id="login-form" style="display: block;">
+                <div class="form-group">
+                    <label for="login-email">E-mail:</label>
+                    <input type="email" id="login-email" class="form-input" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Senha:</label>
+                    <input type="password" id="login-password" class="form-input" placeholder="Sua senha" required>
+                </div>
+                <button type="submit" class="btn-primary">🔑 Entrar</button>
+            </form>
+
+            <!-- Formulário de Cadastro -->
+            <form id="register-form" style="display: none;">
+                <div class="form-group">
+                    <label for="register-email">E-mail:</label>
+                    <input type="email" id="register-email" class="form-input" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Senha:</label>
+                    <input type="password" id="register-password" class="form-input" placeholder="Mínimo 6 caracteres" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm">Confirmar Senha:</label>
+                    <input type="password" id="register-confirm" class="form-input" placeholder="Confirme sua senha" required>
+                </div>
+                <button type="submit" class="btn-primary">📝 Cadastrar</button>
+            </form>
+
+            <!-- Contas Demo -->
+            <div class="demo-accounts">
+                <div class="demo-title">🚀 Contas de Demonstração</div>
+                
+                <div class="demo-account" onclick="loginDemo('admin@rifaapp.com', '123456')">
+                    <div class="demo-info">
+                        <div class="demo-email">admin@rifaapp.com</div>
+                        <div class="demo-role">Admin - 8 rifas criadas</div>
+                    </div>
+                    <button class="demo-btn">Entrar</button>
+                </div>
+
+                <div class="demo-account" onclick="loginDemo('user@teste.com', '123456')">
+                    <div class="demo-info">
+                        <div class="demo-email">user@teste.com</div>
+                        <div class="demo-role">Usuário - Participante</div>
+                    </div>
+                    <button class="demo-btn">Entrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script>
+        // Classe para gerenciar o login
+        class LoginManager {
+            constructor() {
+                this.currentTab = 'login';
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.checkAutoLogin();
+            }
+
+            bindEvents() {
+                // Formulário de login
+                document.getElementById('login-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleLogin();
+                });
+
+                // Formulário de cadastro
+                document.getElementById('register-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleRegister();
+                });
+
+                // Enter nos campos
+                document.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        if (this.currentTab === 'login') {
+                            this.handleLogin();
+                        } else {
+                            this.handleRegister();
+                        }
+                    }
+                });
+            }
+
+            checkAutoLogin() {
+                const currentUser = dataManager.getCurrentUser();
+                if (currentUser) {
+                    this.showMessage('Você já está logado! Redirecionando...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'home.html';
+                    }, 1500);
+                }
+            }
+
+            handleLogin() {
+                const email = document.getElementById('login-email').value.trim();
+                const password = document.getElementById('login-password').value;
+
+                if (!email || !password) {
+                    this.showMessage('Por favor, preencha todos os campos!', 'error');
+                    return;
+                }
+
+                this.showLoading(true);
+
+                // Simula delay de rede
+                setTimeout(() => {
+                    const user = dataManager.getUserByEmail(email);
+                    
+                    if (!user) {
+                        this.showLoading(false);
+                        this.showMessage('E-mail não encontrado!', 'error');
+                        return;
+                    }
+
+                    if (user.password !== password) {
+                        this.showLoading(false);
+                        this.showMessage('Senha incorreta!', 'error');
+                        return;
+                    }
+
+                    // Login bem-sucedido
+                    dataManager.setCurrentUser(user);
+                    this.showLoading(false);
+                    this.showMessage('Login realizado com sucesso! Redirecionando...', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'home.html';
+                    }, 1500);
+                }, 1000);
+            }
+
+            handleRegister() {
+                const email = document.getElementById('register-email').value.trim();
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm').value;
+
+                if (!email || !password || !confirmPassword) {
+                    this.showMessage('Por favor, preencha todos os campos!', 'error');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    this.showMessage('As senhas não coincidem!', 'error');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    this.showMessage('A senha deve ter pelo menos 6 caracteres!', 'error');
+                    return;
+                }
+
+                // Validação de e-mail
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    this.showMessage('Por favor, insira um e-mail válido!', 'error');
+                    return;
+                }
+
+                this.showLoading(true);
+
+                // Simula delay de rede
+                setTimeout(() => {
+                    // Verifica se o e-mail já existe
+                    const existingUser = dataManager.getUserByEmail(email);
+                    if (existingUser) {
+                        this.showLoading(false);
+                        this.showMessage('Este e-mail já está cadastrado!', 'error');
+                        return;
+                    }
+
+                    // Cria novo usuário
+                    const newUser = dataManager.createUser({
+                        email: email,
+                        password: password
+                    });
+
+                    if (newUser) {
+                        dataManager.setCurrentUser(newUser);
+                        this.showLoading(false);
+                        this.showMessage('Cadastro realizado com sucesso! Redirecionando...', 'success');
+                        
+                        setTimeout(() => {
+                            window.location.href = 'home.html';
+                        }, 1500);
+                    } else {
+                        this.showLoading(false);
+                        this.showMessage('Erro ao criar conta. Tente novamente!', 'error');
+                    }
+                }, 1000);
+            }
+
+            showMessage(message, type) {
+                this.hideMessages();
+                
+                const messageElement = document.getElementById(type === 'error' ? 'error-message' : 'success-message');
+                messageElement.textContent = message;
+                messageElement.style.display = 'block';
+
+                // Auto-hide após 5 segundos
+                setTimeout(() => {
+                    messageElement.style.display = 'none';
+                }, 5000);
+            }
+
+            hideMessages() {
+                document.getElementById('error-message').style.display = 'none';
+                document.getElementById('success-message').style.display = 'none';
+            }
+
+            showLoading(show) {
+                document.getElementById('loading').style.display = show ? 'block' : 'none';
+                
+                // Desabilita botões durante loading
+                const buttons = document.querySelectorAll('.btn-primary');
+                buttons.forEach(btn => {
+                    btn.disabled = show;
+                });
+            }
+        }
+
+        // Funções globais
+        function switchTab(tab) {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            // Remove active de todos os botões
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+
+            if (tab === 'login') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                tabButtons[0].classList.add('active');
+                window.loginManager.currentTab = 'login';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+                tabButtons[1].classList.add('active');
+                window.loginManager.currentTab = 'register';
+            }
+
+            // Limpa mensagens
+            window.loginManager.hideMessages();
+        }
+
+        function loginDemo(email, password) {
+            document.getElementById('login-email').value = email;
+            document.getElementById('login-password').value = password;
+            
+            // Muda para aba de login se não estiver
+            if (window.loginManager.currentTab !== 'login') {
+                switchTab('login');
+            }
+            
+            // Faz login automaticamente
+            setTimeout(() => {
+                window.loginManager.handleLogin();
+            }, 500);
+        }
+
+        // Inicializa quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            window.loginManager = new LoginManager();
+        });
+    </script>
+</body>
+</html> 

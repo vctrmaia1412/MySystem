@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Carteira - RifaApp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Estilos específicos para a página da carteira */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        .carteira-page {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 80px 20px 100px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Estilos específicos da carteira */
+        .balance-card {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        .balance-amount {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .balance-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .action-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn.withdraw {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+
+        .action-btn.history {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-value.positive {
+            color: #28a745;
+        }
+
+        .stat-value.negative {
+            color: #dc3545;
+        }
+
+        .stat-value.neutral {
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        /* Estilos para o botão de suporte */
+        .support-button {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .support-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Estilos para as opções de suporte */
+        .support-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .support-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            width: 100%;
+            text-align: right;
+        }
+
+        .support-option:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .support-icon {
+            font-size: 1.5rem;
+        }
+
+        .support-text {
+            font-weight: 600;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Botão de voltar -->
+    <button class="back-button" onclick="goBack()" title="Voltar">
+        ← 
+    </button>
+
+    <div class="carteira-page">
+        <!-- Header da página -->
+        <div class="page-header">
+            <h1 class="page-title">💰 Minha Carteira</h1>
+            <p class="page-subtitle">Gerencie seus ganhos e transações</p>
+        </div>
+
+        <!-- Container para o conteúdo da carteira -->
+        <div id="carteira-content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Carregando dados da carteira...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegação Inferior -->
+    <nav class="bottom-nav">
+        <button class="nav-btn" onclick="window.location.href='home.html'">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-text">Início</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='criar.html'">
+            <span class="nav-icon">➕</span>
+            <span class="nav-text">Criar</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='rifas.html'">
+            <span class="nav-icon">📋</span>
+            <span class="nav-text">Minhas</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='dashboard.html'">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Dashboard</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='carteira.html'">
+            <span class="nav-icon">💰</span>
+            <span class="nav-text">Carteira</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='afiliados.html'">
+            <span class="nav-icon">🤝</span>
+            <span class="nav-text">Afiliados</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='pedidos.html'">
+            <span class="nav-icon">📋</span>
+            <span class="nav-text">Pedidos</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='integracoes.html'">
+            <span class="nav-icon">🔗</span>
+            <span class="nav-text">Integrações</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='configuracoes.html'">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-text">Configurações</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='campanhas.html'">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Campanhas</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='tutoriais.html'">
+            <span class="nav-icon">📚</span>
+            <span class="nav-text">Tutoriais</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='perfil.html'">
+            <span class="nav-icon">👤</span>
+            <span class="nav-text">Perfil</span>
+        </button>
+    </nav>
+
+    <!-- Modal de saque -->
+    <div id="withdraw-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💸 Solicitar Saque</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="withdraw-info"></div>
+                <div class="input-group">
+                    <label>Valor para saque:</label>
+                    <input type="number" id="withdraw-amount" min="1" step="0.01" placeholder="0,00">
+                    <small style="color: #666; margin-top: 5px; display: block;">Taxa de 8% será descontada</small>
+                </div>
+                <div id="withdraw-calculation" style="display: none;">
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Valor bruto:</span>
+                            <span id="gross-amount">R$ 0,00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Taxa (8%):</span>
+                            <span id="fee-amount" style="color: #dc3545;">R$ 0,00</span>
+                        </div>
+                        <hr style="margin: 10px 0;">
+                        <div style="display: flex; justify-content: space-between; font-weight: 700;">
+                            <span>Valor líquido:</span>
+                            <span id="net-amount" style="color: #28a745;">R$ 0,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn-primary" onclick="confirmWithdraw()">Confirmar Saque</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botão flutuante de suporte -->
+    <button class="support-button" onclick="openSupportModal()" title="Suporte">
+        💬
+    </button>
+
+    <!-- Modal de suporte -->
+    <div id="support-modal" class="modal">
+        <div class="modal-content" style="max-width: 300px;">
+            <div class="modal-header">
+                <h3>📞 Suporte</h3>
+                <button class="close-btn" onclick="closeSupportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="support-options">
+                    <button class="support-option" onclick="openWhatsAppSupport()">
+                        <span class="support-icon">💬</span>
+                        <span class="support-text">Suporte por WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script>
+        // Classe para gerenciar a página da carteira
+        class CarteiraPage {
+            constructor() {
+                this.currentUser = null;
+                this.init();
+            }
+
+            init() {
+                this.checkAuth();
+                this.loadCarteira();
+                this.bindEvents();
+            }
+
+            checkAuth() {
+                this.currentUser = dataManager.getCurrentUser();
+                if (!this.currentUser) {
+                    alert('Você precisa estar logado para ver a carteira!');
+                    window.location.href = 'index.html';
+                    return;
+                }
+                console.log('Usuário logado:', this.currentUser.email);
+            }
+
+            bindEvents() {
+                // Atualização do valor de saque
+                document.getElementById('withdraw-amount').addEventListener('input', () => {
+                    this.updateWithdrawCalculation();
+                });
+            }
+
+            loadCarteira() {
+                const user = dataManager.getCurrentUser();
+                const transactions = dataManager.getUserTransactions(user.id);
+                const stats = dataManager.getUserStats(user.id);
+                const content = document.getElementById('carteira-content');
+
+                // Card do saldo principal
+                const balanceHtml = `
+                    <div class="balance-card fade-in">
+                        <div class="balance-amount">${dataManager.formatCurrency(user.balance)}</div>
+                        <div class="balance-label">Saldo Disponível</div>
+                        <div class="quick-actions">
+                            <button class="action-btn withdraw" onclick="window.location.href='saque.html'" ${user.balance <= 0 ? 'disabled' : ''}>
+                                💸 Sacar
+                            </button>
+                            <button class="action-btn history" onclick="carteiraPage.scrollToTransactions()">
+                                📋 Histórico
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Estatísticas
+                const statsHtml = `
+                    <div class="stats-grid fade-in">
+                        <div class="stat-card">
+                            <div class="stat-value positive">${dataManager.formatCurrency(stats.totalEarned)}</div>
+                            <div class="stat-label">Total Ganho</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value negative">${dataManager.formatCurrency(stats.totalSpent)}</div>
+                            <div class="stat-label">Total Gasto</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value negative">${dataManager.formatCurrency(stats.totalWithdrawn)}</div>
+                            <div class="stat-label">Total Sacado</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value neutral">${stats.totalRifasCreated}</div>
+                            <div class="stat-label">Rifas Criadas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value neutral">${stats.totalParticipations}</div>
+                            <div class="stat-label">Participações</div>
+                        </div>
+                    </div>
+                `;
+
+                // Histórico de transações
+                const transactionsHtml = transactions.length > 0 ? 
+                    transactions.map(transaction => {
+                        const isPositive = transaction.amount > 0;
+                        const amountClass = isPositive ? 'positive' : 'negative';
+                        const icon = transaction.type === 'earning' ? '💰' : 
+                                   transaction.type === 'withdrawal' ? '🏦' : '🎫';
+                        
+                        return `
+                            <div class="transaction-item">
+                                <div class="transaction-info">
+                                    <h4>${icon} ${transaction.description}</h4>
+                                    <p>${dataManager.formatDate(transaction.createdAt)}</p>
+                                </div>
+                                <div class="transaction-amount ${amountClass}">
+                                    ${dataManager.formatCurrency(transaction.amount)}
+                                </div>
+                            </div>
+                        `;
+                    }).join('') :
+                    `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">💳</div>
+                            <h3>Nenhuma transação</h3>
+                            <p>Suas transações aparecerão aqui</p>
+                        </div>
+                    `;
+
+                content.innerHTML = `
+                    ${balanceHtml}
+                    ${statsHtml}
+                    <div class="transaction-list fade-in" id="transactions-section">
+                        <h3 style="margin-bottom: 20px; color: #333;">📋 Histórico de Transações</h3>
+                        ${transactionsHtml}
+                    </div>
+                `;
+            }
+
+            openWithdrawModal() {
+                const user = dataManager.getCurrentUser();
+                
+                if (user.balance <= 0) {
+                    this.showMessage('Saldo insuficiente para saque!', 'error');
+                    return;
+                }
+
+                document.getElementById('withdraw-info').innerHTML = `
+                    <p><strong>Saldo disponível:</strong> ${dataManager.formatCurrency(user.balance)}</p>
+                    <p style="color: #666; font-size: 0.9rem;">Digite o valor que deseja sacar. Uma taxa de 8% será aplicada.</p>
+                `;
+                
+                document.getElementById('withdraw-amount').value = '';
+                document.getElementById('withdraw-amount').max = user.balance;
+                document.getElementById('withdraw-calculation').style.display = 'none';
+                
+                document.getElementById('withdraw-modal').classList.add('active');
+            }
+
+            updateWithdrawCalculation() {
+                const amount = parseFloat(document.getElementById('withdraw-amount').value) || 0;
+                const user = dataManager.getCurrentUser();
+                
+                if (amount > 0 && amount <= user.balance) {
+                    const fee = amount * 0.08;
+                    const netAmount = amount - fee;
+                    
+                    document.getElementById('gross-amount').textContent = dataManager.formatCurrency(amount);
+                    document.getElementById('fee-amount').textContent = dataManager.formatCurrency(fee);
+                    document.getElementById('net-amount').textContent = dataManager.formatCurrency(netAmount);
+                    document.getElementById('withdraw-calculation').style.display = 'block';
+                } else {
+                    document.getElementById('withdraw-calculation').style.display = 'none';
+                }
+            }
+
+            confirmWithdraw() {
+                const amount = parseFloat(document.getElementById('withdraw-amount').value);
+                const user = dataManager.getCurrentUser();
+                
+                if (!amount || amount <= 0) {
+                    this.showMessage('Digite um valor válido!', 'error');
+                    return;
+                }
+                
+                if (amount > user.balance) {
+                    this.showMessage('Valor maior que o saldo disponível!', 'error');
+                    return;
+                }
+
+                const result = dataManager.requestWithdrawal(user.id, amount);
+                
+                if (result) {
+                    this.showMessage(
+                        `Saque solicitado com sucesso!\nValor líquido: ${dataManager.formatCurrency(result.netAmount)}`, 
+                        'success'
+                    );
+                    this.closeModal();
+                    this.loadCarteira(); // Recarrega os dados
+                } else {
+                    this.showMessage('Erro ao processar saque!', 'error');
+                }
+            }
+
+            scrollToTransactions() {
+                document.getElementById('transactions-section').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+            }
+
+            closeModal() {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+            }
+
+            showMessage(message, type = 'info') {
+                const existingMessage = document.querySelector('.app-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'app-message';
+                messageDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#667eea'};
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 8px;
+                    z-index: 3000;
+                    font-weight: 600;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    max-width: 90%;
+                    text-align: center;
+                    white-space: pre-line;
+                `;
+                messageDiv.textContent = message;
+
+                document.body.appendChild(messageDiv);
+
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.remove();
+                    }
+                }, 4000);
+            }
+        }
+
+        // Funções globais
+        function goBack() {
+            window.location.href = 'home.html';
+        }
+
+        function closeModal() {
+            carteiraPage.closeModal();
+        }
+
+        function confirmWithdraw() {
+            carteiraPage.confirmWithdraw();
+        }
+
+        // Inicializa a página quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            window.carteiraPage = new CarteiraPage();
+        });
+
+        // Fecha modais ao clicar fora deles
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                closeModal();
+            }
+        });
+
+        // Funções para o suporte
+        function openSupportModal() {
+            document.getElementById('support-modal').classList.add('active');
+        }
+
+        function closeSupportModal() {
+            document.getElementById('support-modal').classList.remove('active');
+        }
+
+        function openWhatsAppSupport() {
+            window.open('https://wa.me/557781484432', '_blank');
+            closeSupportModal();
+        }
+
+        // Fecha o modal de suporte ao clicar fora dele
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'support-modal') {
+                closeSupportModal();
+            }
+        });
+    </script>
+</body>
+</html> 

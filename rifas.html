@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rifas Disponíveis - RifaApp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Estilos específicos para a página de rifas */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        .rifas-page {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 80px 20px 100px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Estilos específicos para "Minhas Rifas" */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-badge.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.finished {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .rifa-card.finished {
+            opacity: 0.8;
+            border: 2px solid #ffc107;
+        }
+
+        .btn-manage {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-finished {
+            background: #6c757d;
+            color: white;
+            cursor: not-allowed;
+        }
+
+        .rifas-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Estilos para o botão de suporte */
+        .support-button {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .support-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Estilos para as opções de suporte */
+        .support-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .support-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            width: 100%;
+            text-align: right;
+        }
+
+        .support-option:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .support-icon {
+            font-size: 1.5rem;
+        }
+
+        .support-text {
+            font-weight: 600;
+            color: #333;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Botão de voltar -->
+    <button class="back-button" onclick="goBack()" title="Voltar">
+        ← 
+    </button>
+
+    <div class="rifas-page">
+        <!-- Header da página -->
+        <div class="page-header">
+            <h1 class="page-title">📋 Minhas Rifas</h1>
+            <p class="page-subtitle">Gerencie suas rifas e acompanhe as vendas!</p>
+            <!-- Botão temporário para resetar dados -->
+            <button onclick="resetarDados()" style="background: #dc3545; color: white; padding: 8px 16px; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer;">
+                🔄 Resetar Dados (Carregar 8 Rifas)
+            </button>
+        </div>
+
+        <!-- Container para o conteúdo das rifas -->
+        <div id="rifas-content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Carregando rifas...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegação Inferior -->
+    <nav class="bottom-nav">
+        <button class="nav-btn" onclick="window.location.href='home.html'">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-text">Início</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='criar.html'">
+            <span class="nav-icon">➕</span>
+            <span class="nav-text">Criar</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='rifas.html'">
+            <span class="nav-icon">📋</span>
+            <span class="nav-text">Minhas</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='dashboard.html'">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Dashboard</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='carteira.html'">
+            <span class="nav-icon">💰</span>
+            <span class="nav-text">Carteira</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='afiliados.html'">
+            <span class="nav-icon">🤝</span>
+            <span class="nav-text">Afiliados</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='pedidos.html'">
+            <span class="nav-icon">📋</span>
+            <span class="nav-text">Pedidos</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='integracoes.html'">
+            <span class="nav-icon">🔗</span>
+            <span class="nav-text">Integrações</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='configuracoes.html'">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-text">Configurações</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='campanhas.html'">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Campanhas</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='tutoriais.html'">
+            <span class="nav-icon">📚</span>
+            <span class="nav-text">Tutoriais</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='perfil.html'">
+            <span class="nav-icon">👤</span>
+            <span class="nav-text">Perfil</span>
+        </button>
+    </nav>
+
+    <!-- Modal para participar de rifa -->
+    <div id="participate-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Participar da Rifa</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="rifa-details"></div>
+                <div class="input-group">
+                    <label>Quantidade de bilhetes:</label>
+                    <input type="number" id="ticket-quantity" min="1" value="1">
+                </div>
+                <div class="total-price">
+                    <strong>Total: R$ <span id="total-price">19,90</span></strong>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn-primary" onclick="confirmParticipation()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de detalhes da rifa -->
+    <div id="details-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalhes da Rifa</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="rifa-detail-content"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="closeModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para finalizar rifa -->
+    <div id="finish-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🎲 Finalizar Rifa</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="finish-rifa-details"></div>
+                <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 15px; margin: 15px 0;">
+                    <h4 style="color: #856404; margin-bottom: 10px;">⚠️ Atenção</h4>
+                    <p style="color: #856404; margin: 0;">Ao finalizar a rifa, um vencedor será sorteado automaticamente entre todos os participantes. Esta ação não pode ser desfeita.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn-primary" onclick="confirmFinishRifa()">🎯 Sortear Vencedor</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de resultado do sorteio -->
+    <div id="result-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🏆 Resultado do Sorteio</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="winner-details"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="closeModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para gerenciar afiliados -->
+    <div id="affiliate-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🤝 Gerenciar Afiliado</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="affiliate-content"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Fechar</button>
+                <button class="btn-primary" id="affiliate-action-btn" onclick="rifasPage.handleAffiliateAction()">Adicionar Afiliado</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botão flutuante de suporte -->
+    <button class="support-button" onclick="openSupportModal()" title="Suporte">
+        💬
+    </button>
+
+    <!-- Modal de suporte -->
+    <div id="support-modal" class="modal">
+        <div class="modal-content" style="max-width: 300px;">
+            <div class="modal-header">
+                <h3>📞 Suporte</h3>
+                <button class="close-btn" onclick="closeSupportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="support-options">
+                    <button class="support-option" onclick="openWhatsAppSupport()">
+                        <span class="support-icon">💬</span>
+                        <span class="support-text">Suporte por WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script>
+        // Classe para gerenciar a página de rifas
+        class RifasPage {
+            constructor() {
+                this.currentUser = null;
+                this.selectedRifaId = null;
+                this.init();
+            }
+
+            init() {
+                this.checkAuth();
+                this.loadRifas();
+                this.bindEvents();
+            }
+
+            checkAuth() {
+                this.currentUser = dataManager.getCurrentUser();
+                if (!this.currentUser) {
+                    alert('Você precisa estar logado para ver as rifas!');
+                    window.location.href = 'index.html';
+                    return;
+                }
+                console.log('Usuário logado:', this.currentUser.email);
+            }
+
+            bindEvents() {
+                // Atualização de quantidade de bilhetes no modal
+                document.getElementById('ticket-quantity').addEventListener('input', () => {
+                    this.updateTotalPrice();
+                });
+            }
+
+            loadRifas() {
+                // Carrega apenas as rifas do usuário logado (incluindo ativas e finalizadas)
+                const allUserRifas = dataManager.getUserRifas(this.currentUser.id);
+                const rifas = allUserRifas; // Mostra todas as rifas do usuário (ativas e finalizadas)
+                const content = document.getElementById('rifas-content');
+                
+                if (rifas.length === 0) {
+                    content.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <h3>Você ainda não criou nenhuma rifa</h3>
+                            <p>Crie sua primeira rifa e comece a ganhar dinheiro!</p>
+                            <button class="btn-primary" onclick="window.location.href='criar.html'" style="margin-top: 20px;">
+                                ➕ Criar Primeira Rifa
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Estatísticas das rifas do usuário
+                const totalRifas = rifas.length;
+                const rifasAtivas = rifas.filter(r => r.status === 'active').length;
+                const rifasFinalizadas = rifas.filter(r => r.status === 'finished').length;
+                const bilhetesVendidos = rifas.reduce((sum, rifa) => sum + rifa.soldTickets, 0);
+                const arrecadacaoTotal = rifas.reduce((sum, rifa) => sum + (rifa.soldTickets * rifa.ticketPrice), 0);
+
+                // Header com estatísticas e filtros
+                const headerHtml = `
+                    <div class="rifas-header">
+                        <div class="rifas-stats">
+                            <div class="stat-card">
+                                <div class="stat-number">${rifasAtivas}</div>
+                                <div class="stat-label">Rifas Ativas</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">${rifasFinalizadas}</div>
+                                <div class="stat-label">Rifas Finalizadas</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">${bilhetesVendidos}</div>
+                                <div class="stat-label">Bilhetes Vendidos</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">${dataManager.formatCurrency(arrecadacaoTotal)}</div>
+                                <div class="stat-label">Receita Total</div>
+                            </div>
+                        </div>
+                        
+                        <div class="rifas-filters">
+                            <div class="filter-group">
+                                <select id="sort-rifas" onchange="rifasPage.sortRifas(this.value)">
+                                    <option value="newest">Mais Recentes</option>
+                                    <option value="oldest">Mais Antigas</option>
+                                    <option value="progress">Maior Progresso</option>
+                                    <option value="tickets">Mais Bilhetes</option>
+                                    <option value="price">Maior Arrecadação</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <input type="text" id="search-rifas" placeholder="🔍 Buscar rifas..." onkeyup="rifasPage.searchRifas(this.value)">
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Cards das rifas
+                const rifasHtml = rifas.map(rifa => {
+                    const progress = (rifa.soldTickets / rifa.totalTickets) * 100;
+                    const arrecadacao = rifa.soldTickets * rifa.ticketPrice;
+                    const bilhetesRestantes = rifa.totalTickets - rifa.soldTickets;
+                    const creator = dataManager.getUserById(rifa.creatorId);
+                    const timeAgo = this.getTimeAgo(rifa.createdAt);
+                    
+                    // Badges de urgência
+                    let urgencyBadge = '';
+                    if (progress >= 90) {
+                        urgencyBadge = '<span class="urgency-badge hot">🔥 Quase Esgotada!</span>';
+                    } else if (progress >= 70) {
+                        urgencyBadge = '<span class="urgency-badge warm">⚡ Vendendo Rápido!</span>';
+                    } else if (bilhetesRestantes <= 10) {
+                        urgencyBadge = '<span class="urgency-badge hot">⏰ Últimos Bilhetes!</span>';
+                    }
+
+                    // Status da rifa
+                    let statusBadge = '';
+                    let statusClass = '';
+                    if (rifa.status === 'active') {
+                        statusBadge = '<span class="status-badge active">🟢 Ativa</span>';
+                        statusClass = 'active';
+                    } else if (rifa.status === 'finished') {
+                        const winner = dataManager.getUserById(rifa.winnerId);
+                        statusBadge = `<span class="status-badge finished">🏆 Finalizada</span>`;
+                        statusClass = 'finished';
+                    }
+                    
+                    return `
+                        <div class="rifa-card fade-in ${statusClass}" data-rifa-id="${rifa.id}" data-title="${rifa.title.toLowerCase()}" data-progress="${progress}">
+                            <div class="rifa-header">
+                                ${statusBadge}
+                                ${urgencyBadge}
+                                <div class="rifa-creator">Criada por você</div>
+                            </div>
+                            
+                            <div class="rifa-image-container">
+                                <div class="rifa-image" style="background-image: url('${rifa.image}'); background-size: cover; background-position: center;">
+                                    ${!rifa.image.includes('http') ? '🎁' : ''}
+                                </div>
+                                <div class="rifa-overlay">
+                                    <div class="rifa-time">${timeAgo}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="rifa-content">
+                                <h3 class="rifa-title">${rifa.title}</h3>
+                                <p class="rifa-description">${rifa.description}</p>
+                                
+                                <div class="rifa-details">
+                                    <div class="detail-row">
+                                        <span class="detail-label">💰 Valor do Bilhete:</span>
+                                        <span class="rifa-price">${dataManager.formatCurrency(rifa.ticketPrice)}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">🎫 Bilhetes:</span>
+                                        <span class="rifa-progress">${rifa.soldTickets}/${rifa.totalTickets}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">💵 Arrecadação:</span>
+                                        <span class="rifa-earning">${dataManager.formatCurrency(arrecadacao)}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">📊 Progresso:</span>
+                                        <span class="progress-percentage">${progress.toFixed(1)}%</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${progress}%"></div>
+                                    <div class="progress-text">${rifa.soldTickets} de ${rifa.totalTickets}</div>
+                                </div>
+                                
+                                <div class="rifa-footer">
+                                    <div class="tickets-remaining">
+                                        <span class="remaining-count">${bilhetesRestantes}</span>
+                                        <span class="remaining-label">bilhetes restantes</span>
+                                    </div>
+                                    
+                                    <div class="rifa-actions">
+                                        <button class="btn-small btn-view" onclick="rifasPage.viewRifaDetails(${rifa.id})">
+                                            👁️ Ver Detalhes
+                                        </button>
+                                        ${rifa.status === 'active' ? 
+                                            `<button class="btn-small btn-manage ${bilhetesRestantes === 0 || rifa.soldTickets === 0 ? 'disabled' : ''}" 
+                                                    onclick="rifasPage.openFinishModal(${rifa.id})" 
+                                                    ${bilhetesRestantes === 0 || rifa.soldTickets === 0 ? 'disabled' : ''}>
+                                                ${rifa.soldTickets === 0 ? '⏳ Sem Vendas' : bilhetesRestantes === 0 ? '🎯 Sortear' : '🎲 Gerenciar'}
+                                            </button>
+                                            <button class="btn-small btn-affiliate" onclick="rifasPage.openAffiliateModal(${rifa.id})" style="background: linear-gradient(135deg, #28a745, #20c997); color: white; margin-top: 5px;">
+                                                🤝 ${rifa.affiliateEnabled ? 'Gerenciar' : 'Adicionar'} Afiliado
+                                            </button>` :
+                                            `<button class="btn-small btn-finished" disabled>
+                                                🏆 Sorteada
+                                            </button>`
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                content.innerHTML = `
+                    ${headerHtml}
+                    <div class="rifa-grid" id="rifas-container">
+                        ${rifasHtml}
+                    </div>
+                `;
+            }
+
+            getTimeAgo(dateString) {
+                const now = new Date();
+                const date = new Date(dateString);
+                const diffInSeconds = Math.floor((now - date) / 1000);
+                
+                if (diffInSeconds < 60) return 'Agora mesmo';
+                if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}min atrás`;
+                if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h atrás`;
+                return `${Math.floor(diffInSeconds / 86400)}d atrás`;
+            }
+
+            sortRifas(sortBy) {
+                const container = document.getElementById('rifas-container');
+                const rifaCards = Array.from(container.children);
+                
+                rifaCards.sort((a, b) => {
+                    const rifaIdA = parseInt(a.dataset.rifaId);
+                    const rifaIdB = parseInt(b.dataset.rifaId);
+                    const rifaA = dataManager.getRifaById(rifaIdA);
+                    const rifaB = dataManager.getRifaById(rifaIdB);
+                    
+                    switch(sortBy) {
+                        case 'newest':
+                            return new Date(rifaB.createdAt) - new Date(rifaA.createdAt);
+                        case 'oldest':
+                            return new Date(rifaA.createdAt) - new Date(rifaB.createdAt);
+                        case 'progress':
+                            const progressA = (rifaA.soldTickets / rifaA.totalTickets) * 100;
+                            const progressB = (rifaB.soldTickets / rifaB.totalTickets) * 100;
+                            return progressB - progressA;
+                        case 'tickets':
+                            return rifaB.totalTickets - rifaA.totalTickets;
+                        case 'price':
+                            const arrecadacaoA = rifaA.soldTickets * rifaA.ticketPrice;
+                            const arrecadacaoB = rifaB.soldTickets * rifaB.ticketPrice;
+                            return arrecadacaoB - arrecadacaoA;
+                        default:
+                            return 0;
+                    }
+                });
+                
+                rifaCards.forEach(card => container.appendChild(card));
+            }
+
+            searchRifas(searchTerm) {
+                const container = document.getElementById('rifas-container');
+                const rifaCards = Array.from(container.children);
+                
+                rifaCards.forEach(card => {
+                    const title = card.dataset.title;
+                    const rifaId = parseInt(card.dataset.rifaId);
+                    const rifa = dataManager.getRifaById(rifaId);
+                    const creator = dataManager.getUserById(rifa.creatorId);
+                    
+                    const searchableText = `${title} ${rifa.description.toLowerCase()} ${creator?.email.toLowerCase() || ''}`;
+                    
+                    if (searchTerm === '' || searchableText.includes(searchTerm.toLowerCase())) {
+                        card.style.display = 'block';
+                        card.classList.add('fade-in');
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            openParticipateModal(rifaId) {
+                this.selectedRifaId = rifaId;
+                const rifa = dataManager.getRifaById(rifaId);
+                
+                document.getElementById('rifa-details').innerHTML = `
+                    <h4>${rifa.title}</h4>
+                    <p>Valor por bilhete: ${dataManager.formatCurrency(rifa.ticketPrice)}</p>
+                    <p>Bilhetes disponíveis: ${rifa.totalTickets - rifa.soldTickets}</p>
+                `;
+                
+                document.getElementById('ticket-quantity').value = 1;
+                document.getElementById('ticket-quantity').max = rifa.totalTickets - rifa.soldTickets;
+                this.updateTotalPrice();
+                
+                document.getElementById('participate-modal').classList.add('active');
+            }
+
+            updateTotalPrice() {
+                const quantity = parseInt(document.getElementById('ticket-quantity').value) || 1;
+                const total = quantity * 19.90;
+                document.getElementById('total-price').textContent = total.toFixed(2);
+            }
+
+            confirmParticipation() {
+                const quantity = parseInt(document.getElementById('ticket-quantity').value);
+                const rifa = dataManager.getRifaById(this.selectedRifaId);
+                
+                if (quantity > (rifa.totalTickets - rifa.soldTickets)) {
+                    this.showMessage('Quantidade de bilhetes não disponível!', 'error');
+                    return;
+                }
+
+                const success = dataManager.addParticipation(this.selectedRifaId, this.currentUser.id, quantity);
+                
+                if (success) {
+                    this.showMessage(`Participação confirmada! ${quantity} bilhete(s) adquirido(s).`, 'success');
+                    this.closeModal();
+                    this.loadRifas(); // Recarrega as rifas
+                } else {
+                    this.showMessage('Erro ao processar participação!', 'error');
+                }
+            }
+
+            openFinishModal(rifaId) {
+                this.selectedRifaId = rifaId;
+                const rifa = dataManager.getRifaById(rifaId);
+                const participations = dataManager.getRifaParticipations(rifaId);
+                
+                if (participations.length === 0) {
+                    this.showMessage('Não é possível finalizar uma rifa sem participantes!', 'error');
+                    return;
+                }
+                
+                document.getElementById('finish-rifa-details').innerHTML = `
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h4>${rifa.title}</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: #667eea;">${rifa.soldTickets}</div>
+                                <div style="font-size: 0.9rem; color: #666;">Bilhetes Vendidos</div>
+                            </div>
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: #28a745;">${participations.length}</div>
+                                <div style="font-size: 0.9rem; color: #666;">Participantes</div>
+                            </div>
+                        </div>
+                        <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                            <div style="font-size: 1.2rem; font-weight: 700; color: #28a745;">
+                                Receita: ${dataManager.formatCurrency(rifa.soldTickets * rifa.ticketPrice)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('finish-modal').classList.add('active');
+            }
+
+            confirmFinishRifa() {
+                const result = dataManager.finishRifa(this.selectedRifaId);
+                
+                if (result) {
+                    document.getElementById('winner-details').innerHTML = `
+                        <div style="text-align: center;">
+                            <div style="font-size: 4rem; margin-bottom: 20px;">🎉</div>
+                            <h3 style="color: #28a745; margin-bottom: 20px;">Sorteio Realizado com Sucesso!</h3>
+                            
+                            <div style="background: linear-gradient(135deg, #ffd700, #ffed4e); padding: 25px; border-radius: 16px; margin: 20px 0; color: #333;">
+                                <h4 style="margin-bottom: 15px;">🏆 ${result.rifa.title}</h4>
+                                <div style="font-size: 1.3rem; font-weight: 700; margin-bottom: 10px;">
+                                    Vencedor: ${result.winner.email}
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                                <div style="background: #f8f9fa; padding: 15px; border-radius: 12px;">
+                                    <div style="font-size: 1.2rem; font-weight: 700; color: #667eea;">${result.totalParticipants}</div>
+                                    <div style="font-size: 0.9rem; color: #666;">Total de Participantes</div>
+                                </div>
+                                <div style="background: #f8f9fa; padding: 15px; border-radius: 12px;">
+                                    <div style="font-size: 1.2rem; font-weight: 700; color: #28a745;">${result.totalTicketsSold}</div>
+                                    <div style="font-size: 0.9rem; color: #666;">Bilhetes Vendidos</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    this.closeModal();
+                    document.getElementById('result-modal').classList.add('active');
+                    this.loadRifas(); // Recarrega as rifas
+                } else {
+                    this.showMessage('Erro ao finalizar rifa!', 'error');
+                }
+            }
+
+            viewRifaDetails(rifaId) {
+                const rifa = dataManager.getRifaById(rifaId);
+                const creator = dataManager.getUserById(rifa.creatorId);
+                const participations = dataManager.getRifaParticipations(rifaId);
+                const progress = (rifa.soldTickets / rifa.totalTickets) * 100;
+                
+                const participantStats = participations.reduce((stats, p) => {
+                    const user = dataManager.getUserById(p.userId);
+                    if (user) {
+                        stats.push({
+                            email: user.email.split('@')[0],
+                            tickets: p.ticketCount,
+                            date: dataManager.formatDate(p.createdAt)
+                        });
+                    }
+                    return stats;
+                }, []);
+
+                const participantsHtml = participantStats.length > 0 ? 
+                    participantStats.map(p => `
+                        <div class="participant-item">
+                            <span class="participant-name">${p.email}</span>
+                            <span class="participant-tickets">${p.tickets} bilhete(s)</span>
+                            <span class="participant-date">${p.date}</span>
+                        </div>
+                    `).join('') :
+                    '<p class="no-participants">Nenhum participante ainda</p>';
+
+                document.getElementById('rifa-detail-content').innerHTML = `
+                    <div class="rifa-detail-view">
+                        <div class="detail-image" style="background-image: url('${rifa.image}'); background-size: cover; background-position: center; height: 200px; border-radius: 12px; margin-bottom: 20px;">
+                            ${!rifa.image.includes('http') ? '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 4rem;">🎁</div>' : ''}
+                        </div>
+                        
+                        <h3>${rifa.title}</h3>
+                        <p style="color: #666; margin-bottom: 20px;">${rifa.description}</p>
+                        
+                        <div class="detail-stats">
+                            <div class="stat-row">
+                                <span>👤 Criador:</span>
+                                <span>${creator?.email || 'Usuário removido'}</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>📅 Criada em:</span>
+                                <span>${dataManager.formatDate(rifa.createdAt)}</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>💰 Valor do bilhete:</span>
+                                <span>${dataManager.formatCurrency(rifa.ticketPrice)}</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>🎫 Total de bilhetes:</span>
+                                <span>${rifa.totalTickets}</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>✅ Bilhetes vendidos:</span>
+                                <span>${rifa.soldTickets}</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>📊 Progresso:</span>
+                                <span>${progress.toFixed(1)}%</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>💵 Arrecadação:</span>
+                                <span>${dataManager.formatCurrency(rifa.soldTickets * rifa.ticketPrice)}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-bar" style="margin: 20px 0;">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                        
+                        <h4 style="margin: 20px 0 10px 0;">👥 Participantes (${participations.length})</h4>
+                        <div class="participants-list" style="max-height: 200px; overflow-y: auto;">
+                            ${participantsHtml}
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('details-modal').classList.add('active');
+            }
+
+            closeModal() {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+            }
+
+            openAffiliateModal(rifaId) {
+                this.selectedRifaId = rifaId;
+                const rifa = dataManager.getRifaById(rifaId);
+                const affiliate = dataManager.getAffiliateByRifa(rifaId);
+                
+                let content = `
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h4>${rifa.title}</h4>
+                        <p style="color: #666;">Gerencie o sistema de afiliados para esta rifa</p>
+                    </div>
+                `;
+
+                if (rifa.affiliateEnabled && affiliate) {
+                    // Mostra informações do afiliado atual
+                    const affiliateUser = dataManager.getUserById(affiliate.affiliateId);
+                    const commissionText = affiliate.type === 'percentage' 
+                        ? `${affiliate.value}% por venda`
+                        : `${dataManager.formatCurrency(affiliate.value)} por bilhete`;
+
+                    content += `
+                        <div style="background: #e8f5e8; border: 1px solid #28a745; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                            <h4 style="color: #28a745; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                                ✅ Afiliado Ativo
+                            </h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                <div>
+                                    <strong>👤 Afiliado:</strong><br>
+                                    ${affiliateUser?.email || 'Usuário removido'}
+                                </div>
+                                <div>
+                                    <strong>💰 Comissão:</strong><br>
+                                    ${commissionText}
+                                </div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div>
+                                    <strong>📊 Vendas:</strong><br>
+                                    ${dataManager.formatCurrency(affiliate.totalSales)}
+                                </div>
+                                <div>
+                                    <strong>💵 Ganhos:</strong><br>
+                                    ${dataManager.formatCurrency(affiliate.totalEarnings)}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                            <h4 style="color: #856404; margin-bottom: 10px;">⚠️ Remover Afiliado</h4>
+                            <p style="color: #856404; margin: 0; font-size: 0.9rem;">
+                                Ao remover o afiliado, ele não receberá mais comissões das próximas vendas. 
+                                Os ganhos já obtidos serão mantidos.
+                            </p>
+                        </div>
+                    `;
+
+                    document.getElementById('affiliate-action-btn').textContent = 'Remover Afiliado';
+                    document.getElementById('affiliate-action-btn').style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
+                } else {
+                    // Formulário para adicionar afiliado
+                    content += `
+                        <div class="input-group">
+                            <label>E-mail do Afiliado *</label>
+                            <input type="email" id="modal-affiliate-email" placeholder="afiliado@exemplo.com">
+                            <small style="color: #666; margin-top: 5px; display: block;">E-mail de um usuário cadastrado no sistema</small>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Tipo de Comissão</label>
+                            <select id="modal-affiliate-type">
+                                <option value="percentage">Percentual (%)</option>
+                                <option value="fixed">Valor Fixo (R$)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label id="modal-affiliate-value-label">Percentual da Comissão (%)</label>
+                            <input type="number" id="modal-affiliate-value" min="1" max="50" placeholder="10" step="0.1">
+                            <small id="modal-affiliate-value-help" style="color: #666; margin-top: 5px; display: block;">Entre 1% e 50% do valor de cada venda</small>
+                        </div>
+                        
+                        <div style="background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; padding: 15px; margin-top: 15px;">
+                            <h4 style="color: #1976d2; margin-bottom: 10px;">💡 Como Funciona</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                                <li>O afiliado receberá comissão de todas as vendas futuras</li>
+                                <li>A comissão é descontada do seu ganho, não do valor do bilhete</li>
+                                <li>Você pode remover o afiliado a qualquer momento</li>
+                                <li>O afiliado verá esta rifa em seu painel de afiliados</li>
+                            </ul>
+                        </div>
+                    `;
+
+                    document.getElementById('affiliate-action-btn').textContent = 'Adicionar Afiliado';
+                    document.getElementById('affiliate-action-btn').style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+
+                    // Adiciona event listeners após o modal ser mostrado
+                    setTimeout(() => {
+                        document.getElementById('modal-affiliate-type').addEventListener('change', (e) => {
+                            this.updateModalAffiliateLabels(e.target.value);
+                        });
+                    }, 100);
+                }
+
+                document.getElementById('affiliate-content').innerHTML = content;
+                document.getElementById('affiliate-modal').classList.add('active');
+            }
+
+            updateModalAffiliateLabels(type) {
+                const label = document.getElementById('modal-affiliate-value-label');
+                const help = document.getElementById('modal-affiliate-value-help');
+                const input = document.getElementById('modal-affiliate-value');
+                
+                if (type === 'percentage') {
+                    label.textContent = 'Percentual da Comissão (%)';
+                    help.textContent = 'Entre 1% e 50% do valor de cada venda';
+                    input.placeholder = '10';
+                    input.min = '1';
+                    input.max = '50';
+                    input.step = '0.1';
+                } else {
+                    label.textContent = 'Valor Fixo por Bilhete (R$)';
+                    help.textContent = 'Valor fixo em reais que o afiliado ganhará por bilhete vendido';
+                    input.placeholder = '2.00';
+                    input.min = '0.50';
+                    input.max = '10.00';
+                    input.step = '0.10';
+                }
+            }
+
+            handleAffiliateAction() {
+                const rifa = dataManager.getRifaById(this.selectedRifaId);
+                
+                if (rifa.affiliateEnabled) {
+                    // Remover afiliado
+                    const success = dataManager.removeAffiliateFromRifa(this.selectedRifaId);
+                    if (success) {
+                        this.showMessage('Afiliado removido com sucesso!', 'success');
+                        this.closeModal();
+                        this.loadRifas();
+                    } else {
+                        this.showMessage('Erro ao remover afiliado!', 'error');
+                    }
+                } else {
+                    // Adicionar afiliado
+                    const email = document.getElementById('modal-affiliate-email').value.trim();
+                    const type = document.getElementById('modal-affiliate-type').value;
+                    const value = parseFloat(document.getElementById('modal-affiliate-value').value) || 0;
+
+                    // Validações
+                    if (!email) {
+                        this.showMessage('E-mail do afiliado é obrigatório!', 'error');
+                        return;
+                    }
+
+                    if (email === this.currentUser.email) {
+                        this.showMessage('Você não pode ser afiliado da sua própria rifa!', 'error');
+                        return;
+                    }
+
+                    if (!dataManager.getUserByEmail(email)) {
+                        this.showMessage('E-mail não encontrado no sistema!', 'error');
+                        return;
+                    }
+
+                    if (!value || value <= 0) {
+                        this.showMessage('Valor da comissão deve ser maior que zero!', 'error');
+                        return;
+                    }
+
+                    if (type === 'percentage' && value > 50) {
+                        this.showMessage('Percentual máximo é 50%!', 'error');
+                        return;
+                    }
+
+                    if (type === 'fixed' && value > 10) {
+                        this.showMessage('Valor fixo máximo é R$ 10,00!', 'error');
+                        return;
+                    }
+
+                    const success = dataManager.addAffiliateToRifa(this.selectedRifaId, {
+                        email: email,
+                        type: type,
+                        value: value
+                    });
+
+                    if (success) {
+                        this.showMessage('Afiliado adicionado com sucesso!', 'success');
+                        this.closeModal();
+                        this.loadRifas();
+                    } else {
+                        this.showMessage('Erro ao adicionar afiliado!', 'error');
+                    }
+                }
+            }
+
+            showMessage(message, type = 'info') {
+                const existingMessage = document.querySelector('.app-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'app-message';
+                messageDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#667eea'};
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 8px;
+                    z-index: 3000;
+                    font-weight: 600;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    max-width: 90%;
+                    text-align: center;
+                `;
+                messageDiv.textContent = message;
+
+                document.body.appendChild(messageDiv);
+
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.remove();
+                    }
+                }, 4000);
+            }
+        }
+
+        // Funções globais
+        function goBack() {
+            window.location.href = 'home.html';
+        }
+
+        function closeModal() {
+            rifasPage.closeModal();
+        }
+
+        function confirmParticipation() {
+            rifasPage.confirmParticipation();
+        }
+
+        function confirmFinishRifa() {
+            rifasPage.confirmFinishRifa();
+        }
+
+        function resetarDados() {
+            if (confirm('Isso irá limpar todos os dados e recarregar com as 8 rifas de exemplo. Continuar?')) {
+                // Limpa todos os dados do localStorage
+                localStorage.clear();
+                
+                // Recarrega a página para inicializar com os dados padrão
+                window.location.reload();
+            }
+        }
+
+        // Inicializa a página quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            window.rifasPage = new RifasPage();
+        });
+
+        // Fecha modais ao clicar fora deles
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                closeModal();
+            }
+        });
+
+        // Funções para o suporte
+        function openSupportModal() {
+            document.getElementById('support-modal').classList.add('active');
+        }
+
+        function closeSupportModal() {
+            document.getElementById('support-modal').classList.remove('active');
+        }
+
+        function openWhatsAppSupport() {
+            window.open('https://wa.me/557781484432', '_blank');
+            closeSupportModal();
+        }
+
+        // Fecha o modal de suporte ao clicar fora dele
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'support-modal') {
+                closeSupportModal();
+            }
+        });
+    </script>
+</body>
+</html> 
